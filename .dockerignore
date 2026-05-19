@@ -1,0 +1,27 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# .dockerignore — File yang TIDAK akan di-copy ke Docker image
+# ─────────────────────────────────────────────────────────────────────────────
+# Sama seperti .gitignore tapi untuk Docker build context.
+# Tujuan: image lebih kecil + tidak bocor file sensitif ke dalam image.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Dependencies (akan di-install ulang di dalam container)
+node_modules/
+
+# Environment files (JANGAN masuk ke image!)
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+
+# Dokumentasi & config yang tidak diperlukan app
+GUIDE.md
+README.md
+monitoring/
+
+# Docker files itu sendiri (tidak perlu di-copy ke dalam container)
+Dockerfile
+docker-compose.yml
+.dockerignore

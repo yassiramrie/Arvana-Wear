@@ -1,0 +1,40 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# prometheus.service — Systemd unit untuk Prometheus v3.11.1
+# ─────────────────────────────────────────────────────────────────────────────
+# Cara deploy ke server:
+#   sudo cp monitoring/systemd/prometheus.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now prometheus
+# ─────────────────────────────────────────────────────────────────────────────
+
+[Unit]
+Description=Prometheus Monitoring System
+Documentation=https://prometheus.io/docs/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+
+ExecStart=/usr/local/bin/prometheus \
+  --config.file=/etc/prometheus/prometheus.yml \
+  --storage.tsdb.path=/var/lib/prometheus/data \
+  --storage.tsdb.retention.time=15d \
+  --web.listen-address=127.0.0.1:9090 \
+  --web.enable-lifecycle
+
+# Restart otomatis jika crash — penting untuk reliability
+Restart=on-failure
+RestartSec=5s
+
+# Security hardening — best practice untuk service yang tidak butuh root
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/prometheus
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# dashboards.yml — Auto-provisioning Grafana Dashboard Loader
+# ─────────────────────────────────────────────────────────────────────────────
+# File ini memberitahu Grafana untuk memuat semua file .json dari folder
+# /etc/grafana/provisioning/dashboards/ sebagai dashboard otomatis.
+#
+# Cara menambah dashboard baru:
+#   1. Export dashboard dari Grafana UI (Share → Export → Save to file)
+#   2. Simpan .json ke monitoring/grafana/provisioning/dashboards/
+#   3. Copy ke server: sudo cp file.json /etc/grafana/provisioning/dashboards/
+#   4. sudo systemctl reload grafana-server
+# ─────────────────────────────────────────────────────────────────────────────
+
+apiVersion: 1
+
+providers:
+  - name:            'default'
+    orgId:           1
+    folder:          'Arvana Wear Monitoring'
+    type:            file

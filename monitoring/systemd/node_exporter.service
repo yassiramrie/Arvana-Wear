@@ -1,0 +1,36 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# node_exporter.service — Systemd unit untuk Node Exporter v1.11.1
+# ─────────────────────────────────────────────────────────────────────────────
+# Cara deploy ke server:
+#   sudo cp monitoring/systemd/node_exporter.service /etc/systemd/system/
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now node_exporter
+# ─────────────────────────────────────────────────────────────────────────────
+
+[Unit]
+Description=Node Exporter — Prometheus Machine Metrics
+Documentation=https://prometheus.io/docs/guides/node-exporter/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+
+# Bind ke 127.0.0.1 saja — tidak perlu diakses dari luar server
+# Prometheus scrape dari dalam server (localhost), bukan dari internet
+ExecStart=/usr/local/bin/node_exporter \
+  --web.listen-address=127.0.0.1:9100
+
+Restart=on-failure
+RestartSec=5s
+
+# Security hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target

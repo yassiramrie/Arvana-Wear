@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VespaCatalog — La Dolce Velocità</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:   #FAFAF5;
+      --charcoal:#1A1A1A;
+      --green:   #16a34a;
+      --green-d: #0f7233;
+      --gold:    #C4A265;
+      --border:  #E5E0D6;
+      --dark:    #0f1a13;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      cursor: none;
+    }
+
+    /* ── Grain overlay ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 9990;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    /* ── Custom cursor ── */
+    #cur-dot {
+      width: 7px; height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.12s ease, background 0.2s;
+    }
+    #cur-ring {
+      width: 30px; height: 30px;
+      border: 1px solid rgba(26,26,26,0.4);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+    }
+    .cur-hover #cur-dot  { transform: translate(-50%,-50%) scale(2.8); }
+    .cur-hover #cur-ring { transform: translate(-50%,-50%) scale(1.6); opacity: 0.3; }
+
+    /* ── Page system ── */
+    .page { display: none; }
+    .page.active {
+      display: block;
+      animation: pageIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Typography ── */
+    .serif { font-family: 'Cormorant Garamond', serif; }
+
+    /* ── Ornament label ── */
+    .label {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── Marquee ── */
+    .marquee-wrap { overflow: hidden; }
+    .marquee-inner {
+      display: flex; width: max-content;
+      animation: ticker 28s linear infinite;
+    }
+    .marquee-wrap:hover .marquee-inner { animation-play-state: paused; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── Nav scroll ── */
+    #main-nav.scrolled {
+      background: rgba(250,250,245,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Product card ── */
+    .pcard { transition: transform 0.35s ease, box-shadow 0.35s ease; }
+    .pcard:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
+    .pcard .ci img { transition: transform 0.65s cubic-bezier(0.22,1,0.36,1); }
+    .pcard:hover .ci img { transform: scale(1.06); }
+
+    /* ── Auth input ── */
+    .ainput {
+      width: 100%; background: white;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 0.8rem 1rem;
+      font-size: 0.875rem; font-weight: 300;
+      font-family: 'Jost', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .ainput:focus { border-color: var(--green); }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── Selection ── */
+    ::selection { background: var(--green); color: white; }
+
+    /* Hero stats bar */
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; line-height: 1; }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cur-dot"></div>
+  <div id="cur-ring"></div>
+
+
+  <!-- ══════════════════════════════════════════
+       PAGE: CATALOG
+  ══════════════════════════════════════════ -->
+  <div id="page-catalog" class="page active">
+
+    <!-- NAVBAR -->
+    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+      <div class="max-w-[1340px] mx-auto px-6 md:px-10 h-[64px] flex items-center justify-between">
+        <button onclick="showPage('catalog')" class="serif text-xl font-medium">
+          Vespa<span style="color:var(--green)">Catalog</span>
+        </button>
+        <div class="hidden md:flex gap-8 text-[0.7rem] font-medium tracking-[0.14em] uppercase">
+          <a href="#grid" class="hover:text-green-700 transition">Koleksi</a>
+          <a href="#footer" class="hover:text-green-700 transition">Kontak</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="showPage('login')"
+            class="text-[0.68rem] font-medium tracking-[0.14em] uppercase px-4 py-2 rounded-full border transition hover:border-green-700 hover:text-green-700"
+            style="border-color:var(--border)">
+            Masuk
+          </button>
+          <button onclick="showPage('register')"
+            class="text-[0.68rem] font-medium tracking-[0.14em] uppercase px-4 py-2.5 rounded-full text-white transition hover:opacity-90"
+            style="background:var(--charcoal)">
+            Daftar
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="min-h-screen flex flex-col lg:flex-row">
+      <!-- Left: Text -->
+      <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 pt-28 pb-16 lg:py-0">
+        <p class="label mb-6" style="color:var(--gold)">✦ dal 1946 · italia ✦</p>
+        <h1 class="serif font-light leading-none mb-6" style="font-size:clamp(3.5rem,8vw,7rem)">
+          La Dolce<br>
+          <em style="color:var(--green)">Velocità</em>
+        </h1>
+        <p class="text-sm text-gray-500 font-light max-w-xs leading-relaxed mb-10" style="line-height:1.8">
+          Koleksi eksklusif Vespa Italia — mesin dua roda yang mendefinisikan gaya hidup urban selama tujuh dekade.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="#grid"
+            class="inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.14em] uppercase px-6 py-3.5 rounded-full text-white hover:opacity-90 transition"
+            style="background:var(--charcoal)">
+            Jelajahi Koleksi &nbsp;→
+          </a>
+          <button onclick="showPage('login')"
+            class="inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.14em] uppercase px-6 py-3.5 rounded-full border hover:border-green-700 hover:text-green-700 transition"
+            style="border-color:var(--border)">
+            Masuk
+          </button>
+        </div>
+        <!-- Stats -->
+        <div class="mt-14 pt-8 flex gap-10 flex-wrap" style="border-top:1px solid var(--border)">
+          <div>
+            <div class="stat-num">6</div>
+            <div class="text-[0.62rem] uppercase tracking-widest text-gray-400 mt-1">Model</div>
+          </div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div>
+            <div class="stat-num">78<span class="text-2xl">th</span></div>
+            <div class="text-[0.62rem] uppercase tracking-widest text-gray-400 mt-1">Warisan</div>
+          </div>
+          <div style="width:1px;background:var(--border)"></div>
+          <div>
+            <div class="stat-num">100<span class="text-2xl">%</span></div>
+            <div class="text-[0.62rem] uppercase tracking-widest text-gray-400 mt-1">Original</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Featured image panel -->
+      <div class="flex-1 relative min-h-[55vw] lg:min-h-0 overflow-hidden" style="background:var(--dark)">
+        <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/primavera.png"
+             onerror="this.src='https://placehold.co/900x700/0f1a13/16a34a?text=Vespa'"
+             alt="Vespa Primavera"
+             class="absolute inset-0 w-full h-full object-contain p-12 opacity-75 mix-blend-luminosity" />
+        <!-- Corner label -->
+        <div class="absolute bottom-8 left-8">
+          <p class="serif italic text-white/40 text-2xl">Primavera 150</p>
+          <p class="label text-green-400/40 mt-1">in evidenza</p>
+        </div>
+        <!-- Decorative line -->
+        <div class="absolute top-8 right-8 bottom-8 w-px" style="background:rgba(255,255,255,0.06)"></div>
+      </div>
+    </section>
+
+    <!-- MARQUEE STRIP -->
+    <div class="marquee-wrap py-3" style="background:var(--charcoal);border-top:1px solid rgba(255,255,255,0.05)">
+      <div class="marquee-inner text-[0.65rem] font-medium tracking-[0.22em] uppercase text-white/50">
+        <span class="px-8">Primavera 150</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">Sprint 150</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">GTS 300 Super</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">LX 125</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">946 Edition</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">Elettrica</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">Primavera 150</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">Sprint 150</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">GTS 300 Super</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">LX 125</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">946 Edition</span><span style="color:var(--green)" class="px-1">·</span>
+        <span class="px-8">Elettrica</span><span style="color:var(--green)" class="px-1">·</span>
+      </div>
+    </div>
+
+    <!-- CATALOG HEADER -->
+    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-5">
+      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
+        <div>
+          <p class="label mb-2">✦ koleksi 2024 ✦</p>
+          <h2 class="serif text-4xl font-light">Semua Model</h2>
+        </div>
+        <span class="hidden md:block text-[0.65rem] tracking-widest uppercase text-gray-400">6 Model Tersedia</span>
+      </div>
+    </div>
+
+    <!-- CATALOG GRID -->
+    <main id="grid" class="max-w-[1340px] mx-auto px-6 md:px-10 py-8 space-y-5">
+
+      <!-- Row 1: 7/5 split -->
+      <div class="grid grid-cols-12 gap-5">
+
+        <!-- Card 1: Featured -->
+        <div class="pcard col-span-12 md:col-span-7 bg-white rounded-2xl overflow-hidden" style="border:1px solid var(--border)">
+          <div class="ci overflow-hidden" style="height:280px">
+            <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/Vespa+Primavera+150.jpg"
+                 alt="Vespa Primavera 150"
+                 onerror="this.src='https://placehold.co/700x400/f5f0e8/1a1a1a?text=Vespa+Primavera'"
+                 class="w-full h-full object-cover" />
+          </div>
+          <div class="p-6 flex items-end justify-between gap-4">
+            <div>
+              <span class="label">Primavera Series</span>
+              <h3 class="serif text-2xl mt-1">Vespa Primavera 150</h3>
+              <p class="text-sm text-gray-400 font-light mt-1">Gaya retro modern dengan mesin 150cc yang lincah untuk perkotaan.</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="serif text-2xl font-light" style="color:var(--green)">Rp 45 jt</p>
+              <button class="mt-1 text-[0.65rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition whitespace-nowrap">Detail →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="pcard col-span-12 md:col-span-5 bg-white rounded-2xl overflow-hidden" style="border:1px solid var(--border)">
+          <div class="ci overflow-hidden" style="height:200px">
+            <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/Vespa+Sprint+150.jpg"
+                 alt="Vespa Sprint 150"
+                 onerror="this.src='https://placehold.co/500x280/f5f0e8/1a1a1a?text=Vespa+Sprint'"
+                 class="w-full h-full object-cover" />
+          </div>
+          <div class="p-5 flex items-end justify-between gap-4">
+            <div>
+              <span class="label">Sprint Series</span>
+              <h3 class="serif text-xl mt-1">Vespa Sprint 150</h3>
+              <p class="text-xs text-gray-400 font-light mt-1">Sporty dan dinamis untuk jiwa muda.</p>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <p class="serif text-xl font-light" style="color:var(--green)">Rp 48 jt</p>
+              <button class="mt-1 text-[0.65rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition">Detail →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Three equal -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+        <!-- Card 3 -->
+        <div class="pcard bg-white rounded-2xl overflow-hidden" style="border:1px solid var(--border)">
+          <div class="ci overflow-hidden" style="height:190px">
+            <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/gts300.jpg"
+                 alt="Vespa GTS 300"
+                 onerror="this.src='https://placehold.co/400x240/f5f0e8/1a1a1a?text=Vespa+GTS'"
+                 class="w-full h-full object-cover" />
+          </div>
+          <div class="p-5">
+            <span class="label">GTS Series</span>
+            <h3 class="serif text-xl mt-1">Vespa GTS 300 Super</h3>
+            <p class="text-xs text-gray-400 font-light mt-1 leading-relaxed">Performa premium 300cc, raja jalanan.</p>
+            <div class="flex items-center justify-between mt-4 pt-4" style="border-top:1px solid var(--border)">
+              <p class="serif text-xl font-light" style="color:var(--green)">Rp 125 jt</p>
+              <button class="text-[0.65rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition">Detail →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="pcard bg-white rounded-2xl overflow-hidden" style="border:1px solid var(--border)">
+          <div class="ci overflow-hidden" style="height:190px">
+            <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/lx125.png"
+                 alt="Vespa LX 125"
+                 onerror="this.src='https://placehold.co/400x240/f5f0e8/1a1a1a?text=Vespa+LX'"
+                 class="w-full h-full object-cover" />
+          </div>
+          <div class="p-5">
+            <span class="label">LX Series</span>
+            <h3 class="serif text-xl mt-1">Vespa LX 125</h3>
+            <p class="text-xs text-gray-400 font-light mt-1 leading-relaxed">Nyaman dan praktis untuk commuter harian.</p>
+            <div class="flex items-center justify-between mt-4 pt-4" style="border-top:1px solid var(--border)">
+              <p class="serif text-xl font-light" style="color:var(--green)">Rp 35 jt</p>
+              <button class="text-[0.65rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition">Detail →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="pcard bg-white rounded-2xl overflow-hidden" style="border:1px solid var(--border)">
+          <div class="ci overflow-hidden" style="height:190px">
+            <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/946.jpeg"
+                 alt="Vespa 946"
+                 onerror="this.src='https://placehold.co/400x240/f5f0e8/1a1a1a?text=Vespa+946'"
+                 class="w-full h-full object-cover" />
+          </div>
+          <div class="p-5">
+            <span class="label">946 Edition</span>
+            <h3 class="serif text-xl mt-1">Vespa 946</h3>
+            <p class="text-xs text-gray-400 font-light mt-1 leading-relaxed">Edisi koleksi eksklusif, terinspirasi 1946.</p>
+            <div class="flex items-center justify-between mt-4 pt-4" style="border-top:1px solid var(--border)">
+              <p class="serif text-xl font-light" style="color:var(--green)">Rp 165 jt</p>
+              <button class="text-[0.65rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition">Detail →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Full-width Elettrica -->
+      <div class="pcard bg-white rounded-2xl overflow-hidden" style="border:1px solid var(--border)">
+        <div class="flex flex-col md:flex-row">
+          <div class="ci overflow-hidden md:w-[55%]" style="height:300px">
+            <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/elettrica.avif"
+                 alt="Vespa Elettrica"
+                 onerror="this.src='https://placehold.co/800x400/0f1a13/16a34a?text=Vespa+Elettrica'"
+                 class="w-full h-full object-cover" />
+          </div>
+          <div class="flex-1 flex flex-col justify-center p-8 md:p-12" style="background:var(--dark)">
+            <p class="label text-green-400/50 mb-4">✦ electric series ✦</p>
+            <h3 class="serif text-3xl md:text-4xl font-light text-white">Vespa Elettrica</h3>
+            <p class="text-sm text-white/40 font-light mt-3 leading-relaxed max-w-xs">
+              Masa depan mobilitas urban. 100% listrik, 0% emisi, tetap stylish — redefinisi kebebasan berkendara.
+            </p>
+            <div class="flex items-center gap-6 mt-8">
+              <p class="serif text-3xl text-green-400 font-light">Rp 88 jt</p>
+              <button class="text-[0.68rem] tracking-widest uppercase text-white/60 hover:text-white border border-white/15 hover:border-white/50 px-5 py-2.5 rounded-full transition">
+                Lihat Detail →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="footer" class="mt-20 py-8" style="border-top:1px solid var(--border)">
+      <div class="max-w-[1340px] mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <span class="serif text-lg">Vespa<span style="color:var(--green)">Catalog</span></span>
+        <p class="text-xs text-gray-400 tracking-wide">© 2024 VespaCatalog — Dibuat untuk pembelajaran DevSecOps.</p>
+        <p class="label" style="color:var(--gold)">✦ dal 1946 ✦</p>
+      </div>
+    </footer>
+
+  </div><!-- /page-catalog -->
+
+
+  <!-- ══════════════════════════════════════════
+       PAGE: LOGIN
+  ══════════════════════════════════════════ -->
+  <div id="page-login" class="page">
+    <div class="min-h-screen flex">
+
+      <!-- Left panel (desktop only) -->
+      <div class="hidden lg:flex lg:w-[42%] flex-col justify-between p-12 relative overflow-hidden" style="background:var(--dark)">
+        <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/gts300.jpg"
+             onerror="this.src='https://placehold.co/600x900/0f1a13/16a34a?text=GTS+300'"
+             alt="" class="absolute inset-0 w-full h-full object-cover opacity-[0.15]" />
+        <!-- Decorative vertical line -->
+        <div class="absolute top-0 right-0 bottom-0 w-px" style="background:rgba(255,255,255,0.05)"></div>
+
+        <div class="relative z-10">
+          <button onclick="showPage('catalog')" class="serif text-2xl font-light text-white">
+            Vespa<span style="color:var(--green)">Catalog</span>
+          </button>
+        </div>
+        <div class="relative z-10">
+          <p class="label text-green-400/40 mb-5">✦ dal 1946 · italia ✦</p>
+          <blockquote class="serif text-4xl font-light italic leading-tight text-white/80">
+            "Bukan sekadar<br>kendaraan.<br>Ini adalah<br><em style="color:var(--green)">gaya hidup.</em>"
+          </blockquote>
+          <div class="mt-8 h-px w-12" style="background:var(--gold)"></div>
+        </div>
+      </div>
+
+      <!-- Right panel: form -->
+      <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-20 py-12" style="background:var(--cream)">
+        <button onclick="showPage('catalog')"
+          class="self-start flex items-center gap-2 text-[0.68rem] tracking-widest uppercase text-gray-400 hover:text-gray-700 transition mb-12">
+          ← Kembali
+        </button>
+
+        <p class="label mb-4" style="color:var(--gold)">✦ selamat datang ✦</p>
+        <h1 class="serif font-light mb-2" style="font-size:clamp(2.5rem,5vw,3.5rem)">Masuk</h1>
+        <p class="text-sm text-gray-400 font-light mb-10">Akses koleksi eksklusif Anda.</p>
+
+        <div class="max-w-[360px] w-full space-y-5">
+          <div>
+            <label class="text-[0.65rem] tracking-widest uppercase text-gray-400 block mb-2">Email</label>
+            <input id="login-email" type="email" placeholder="nama@email.com" class="ainput" />
+          </div>
+          <div>
+            <label class="text-[0.65rem] tracking-widest uppercase text-gray-400 block mb-2">Password</label>
+            <input id="login-password" type="password" placeholder="••••••••" class="ainput" />
+          </div>
+
+          <p id="login-msg" class="text-sm hidden"></p>
+
+          <button onclick="handleLogin()"
+            class="w-full text-white text-[0.7rem] font-medium tracking-[0.15em] uppercase py-4 rounded-xl hover:opacity-90 transition"
+            style="background:var(--charcoal)">
+            Masuk
+          </button>
+
+          <p class="text-center text-sm text-gray-400 font-light pt-1">
+            Belum punya akun?
+            <button onclick="showPage('register')"
+              class="font-medium underline underline-offset-4 hover:text-green-700 transition ml-1"
+              style="color:var(--green)">Daftar sekarang</button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-login -->
+
+
+  <!-- ══════════════════════════════════════════
+       PAGE: REGISTER
+  ══════════════════════════════════════════ -->
+  <div id="page-register" class="page">
+    <div class="min-h-screen flex">
+
+      <!-- Left panel -->
+      <div class="hidden lg:flex lg:w-[42%] flex-col justify-between p-12 relative overflow-hidden" style="background:var(--dark)">
+        <img src="https://s3-docker-compose-yassir.s3.ap-southeast-3.amazonaws.com/products/946.jpeg"
+             onerror="this.src='https://placehold.co/600x900/0f1a13/c4a265?text=Vespa+946'"
+             alt="" class="absolute inset-0 w-full h-full object-cover opacity-[0.15]" />
+        <div class="absolute top-0 right-0 bottom-0 w-px" style="background:rgba(255,255,255,0.05)"></div>
+
+        <div class="relative z-10">
+          <button onclick="showPage('catalog')" class="serif text-2xl font-light text-white">
+            Vespa<span style="color:var(--green)">Catalog</span>
+          </button>
+        </div>
+        <div class="relative z-10">
+          <p class="label text-green-400/40 mb-5">✦ bergabunglah ✦</p>
+          <blockquote class="serif text-4xl font-light italic leading-tight text-white/80">
+            "Mulai perjalanan<br>Anda bersama<br><em style="color:var(--green)">VespaCatalog.</em>"
+          </blockquote>
+          <div class="mt-8 h-px w-12" style="background:var(--gold)"></div>
+        </div>
+      </div>
+
+      <!-- Right panel: form -->
+      <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-20 py-12" style="background:var(--cream)">
+        <button onclick="showPage('catalog')"
+          class="self-start flex items-center gap-2 text-[0.68rem] tracking-widest uppercase text-gray-400 hover:text-gray-700 transition mb-12">
+          ← Kembali
+        </button>
+
+        <p class="label mb-4" style="color:var(--gold)">✦ akun baru ✦</p>
+        <h1 class="serif font-light mb-2" style="font-size:clamp(2.5rem,5vw,3.5rem)">Daftar</h1>
+        <p class="text-sm text-gray-400 font-light mb-10">Buat akun dan nikmati koleksi eksklusif.</p>
+
+        <div class="max-w-[360px] w-full space-y-5">
+          <div>
+            <label class="text-[0.65rem] tracking-widest uppercase text-gray-400 block mb-2">Nama Lengkap</label>
+            <input id="reg-name" type="text" placeholder="John Doe" class="ainput" />
+          </div>
+          <div>
+            <label class="text-[0.65rem] tracking-widest uppercase text-gray-400 block mb-2">Email</label>
+            <input id="reg-email" type="email" placeholder="nama@email.com" class="ainput" />
+          </div>
+          <div>
+            <label class="text-[0.65rem] tracking-widest uppercase text-gray-400 block mb-2">Password</label>
+            <input id="reg-password" type="password" placeholder="Min. 8 karakter" class="ainput" />
+          </div>
+
+          <p id="reg-msg" class="text-sm hidden"></p>
+
+          <button onclick="handleRegister()"
+            class="w-full text-white text-[0.7rem] font-medium tracking-[0.15em] uppercase py-4 rounded-xl hover:opacity-90 transition"
+            style="background:var(--green)">
+            Buat Akun
+          </button>
+
+          <p class="text-center text-sm text-gray-400 font-light pt-1">
+            Sudah punya akun?
+            <button onclick="showPage('login')"
+              class="font-medium underline underline-offset-4 hover:text-green-700 transition ml-1"
+              style="color:var(--charcoal)">Masuk</button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-register -->
+
+
+  <!-- ══ JAVASCRIPT ═══════════════════════════ -->
+  <script>
+    // ── Config ────────────────────────────────
+    // Gunakan string kosong (relative path) agar API call melewati proxy yang sama
+    // (Nginx di Docker / production). Dengan ini frontend dan backend satu origin.
+    const API_URL = '';
+
+    // ── Page navigation ───────────────────────
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const page = document.getElementById('page-' + id);
+      page.classList.add('active');
+      document.body.style.overflow = (id === 'catalog') ? '' : 'hidden';
+      window.scrollTo(0, 0);
+    }
+
+    // ── Custom cursor ─────────────────────────
+    const dot  = document.getElementById('cur-dot');
+    const ring = document.getElementById('cur-ring');
+    let mx = -100, my = -100, rx = -100, ry = -100;
+
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+    (function animCursor() {
+      rx += (mx - rx) * 0.14;
+      ry += (my - ry) * 0.14;
+      dot.style.left  = mx + 'px';
+      dot.style.top   = my + 'px';
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animCursor);
+    })();
+
+    document.addEventListener('mouseover', e => {
+      if (e.target.closest('a,button,input')) document.body.classList.add('cur-hover');
+    });
+    document.addEventListener('mouseout', e => {
+      if (e.target.closest('a,button,input')) document.body.classList.remove('cur-hover');
+    });
+
+    // Hide cursor on mobile
+    if ('ontouchstart' in window) {
+      dot.style.display = ring.style.display = 'none';
+      document.body.style.cursor = '';
+    }
+
+    // ── Navbar on scroll ──────────────────────
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // ── Feedback helper ───────────────────────
+    function showMsg(id, text, isError = false) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = `text-sm ${isError ? 'text-red-500' : 'text-green-600'}`;
+      el.classList.remove('hidden');
+    }
+
+    // ── Login ─────────────────────────────────
+    async function handleLogin() {
+      const email    = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!email || !password) return showMsg('login-msg', 'Email dan password wajib diisi.', true);
+      try {
+        const res  = await fetch(`${API_URL}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showMsg('login-msg', `Halo, ${data.name}! Login berhasil.`);
+          setTimeout(() => showPage('catalog'), 1200);
+        } else {
+          showMsg('login-msg', data.message || 'Login gagal.', true);
+        }
+      } catch (_) {
+        showMsg('login-msg', 'Tidak bisa terhubung ke server.', true);
+      }
+    }
+
+    // ── Register ──────────────────────────────
+    async function handleRegister() {
+      const name     = document.getElementById('reg-name').value.trim();
+      const email    = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      if (!name || !email || !password) return showMsg('reg-msg', 'Semua field wajib diisi.', true);
+      if (password.length < 8) return showMsg('reg-msg', 'Password minimal 8 karakter.', true);
+      try {
+        const res  = await fetch(`${API_URL}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showMsg('reg-msg', 'Akun berhasil dibuat! Silakan login.');
+          setTimeout(() => showPage('login'), 1500);
+        } else {
+          showMsg('reg-msg', data.message || 'Registrasi gagal.', true);
+        }
+      } catch (_) {
+        showMsg('reg-msg', 'Tidak bisa terhubung ke server.', true);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# datasources.yml — Auto-provisioning Grafana Datasource
+# ─────────────────────────────────────────────────────────────────────────────
+# File ini dibaca Grafana saat startup.
+# Prometheus otomatis terdaftar sebagai datasource — tidak perlu setup manual.
+#
+# Mode Docker:
+#   URL menggunakan nama service 'prometheus' (bukan 127.0.0.1).
+#   Docker DNS resolve 'prometheus' → IP container Prometheus.
+# ─────────────────────────────────────────────────────────────────────────────
+
+apiVersion: 1
+
+datasources:
+  - name:      Prometheus
+    type:      prometheus
+    access:    proxy
+    url:       http://prometheus:9090   # Nama service di docker-compose.yml
+    isDefault: true
+    editable:  false
+    jsonData:
+      timeInterval: '15s'
