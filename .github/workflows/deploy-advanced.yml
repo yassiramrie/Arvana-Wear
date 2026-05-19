@@ -1,53 +1,3 @@
-# .github/workflows/deploy-advanced.yml
-# ─────────────────────────────────────────────────────────────────────────────
-# CI/CD Pipeline — Vespa Catalog (Advanced Version)
-# Trigger: setiap push ke branch 'main'
-#
-# Perbedaan dari deploy.yml (basic):
-#   - Test job lebih verbose dengan output yang jelas (PASS/FAIL per test)
-#   - Deploy step lebih detail: validasi Docker Compose, logging per tahap
-#   - Health check mencakup App + Prometheus + Grafana
-#   - Semua error menampilkan container logs untuk debugging
-#
-# GitHub Secrets yang harus diset di repo Settings → Secrets:
-#   EC2_HOST               → IP publik atau domain EC2
-#   EC2_USER               → SSH username (biasanya: ubuntu)
-#   EC2_SSH_KEY            → Isi file .pem (private key)
-#   DB_PASSWORD            → Password PostgreSQL container
-#   GRAFANA_ADMIN_PASSWORD → Password login Grafana (port 3001)
-# ─────────────────────────────────────────────────────────────────────────────
-
-name: Deploy Advanced — Vespa Catalog
-
-on:
-  push:
-    branches: [production]
-
-jobs:
-
-  # ════════════════════════════════════════════════════════════════════════════
-  # JOB 1: TEST
-  # Jalan di GitHub runner (cloud) — tidak butuh server kita.
-  # Kalau ada step yang gagal, pipeline berhenti dan job 'deploy' tidak jalan.
-  # ════════════════════════════════════════════════════════════════════════════
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install
-
-      # TEST 1: Syntax check — catches JS parse errors before they reach the server
-      - name: Syntax check (server.js)
         run: |
           echo "=== TEST 1: Checking server.js syntax ==="
           if node --check server.js; then
@@ -68,46 +18,7 @@ jobs:
             exit 1
           fi
 
-      # TEST 3: Security audit — block on HIGH or CRITICAL CVEs
-      - name: npm security audit
-        run: |
-          echo "=== TEST 3: Running npm security audit ==="
-          if npm audit --audit-level=high; then
-            echo "PASS — No HIGH or CRITICAL vulnerabilities found"
-          else
-            echo "FAIL — HIGH or CRITICAL vulnerabilities detected. Run 'npm audit fix' locally."
-            exit 1
-          fi
-
-  # ════════════════════════════════════════════════════════════════════════════
-  # JOB 2: DEPLOY
-  # Jalan setelah job 'test' berhasil (needs: test).
-  # Kirim file ke EC2, lalu jalankan semua container via Docker Compose.
-  # ════════════════════════════════════════════════════════════════════════════
-  deploy:
-    name: Deploy to EC2 (Docker Compose)
-    runs-on: ubuntu-latest
-    needs: test
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # STEP 1: Copy semua file yang diperlukan ke EC2
-      # Termasuk: Dockerfile, docker-compose.yml, nginx/, monitoring/, src files
-      - name: Copy files to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host:     ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key:      ${{ secrets.EC2_SSH_KEY }}
-          source:   "server.js,package.json,package-lock.json,init.sql,index.html,Dockerfile,.dockerignore,docker-compose.yml,nginx,monitoring"
-          target:   "~/vespa-catalog"
-
-      # STEP 2: Install Docker jika belum ada, lalu deploy via docker compose
-      # 'env' + 'envs' = cara aman untuk kirim secret ke dalam shell script SSH.
-      # Secret TIDAK boleh ditulis langsung di 'script' karena akan ter-log.
-      - name: Install Docker & deploy
+...
         uses: appleboy/ssh-action@v1.0.3
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -132,74 +43,10 @@ jobs:
             # --- Pastikan Docker Compose plugin tersedia ---
             if ! sudo docker compose version &>/dev/null 2>&1; then
               echo "=== Installing Docker Compose plugin ==="
-              sudo apt-get update -y && sudo apt-get install -y docker-compose-plugin
+              sudo mkdir -p /usr/local/lib/docker/cli-plugins
+              sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose
+              sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
             fi
             echo "Docker Compose: $(sudo docker compose version)"
 
-            cd ~/vespa-catalog
-
-            # --- Tulis .env dari CI secrets ---
-            # docker-compose.yml membaca ${DB_PASSWORD} dan ${GF_SECURITY_ADMIN_PASSWORD} dari file ini.
-            # File .env TIDAK pernah di-commit ke git (ada di .gitignore)
-            printf "DB_PASSWORD=%s\nGF_SECURITY_ADMIN_PASSWORD=%s\n" \
-              "${DB_PASSWORD}" "${GF_PASSWORD}" > .env
-            chmod 600 .env
-            echo ".env written (permissions: 600)"
-
-            # --- Pull latest images & build app image, lalu start semua service ---
-            echo "=== Starting all services via Docker Compose ==="
-            sudo docker compose pull --quiet
-            sudo docker compose up -d --build
-
-            echo "--- Services status ---"
-            sudo docker compose ps
-            echo "Deploy done at $(date '+%Y-%m-%d %H:%M:%S UTC')"
-
-      # STEP 3: Health check — pastikan semua service merespons setelah deploy
-      - name: Health check
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host:     ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key:      ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            echo "=== POST-DEPLOY: Health checks ==="
-            sleep 5
-
-            cd ~/vespa-catalog
-
-            # 1. App health via Nginx (port 8080 → proxy ke /health di app:3000)
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health)
-            if [ "$STATUS" = "200" ]; then
-              echo "PASS — App healthy via Nginx (port 8080)"
-            else
-              echo "FAIL — App tidak merespons (HTTP ${STATUS})"
-              sudo docker compose logs --tail=30 app
-              exit 1
-            fi
-
-            # 2. Prometheus health
-            PROM=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9090/-/healthy)
-            if [ "$PROM" = "200" ]; then
-              echo "PASS — Prometheus healthy (port 9090)"
-            else
-              echo "WARN — Prometheus belum siap (HTTP ${PROM})"
-            fi
-
-            # 3. Grafana health
-            GRAFANA=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3001/api/health)
-            if [ "$GRAFANA" = "200" ]; then
-              echo "PASS — Grafana healthy (port 3001)"
-            else
-              echo "WARN — Grafana belum siap (HTTP ${GRAFANA})"
-            fi
-
-            PUBLIC_IP=$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4 2>/dev/null || echo "YOUR_EC2_IP")
-            echo ""
-            echo "ALL CHECKS DONE"
-            echo "Frontend + API : http://${PUBLIC_IP}:8080"
-            echo "Grafana        : http://${PUBLIC_IP}:3001"
-            echo "Prometheus     : http://${PUBLIC_IP}:9090"
-
-      - name: Notify success
-        run: echo "Pipeline complete — all Docker services deployed!"
+            cd ~/arvana-wear
