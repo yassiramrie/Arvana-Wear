@@ -18,3 +18,5 @@ providers:
     orgId:           1
     folder:          'Arvana Wear Monitoring'
     type:            file
+    options:
+      path:          /etc/grafana/provisioning/dashboards
