@@ -1,11 +1,11 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# docker-compose.yml — Vespa Catalog Full Stack
+# docker-compose.yml — Arvana Wear Full Stack
 # ─────────────────────────────────────────────────────────────────────────────
 #
 # Services yang berjalan:
 #   1. postgres      → Database (ganti AWS RDS)         port 5432
 #   2. app           → Node.js Express API               port 3000
-#   3. nginx         → Reverse proxy + static files      port 8080
+#   3. nginx         → Reverse proxy + static files      port 8888
 #   4. node-exporter → Metrics OS (CPU, RAM, disk)       port 9100
 #   5. prometheus    → Metrics collector & storage       port 9090
 #   6. grafana       → Dashboard visualisasi             port 3001
@@ -17,7 +17,7 @@
 #   docker compose logs -f app   ← lihat log service tertentu
 #
 # Akses:
-#   http://localhost:8080        ← Frontend (via Nginx)
+#   http://localhost:8888        ← Frontend (via Nginx)
 #   http://localhost:3000        ← API langsung (opsional, untuk debugging)
 #   http://localhost:3001        ← Grafana
 #   http://localhost:9090        ← Prometheus
@@ -30,18 +30,18 @@ services:
   # sehingga tidak hilang saat container direstart.
   postgres:
     image: postgres:16-alpine
-    container_name: vespa-postgres
+    container_name: arvana-postgres
     environment:
-      POSTGRES_DB:       vespa_catalog
+      POSTGRES_DB:       arvana_wear
       POSTGRES_USER:     postgres
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-vespa_secret}    # Di-inject dari .env / CI secrets
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-arvana_secret}    # Di-inject dari .env / CI secrets
     volumes:
       - postgres_data:/var/lib/postgresql/data      # Persist data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Auto-run saat DB pertama kali dibuat
     ports:
       - "5432:5432"   # host:container — bisa diakses dari luar container (opsional)
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d vespa_catalog"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d arvana_wear"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -52,15 +52,15 @@ services:
   # DB_HOST=postgres → Docker DNS otomatis resolve ke container postgres di atas.
   app:
     build: .
-    container_name: vespa-app
+    container_name: arvana-app
     environment:
       NODE_ENV:    production
       PORT:        3000
       DB_HOST:     postgres       # Nama service di atas, bukan IP/RDS endpoint
       DB_PORT:     5432
-      DB_NAME:     vespa_catalog
+      DB_NAME:     arvana_wear
       DB_USER:     postgres
-      DB_PASSWORD: ${DB_PASSWORD:-vespa_secret}   # Harus sama dengan POSTGRES_PASSWORD di atas
+      DB_PASSWORD: ${DB_PASSWORD:-arvana_secret}   # Harus sama dengan POSTGRES_PASSWORD di atas
       DB_SSL:      "false"        # Disable SSL untuk koneksi lokal antar container
     ports:
       - "3000:3000"
@@ -78,9 +78,9 @@ services:
   # Cocok dengan arsitektur production di deploy.yml.
   nginx:
     image: nginx:alpine
-    container_name: vespa-nginx
+    container_name: arvana-nginx
     ports:
-      - "8080:80"             # host:container — akses via http://localhost:8080
+      - "8888:80"             # host:container — akses via http://localhost:8888
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro  # Config
       - ./index.html:/usr/share/nginx/html/index.html:ro       # Frontend
@@ -93,7 +93,7 @@ services:
   # Mount /proc, /sys, / dari host agar bisa baca metrics real host.
   node-exporter:
     image: prom/node-exporter:latest
-    container_name: vespa-node-exporter
+    container_name: arvana-node-exporter
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
@@ -102,7 +102,7 @@ services:
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
-      - /:/host/root:ro,rslave
+      - /:/host/root:ro
     ports:
       - "9100:9100"
     restart: unless-stopped
@@ -112,7 +112,7 @@ services:
   # Config di-mount dari ./monitoring/prometheus.yml.
   prometheus:
     image: prom/prometheus:latest
-    container_name: vespa-prometheus
+    container_name: arvana-prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -132,7 +132,7 @@ services:
   # Datasource Prometheus sudah auto-provisioning dari file datasources.yml.
   grafana:
     image: grafana/grafana:latest
-    container_name: vespa-grafana
+    container_name: arvana-grafana
     environment:
       GF_SECURITY_ADMIN_USER:     admin
       GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD:-admin123}    # Di-inject dari .env / CI secrets

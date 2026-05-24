@@ -1,7 +1,7 @@
 {
-  "name": "vespa-catalog-api",
+  "name": "arvana-wear-api",
   "version": "1.0.0",
-  "description": "Simple Vespa Catalog backend for DevSecOps learning",
+  "description": "Simple Arvana Wear backend for DevSecOps learning",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

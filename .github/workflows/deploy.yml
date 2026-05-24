@@ -128,9 +128,9 @@ jobs:
           script: |
             sleep 5   # beri waktu container untuk fully start
 
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health)
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health)
             if [ "$STATUS" = "200" ]; then
-              echo "PASS — App is live at port 8080!"
+              echo "PASS — App is live at port 8888!"
             else
               echo "FAIL — App not responding (HTTP $STATUS)"
               cd ~/arvana-wear && sudo docker compose logs --tail=30 app

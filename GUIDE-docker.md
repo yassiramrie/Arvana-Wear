@@ -1,4 +1,4 @@
-# 🛵 Vespa Catalog — Panduan Deployment dengan Docker
+#  Arvana Wear — Panduan Deployment dengan Docker
 
 > **Untuk siapa?** Developer yang sudah paham dasar-dasar DevSecOps dan ingin
 > belajar containerization: menggantikan RDS, PM2, dan systemd dengan Docker.
@@ -74,8 +74,8 @@ docker compose version    # Docker Compose version v2.x.x
 ### 1.1 Clone Repository
 
 ```bash
-git clone https://github.com/USERNAME/vespa-catalog.git
-cd vespa-catalog
+git clone https://github.com/USERNAME/arvana-wear.git
+cd arvana-wear
 ```
 
 ### 1.2 Siapkan File Environment
@@ -154,7 +154,7 @@ Buka browser:
 ## Langkah 2 — Memahami Struktur File Docker
 
 ```
-vespa-catalog/
+arvana-wear/
 │
 ├── Dockerfile              ← Instruksi build image Node.js app
 ├── docker-compose.yml      ← Orkestrasi semua 6 container
@@ -250,7 +250,7 @@ Buka port berikut di Security Group EC2:
 | Port | Keterangan |
 |------|------------|
 | 22 | SSH (dari IP laptop kamu saja) |
-| 8080 | Frontend + API via Nginx |
+| 8888 | Frontend + API via Nginx |
 | 3001 | Grafana Dashboard |
 | 9090 | Prometheus (opsional, bisa tutup) |
 
@@ -275,11 +275,11 @@ Push ke main
       │  (hanya lanjut kalau test PASS)
       ▼
 [JOB 2: deploy]  ← Jalan di GitHub cloud runner, tapi SSH ke EC2 kamu
-  ├── SCP semua file ke EC2 (~/vespa-catalog/)
+  ├── SCP semua file ke EC2 (~/arvana-wear/)
   ├── SSH: install Docker jika belum ada
   ├── SSH: tulis .env dari GitHub Secrets
   ├── SSH: docker compose up -d --build
-  └── SSH: curl health check ke localhost:8080/health
+  └── SSH: curl health check ke localhost:8888/health
 ```
 
 **Kenapa `env` + `envs` di pipeline?**
@@ -357,7 +357,7 @@ docker compose logs -f postgres
 
 # Masuk ke dalam container (seperti SSH)
 docker compose exec app sh
-docker compose exec postgres psql -U postgres -d vespa_catalog
+docker compose exec postgres psql -U postgres -d arvana_wear
 
 # Lihat status semua container
 docker compose ps
@@ -372,7 +372,7 @@ docker compose restart app
 
 | Masalah | Kemungkinan Penyebab | Solusi |
 |---------|---------------------|--------|
-| `curl: Connection refused` port 8080 | Nginx container tidak jalan | `docker compose logs nginx` |
+| `curl: Connection refused` port 8888 | Nginx container tidak jalan | `docker compose logs nginx` |
 | App error `ECONNREFUSED 5432` | PostgreSQL belum ready | `docker compose logs postgres`, tunggu healthcheck |
 | `relation "users" does not exist` | init.sql tidak jalan | `docker compose down -v` lalu `up -d` lagi |
 | Container restart terus (restart loop) | Error di app/config | `docker compose logs app` |
@@ -396,6 +396,5 @@ docker compose restart app
 | **Idempotency** | `docker compose up -d` aman dijalankan berkali-kali |
 | **Observability** | Prometheus + Grafana jalan otomatis dalam satu stack yang sama |
 
----
 
-*Dibuat untuk tujuan pembelajaran DevSecOps. Happy hacking! 🛵*
+*Dibuat untuk tujuan pembelajaran DevSecOps. Happy hacking! 🧕*

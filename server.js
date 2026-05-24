@@ -1,5 +1,5 @@
 /**
- * server.js — Vespabrok Catalog API
+ * server.js — Arvana Wear API
  * ─────────────────────────────────────────────────────────────────────────────
  * Endpoints:
  *   POST /register  → Buat akun baru
@@ -54,7 +54,7 @@ app.use(express.json());                 // Parse incoming JSON request body
 const db = new Pool({
   host:     process.env.DB_HOST,       // RDS Endpoint, e.g. mydb.xxxx.rds.amazonaws.com
   port:     process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME,       // Database name, e.g. vespa_catalog
+  database: process.env.DB_NAME,       // Database name, e.g. arvana_wear
   user:     process.env.DB_USER,       // DB master username
   password: process.env.DB_PASSWORD,   // DB master password — paling sensitif!
   ssl: process.env.DB_SSL === 'false' ? false : {rejectUnauthorized: false},

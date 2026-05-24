@@ -1,3 +1,25 @@
+name: Deploy Advanced — Arvana Wear
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Syntax check (server.js)
         run: |
           echo "=== TEST 1: Checking server.js syntax ==="
           if node --check server.js; then
@@ -18,7 +40,27 @@
             exit 1
           fi
 
-...
+      - name: Security audit
+        run: npm audit --audit-level=high
+
+  deploy:
+    name: Deploy to EC2 (Docker Compose)
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host:     ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key:      ${{ secrets.EC2_SSH_KEY }}
+          source:   "server.js,package.json,package-lock.json,init.sql,index.html,Dockerfile,.dockerignore,docker-compose.yml,nginx,monitoring"
+          target:   "~/arvana-wear"
+
+      - name: Deploy via Docker Compose
         uses: appleboy/ssh-action@v1.0.3
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -50,3 +92,28 @@
             echo "Docker Compose: $(sudo docker compose version)"
 
             cd ~/arvana-wear
+
+            # Setup environment variables untuk Docker Compose
+            printf "DB_PASSWORD=%s\nGF_SECURITY_ADMIN_PASSWORD=%s\n" \
+              "${DB_PASSWORD}" "${GF_PASSWORD}" > .env
+            chmod 600 .env
+
+            sudo docker compose up -d --build
+            sudo docker compose ps
+
+      - name: Health check
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host:     ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key:      ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sleep 5
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health)
+            if [ "$STATUS" = "200" ]; then
+              echo "PASS — App is live at port 8888!"
+            else
+              echo "FAIL — App not responding (HTTP $STATUS)"
+              cd ~/arvana-wear && sudo docker compose logs --tail=30 app
+              exit 1
+            fi

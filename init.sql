@@ -1,15 +1,15 @@
 -- ─────────────────────────────────────────────────────────────────────────────
--- init.sql — Inisialisasi Tabel Vespa Catalog
+-- init.sql — Inisialisasi Tabel Arvana Wear
 -- ─────────────────────────────────────────────────────────────────────────────
 --
 -- Mode Docker:
 --   File ini di-mount ke /docker-entrypoint-initdb.d/init.sql
 --   PostgreSQL container otomatis menjalankan file ini saat database pertama
---   kali dibuat (hanya sekali). Database 'vespa_catalog' sudah dibuat otomatis
+--   kali dibuat (hanya sekali). Database 'arvana_wear' sudah dibuat otomatis
 --   oleh POSTGRES_DB di docker-compose.yml, jadi kita hanya perlu buat tabel.
 --
 -- Mode Manual (psql):
---   psql -h <HOST> -U postgres -d vespa_catalog -f init.sql
+--   psql -h <HOST> -U postgres -d arvana_wear -f init.sql
 -- ─────────────────────────────────────────────────────────────────────────────
 
 -- ── TABEL USERS ───────────────────────────────────────────────────────────────
