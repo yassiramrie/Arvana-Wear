@@ -109,6 +109,9 @@ jobs:
             printf "DB_PASSWORD=%s\nGF_SECURITY_ADMIN_PASSWORD=%s\n" \
               "${DB_PASSWORD}" "${GF_PASSWORD}" > .env
             chmod 600 .env
+            
+            # Hapus paksa container lama jika nyangkut untuk menghindari "Conflict name"
+            sudo docker rm -f arvana-app || true
 
             # Jalankan semua 6 container (build app image dulu, pull sisanya)
             sudo docker compose up -d --build

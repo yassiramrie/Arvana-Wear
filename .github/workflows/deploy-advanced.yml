@@ -98,6 +98,9 @@ jobs:
               "${DB_PASSWORD}" "${GF_PASSWORD}" > .env
             chmod 600 .env
 
+            # Hapus paksa container lama jika nyangkut
+            sudo docker rm -f arvana-app || true
+
             sudo docker compose up -d --build
             sudo docker compose ps
 
