@@ -131,7 +131,7 @@ services:
   # Default login: admin / admin123
   # Datasource Prometheus sudah auto-provisioning dari file datasources.yml.
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.4.2
     container_name: arvana-grafana
     environment:
       GF_SECURITY_ADMIN_USER:     admin
