@@ -105,8 +105,8 @@ jobs:
             cd ~/arvana-wear
 
             # Buat file .env dari secrets CI — TIDAK pernah di-commit ke git!
-            # docker-compose.yml membaca ${DB_PASSWORD} dan ${GF_SECURITY_ADMIN_PASSWORD} dari file ini.
-            printf "DB_PASSWORD=%s\nGF_SECURITY_ADMIN_PASSWORD=%s\n" \
+            # docker-compose.yml membaca ${DB_PASSWORD} dan ${GRAFANA_PASSWORD} dari file ini.
+            printf "DB_PASSWORD=%s\nGRAFANA_PASSWORD=%s\n" \
               "${DB_PASSWORD}" "${GF_PASSWORD}" > .env
             chmod 600 .env
             
@@ -129,13 +129,17 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key:      ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sleep 5   # beri waktu container untuk fully start
-
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health)
-            if [ "$STATUS" = "200" ]; then
-              echo "PASS — App is live at port 8888!"
-            else
-              echo "FAIL — App not responding (HTTP $STATUS)"
-              cd ~/arvana-wear && sudo docker compose logs --tail=30 app
-              exit 1
-            fi
+            echo "Menunggu services menyala (termasuk healthcheck Postgres)..."
+            for i in {1..6}; do
+              sleep 10
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health || echo "000")
+              if [ "$STATUS" = "200" ]; then
+                echo "PASS — App is live at port 8888!"
+                exit 0
+              fi
+              echo "Percobaan $i gagal (HTTP $STATUS). Retrying..."
+            done
+            
+            echo "FAIL — App tidak merespons setelah 60 detik."
+            cd ~/arvana-wear && sudo docker compose logs --tail=30 app
+            exit 1

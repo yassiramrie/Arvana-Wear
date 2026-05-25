@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# Dockerfile — Vespa Catalog API
+# Dockerfile — Arvana Wear API
 # ─────────────────────────────────────────────────────────────────────────────
 # Multi-stage? No — app ini kecil, single stage sudah cukup.
 # Base image: node:20-alpine (kecil ~50MB, cocok untuk production)

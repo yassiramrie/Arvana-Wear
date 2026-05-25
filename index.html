@@ -24,27 +24,82 @@
       --dark:     #0F1A13;
     }
 
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Back to top ── */
+    #back-top {
+      position: fixed; bottom: 5rem; right: 1.5rem; z-index: 99;
+      width: 40px; height: 40px;
+      background: var(--charcoal);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    #back-top.show { opacity: 1; visibility: visible; }
+    #back-top:hover { transform: translateY(-3px); }
+    #back-top i { color: white; font-size: 0.9rem; }
+
+    /* ── Benefit card ── */
+    .bcard {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .bcard:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px -8px rgba(0,0,0,0.06);
+    }
+    .bcard .icon-wrap {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-size: 1.3rem;
+      transition: transform 0.3s ease;
+    }
+    .bcard:hover .icon-wrap { transform: scale(1.1); }
+
+    /* ── Color swatch ── */
+    .swatch {
+      display: inline-block;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      margin: 0 2px;
+      transition: transform 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .swatch:hover { transform: scale(1.3); border-color: var(--green); }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--cream);
       color: var(--charcoal);
       font-family: 'Inter', sans-serif;
       font-weight: 300;
     }
-
     .serif { font-family: 'Playfair Display', serif; }
-
-    /* ── Nav scroll ── */
     #main-nav.scrolled {
       background: rgba(250, 247, 242, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
-
-    /* ── Product card ── */
     .pcard {
       background: white;
       border-radius: 1.25rem;
@@ -62,19 +117,13 @@
       width: 100%; height: 100%; object-fit: cover;
     }
     .pcard:hover .ci img { transform: scale(1.07); }
-
-    /* ── Badge ── */
     .badge {
       position: absolute; top: 1rem; left: 1rem;
       font-size: 0.6rem; letter-spacing: 0.08em; font-weight: 500;
       padding: 0.3rem 0.8rem; border-radius: 999px;
       background: white; color: var(--green);
     }
-    .badge-soldout {
-      background: var(--charcoal); color: white;
-    }
-
-    /* ── Marquee ── */
+    .badge-soldout { background: var(--charcoal); color: white; }
     .marquee-wrap { overflow: hidden; }
     .marquee-inner {
       display: flex; width: max-content;
@@ -85,8 +134,6 @@
       from { transform: translateX(0); }
       to { transform: translateX(-50%); }
     }
-
-    /* ── Auth input ── */
     .ainput {
       width: 100%; background: white;
       border: 1px solid var(--border);
@@ -98,14 +145,10 @@
       outline: none;
     }
     .ainput:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.08); }
-
-    /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--cream); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::selection { background: var(--green); color: white; }
-
-    /* ── Page system ── */
     .page { display: none; }
     .page.active {
       display: block;
@@ -115,8 +158,6 @@
       from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* ── Category cards ── */
     .cat-card {
       position: relative; border-radius: 1.25rem; overflow: hidden;
       cursor: pointer;
@@ -131,8 +172,6 @@
       position: absolute; bottom: 0; left: 0; right: 0;
       padding: 1.5rem;
     }
-
-    /* ── Testimonial ── */
     .testi-card {
       background: white;
       border: 1px solid var(--border);
@@ -141,22 +180,16 @@
       transition: transform 0.3s ease;
     }
     .testi-card:hover { transform: translateY(-3px); }
-
-    /* ── Animated counter ── */
     .stat-num {
       font-family: 'Playfair Display', serif;
       font-size: 2.8rem;
       line-height: 1;
     }
-
-    /* ── Label ── */
     .label-tag {
       display: inline-flex; align-items: center; gap: 0.4rem;
       font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--gold);
     }
-
-    /* ── Floating contact btn ── */
     #wa-btn {
       position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
       width: 52px; height: 52px;
@@ -169,21 +202,22 @@
     }
     #wa-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5); }
     #wa-btn i { color: white; font-size: 1.5rem; }
-
-    /* ── Hero section ── */
     .hero-bg {
       background: linear-gradient(135deg, var(--dark) 0%, #1a2e20 50%, var(--dark) 100%);
+      background-size: 200% 200%;
+      animation: heroShift 8s ease infinite;
     }
-
-    /* ── Geometric pattern ── */
     .geo-pattern {
       background-image:
         radial-gradient(circle at 30% 70%, rgba(255,255,255,0.03) 1px, transparent 1px),
         radial-gradient(circle at 70% 30%, rgba(255,255,255,0.03) 1px, transparent 1px);
       background-size: 40px 40px, 30px 30px;
     }
-
-    /* ── Wishlist heart ── */
+    @keyframes heroShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
     .wish-btn {
       position: absolute; top: 1rem; right: 1rem;
       width: 34px; height: 34px;
@@ -196,18 +230,72 @@
     .pcard:hover .wish-btn { opacity: 1; }
     .wish-btn i { color: #ccc; font-size: 0.85rem; transition: color 0.2s; }
     .wish-btn:hover i { color: #e74c3c; }
+    @media (max-width: 768px) { .wish-btn { opacity: 1; } }
 
-    @media (max-width: 768px) {
-      .wish-btn { opacity: 1; }
+    /* ── Shopee button ── */
+    .btn-shopee {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #EE4D2D;
+      color: white;
+      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.06em;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      transition: opacity 0.2s;
+    }
+    .btn-shopee:hover { opacity: 0.9; }
+
+    /* ── Instagram grid item ── */
+    .ig-item {
+      position: relative; border-radius: 0.75rem; overflow: hidden;
+      aspect-ratio: 1/1; cursor: pointer;
+    }
+    .ig-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .ig-item:hover img { transform: scale(1.08); }
+    .ig-item .ig-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.3);
+      opacity: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.3s ease;
+    }
+    .ig-item:hover .ig-overlay { opacity: 1; }
+    .ig-overlay i { color: white; font-size: 1.5rem; }
+
+    /* ── Channel cards ── */
+    .chnl-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .chnl-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px -8px rgba(0,0,0,0.06);
+    }
+    .chnl-card .icon-box {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- ══ WHATSAPP FLOATING BUTTON ══ -->
-  <a id="wa-btn" href="https://wa.me/6281234567890?text=Halo%20Arvana%20Wear!" target="_blank" aria-label="Hubungi via WhatsApp">
+  <!-- ══ WHATSAPP ══ -->
+  <a id="wa-btn" href="https://wa.me/6285185313732?text=Halo%20Arvana%20Wear!%20Saya%20mau%20tanya%20produk" target="_blank" aria-label="Hubungi via WhatsApp">
     <i class="fab fa-whatsapp"></i>
   </a>
+
+  <!-- ══ BACK TO TOP ══ -->
+  <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Kembali ke atas">
+    <i class="fas fa-chevron-up"></i>
+  </button>
 
   <!-- ══════════════════════════════════════════
        PAGE: CATALOG (HOME)
@@ -221,10 +309,10 @@
           Arvana<span style="color:var(--green)">Wear</span>
         </button>
         <div class="hidden md:flex items-center gap-8 text-[0.7rem] font-medium tracking-[0.12em] uppercase">
-          <a href="#trending" class="hover:text-green-700 transition">Trending</a>
-          <a href="#koleksi" class="hover:text-green-700 transition">Koleksi</a>
+          <a href="#trending" class="hover:text-green-700 transition">Koleksi</a>
+          <a href="#shopee" class="hover:text-green-700 transition">Shopee</a>
+          <a href="#instagram" class="hover:text-green-700 transition">Instagram</a>
           <a href="#testimoni" class="hover:text-green-700 transition">Testimoni</a>
-          <a href="#footer" class="hover:text-green-700 transition">Kontak</a>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="showPage('login')"
@@ -243,23 +331,20 @@
 
     <!-- ══ HERO ══ -->
     <section class="hero-bg geo-pattern min-h-screen flex flex-col lg:flex-row relative overflow-hidden">
-      <!-- Decorative top-left gold accent -->
       <div class="absolute top-0 left-0 w-64 h-64 opacity-10" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
       <div class="absolute bottom-0 right-0 w-96 h-96 opacity-5" style="background: radial-gradient(circle, var(--gold-l) 0%, transparent 70%);"></div>
-
-      <!-- Left: Text -->
       <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 pt-28 pb-16 lg:py-0 relative z-10">
         <div class="flex items-center gap-3 mb-6">
           <span class="w-8 h-px" style="background:var(--gold)"></span>
-          <span class="text-[0.6rem] tracking-[0.22em] uppercase" style="color:var(--gold)">Ramadhan Collection 2026</span>
+          <span class="text-[0.6rem] tracking-[0.22em] uppercase" style="color:var(--gold)">Your Journey Your Style</span>
         </div>
         <h1 class="serif font-light leading-tight mb-6 text-white" style="font-size:clamp(3rem, 7.5vw, 6.5rem)">
           Busana Muslim<br>
           <span style="color:var(--gold)">Elegan & Syar'i</span>
         </h1>
         <p class="text-sm text-white/40 font-light max-w-sm leading-relaxed mb-10" style="line-height:1.9">
-          Temukan koleksi busana muslim premium yang memadukan desain modern dengan nilai-nilai syar'i. 
-          Dari abaya hingga gamis, setiap helai dirancang untuk keanggunan Anda.
+          Temukan koleksi busana muslim premium di Instagram, belanja mudah lewat Shopee, dan konsultasi gratis via WhatsApp.
+          <br><span class="text-[0.65rem] tracking-widest" style="color:var(--gold);font-family:'Playfair Display',serif;font-style:italic">#YourJourneyYourStyle</span>
         </p>
         <div class="flex flex-wrap gap-4">
           <a href="#trending"
@@ -267,11 +352,11 @@
             style="background:var(--gold); color:white;">
             Koleksi Terbaru &nbsp;→
           </a>
-          <button onclick="showPage('register')"
+          <a href="#shopee"
             class="inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.12em] uppercase px-7 py-3.5 rounded-full transition"
             style="border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.7);">
-            Daftar Member
-          </button>
+            Belanja di Shopee
+          </a>
         </div>
         <!-- Stats -->
         <div class="mt-14 pt-8 flex gap-10 flex-wrap" style="border-top:1px solid rgba(255,255,255,0.07)">
@@ -291,52 +376,30 @@
           </div>
         </div>
       </div>
-
-      <!-- Right: Featured image panel with overlay -->
       <div class="flex-1 relative min-h-[50vh] lg:min-h-0 overflow-hidden">
         <div class="absolute inset-0" style="background:linear-gradient(135deg, rgba(15,26,19,0.3), transparent 50%)"></div>
-        <img src="https://placehold.co/800x1000/2D6A4F/B8945C?text=Arvana+Wear+2026"
+        <img src="https://placehold.co/800x1000/2D6A4F/FAF7F2?text=Arvana+Wear"
              alt="Arvana Wear Collection"
-             class="w-full h-full object-cover"
-             onerror="this.src='https://placehold.co/800x1000/2D6A4F/B8945C?text=Arvana+Wear'" />
-        <!-- Floating label -->
+             class="w-full h-full object-cover" />
         <div class="absolute bottom-8 left-8 flex items-center gap-3">
           <div class="w-0.5 h-10" style="background:var(--gold)"></div>
           <div>
             <p class="serif italic text-white/60 text-lg">New Arrival</p>
-            <p class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">Signature Abaya Series</p>
+            <p class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">#YourJourneyYourStyle</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ══ MARQUEE TRENDING ══ -->
+    <!-- ══ MARQUEE ══ -->
     <div class="marquee-wrap py-3" style="background:var(--charcoal);">
       <div class="marquee-inner text-[0.6rem] font-medium tracking-[0.2em] uppercase" style="color:rgba(255,255,255,0.45)">
-        <span class="px-8"><i class="fas fa-star" style="color:var(--gold);font-size:8px"></i> Abaya Silk Premium 2026</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8"><i class="fas fa-star" style="color:var(--gold);font-size:8px"></i> Gamis Rayon Exclusive</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8"><i class="fas fa-star" style="color:var(--gold);font-size:8px"></i> Khimar Syar'i 2 Layer</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8"><i class="fas fa-star" style="color:var(--gold);font-size:8px"></i> Tunik Modern Minimalis</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8"><i class="fas fa-star" style="color:var(--gold);font-size:8px"></i> Koko Premium Pria</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8"><i class="fas fa-star" style="color:var(--gold);font-size:8px"></i> Pashmina Ceruty Babydoll</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Abaya Silk Premium 2026</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Gamis Rayon Exclusive</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Khimar Syar'i 2 Layer</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Tunik Modern Minimalis</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Koko Premium Pria</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Pashmina Ceruty Babydoll</span>
-        <span style="color:var(--gold)" class="px-2">·</span>
+        <span class="px-8">Basic Paris 115x115</span><span style="color:var(--gold)" class="px-2">·</span>
+        <span class="px-8">Pashmina Pop Rayon</span><span style="color:var(--gold)" class="px-2">·</span>
+        <span class="px-8">Basic Paris 115x115</span><span style="color:var(--gold)" class="px-2">·</span>
+        <span class="px-8">Pashmina Pop Rayon</span><span style="color:var(--gold)" class="px-2">·</span>
+        <span class="px-8">Basic Paris 115x115</span><span style="color:var(--gold)" class="px-2">·</span>
+        <span class="px-8">Pashmina Pop Rayon</span><span style="color:var(--gold)" class="px-2">·</span>
       </div>
     </div>
 
@@ -350,46 +413,80 @@
         <span class="hidden md:block text-[0.6rem] tracking-widest uppercase" style="color:var(--sand)">Temukan Gaya Anda</span>
       </div>
     </section>
-
     <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-12">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/2D6A4F/FAF7F2?text=Wanita" alt="Busana Wanita" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x500/2D6A4F/FAF7F2?text=Wanita'">
+          <img src="https://placehold.co/400x500/2D6A4F/FAF7F2?text=Hijab+Collection" alt="Hijab Collection" class="w-full h-full object-cover">
           <div class="overlay"></div>
           <div class="text">
             <h3 class="serif text-xl text-white">Wanita</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Abaya · Gamis · Tunik</p>
+            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Basic Paris · Pashmina · Bergo</p>
           </div>
         </div>
         <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/40916C/FAF7F2?text=Pria" alt="Busana Pria" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x500/40916C/FAF7F2?text=Pria'">
+          <img src="https://placehold.co/400x500/40916C/FAF7F2?text=Pashmina+Pop" alt="Pashmina Pop" class="w-full h-full object-cover">
           <div class="overlay"></div>
           <div class="text">
             <h3 class="serif text-xl text-white">Pria</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Koko · Gamis · Sarung</p>
+            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Pashmina · Gamis · Koko</p>
           </div>
         </div>
         <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/B8945C/FAF7F2?text=Hijab" alt="Koleksi Hijab" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x500/B8945C/FAF7F2?text=Hijab'">
+          <img src="https://placehold.co/400x500/B8945C/FAF7F2?text=Basic+Paris" alt="Basic Paris" class="w-full h-full object-cover">
           <div class="overlay"></div>
           <div class="text">
             <h3 class="serif text-xl text-white">Hijab</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Khimar · Pashmina · Bergo</p>
+            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Paris Segi · Pashmina · Bergo</p>
           </div>
         </div>
         <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/1C1C1E/FAF7F2?text=Anak" alt="Busana Anak" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x500/1C1C1E/FAF7F2?text=Anak'">
+          <img src="https://placehold.co/400x500/1C1C1E/FAF7F2?text=Your+Style" alt="Your Style" class="w-full h-full object-cover">
           <div class="overlay"></div>
           <div class="text">
             <h3 class="serif text-xl text-white">Anak-Anak</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Gamis · Tunik · Aksesoris</p>
+            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Paris Segi · Bergo · Aksesoris</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══ TRENDING SECTION ══ -->
-    <section id="trending" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-8 pb-6">
+    <!-- ══ MENGAPA ARVANA WEAR ══ -->
+    <section class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-6 reveal">
+      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
+        <div>
+          <div class="label-tag mb-2"><i class="fas fa-star" style="font-size:8px"></i> Kenapa Arvana?</div>
+          <h2 class="serif text-3xl md:text-4xl font-light">Kenapa Belanja di Arvana Wear?</h2>
+        </div>
+        <span class="hidden md:block text-[0.6rem] tracking-widest uppercase" style="color:var(--sand)">#YourJourneyYourStyle</span>
+      </div>
+    </section>
+    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-12 reveal">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bcard">
+          <div class="icon-wrap" style="background:#f0f5f1;"><i class="fas fa-leaf" style="color:var(--green);"></i></div>
+          <h3 class="font-medium text-sm">Bahan Premium</h3>
+          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Kain Paris & Rayon Spandex berkualitas, adem, nyaman dipakai seharian.</p>
+        </div>
+        <div class="bcard">
+          <div class="icon-wrap" style="background:#f5f0e8;"><i class="fas fa-tag" style="color:var(--gold);"></i></div>
+          <h3 class="font-medium text-sm">Harga Terjangkau</h3>
+          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Mulai dari Rp 31.000 — kualitas premium dengan harga ramah di kantong.</p>
+        </div>
+        <div class="bcard">
+          <div class="icon-wrap" style="background:#fef0ec;"><i class="fas fa-truck" style="color:var(--sand);"></i></div>
+          <h3 class="font-medium text-sm">Pengiriman Cepat</h3>
+          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Dikirim dari Tangerang Selatan, sampai dalam 2-3 hari ke seluruh Indonesia.</p>
+        </div>
+        <div class="bcard">
+          <div class="icon-wrap" style="background:#f5e8e8;"><i class="fas fa-heart" style="color:var(--rose);"></i></div>
+          <h3 class="font-medium text-sm">Banyak Pilihan</h3>
+          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">19 warna Basic Paris & 7 warna Pashmina Pop — cocok untuk semua gaya.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TRENDING ══ -->
+    <section id="trending" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-8 pb-6 reveal">
       <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
         <div>
           <div class="label-tag mb-2"><i class="fas fa-fire" style="font-size:8px"></i> Sedang Tren</div>
@@ -398,179 +495,210 @@
         <span class="hidden md:block text-[0.6rem] tracking-widest uppercase" style="color:var(--sand)">Paling Diminati</span>
       </div>
     </section>
-
     <main id="koleksi" class="max-w-[1340px] mx-auto px-6 md:px-10 pb-8">
-      <!-- Row 1: Feature + 2 small -->
-      <div class="grid grid-cols-12 gap-5 mb-5">
-
-        <!-- Featured Card 1 -->
-        <div class="col-span-12 md:col-span-7 pcard relative">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Basic Paris -->
+        <div class="pcard relative">
           <div class="badge">BEST SELLER 🔥</div>
-          <button class="wish-btn"><i class="far fa-heart"></i></button>
-          <div class="ci" style="height:320px">
-            <img src="https://placehold.co/700x400/2D6A4F/B8945C?text=Abaya+Silk+Premium+2026"
-                 alt="Abaya Silk Premium"
-                 onerror="this.src='https://placehold.co/700x400/2D6A4F/B8945C?text=Abaya+Silk'"
-                 class="w-full h-full object-cover" />
+          <div class="ci" style="height:280px">
+            <img src="images/product-1.jpg" alt="Basic Paris Square Hijab" class="w-full h-full object-cover" />
           </div>
-          <div class="p-6 flex items-end justify-between gap-4">
-            <div>
-              <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Abaya Series · Wanita</span>
-              <h3 class="serif text-2xl mt-1">Abaya Silk Premium</h3>
-              <div class="flex items-center gap-1 mt-1">
-                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
-                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
-                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
-                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
-                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
-                <span class="text-[0.6rem] text-gray-400 ml-1">(128)</span>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Hijab Segi Empat</span>
+              <div class="flex items-center gap-1">
+                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
+                <span class="text-[0.6rem] text-gray-400 ml-1">(47)</span>
               </div>
-              <p class="text-xs text-gray-400 font-light mt-1 max-w-xs">Keanggunan abadi dengan material silk premium yang jatuh sempurna dan nyaman seharian.</p>
             </div>
-            <div class="text-right flex-shrink-0">
-              <p class="serif text-2xl font-light" style="color:var(--green)">Rp 450.000</p>
-              <p class="text-[0.55rem] line-through text-gray-300">Rp 550.000</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Minicards col -->
-        <div class="col-span-12 md:col-span-5 grid grid-rows-2 gap-5">
-
-          <div class="pcard relative flex md:flex-row">
-            <button class="wish-btn"><i class="far fa-heart"></i></button>
-            <div class="ci md:w-[45%]" style="min-height:160px">
-              <img src="https://placehold.co/400x240/40916C/FAF7F2?text=Gamis+2026"
-                   alt="Gamis Rayon Exclusive"
-                   onerror="this.src='https://placehold.co/400x240/40916C/FAF7F2?text=Gamis'"
-                   class="w-full h-full object-cover" />
-            </div>
-            <div class="flex-1 p-5 flex flex-col justify-center">
-              <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Daily Wear</span>
-              <h3 class="serif text-lg mt-1">Gamis Rayon Exclusive</h3>
-              <p class="serif text-xl mt-2" style="color:var(--green)">Rp 350.000</p>
-            </div>
-          </div>
-
-          <div class="pcard relative flex md:flex-row">
-            <button class="wish-btn"><i class="far fa-heart"></i></button>
-            <div class="ci md:w-[45%]" style="min-height:160px">
-              <img src="https://placehold.co/400x240/B8945C/FAF7F2?text=Khimar"
-                   alt="Khimar Syar'i"
-                   onerror="this.src='https://placehold.co/400x240/B8945C/FAF7F2?text=Khimar'"
-                   class="w-full h-full object-cover" />
-            </div>
-            <div class="flex-1 p-5 flex flex-col justify-center">
-              <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Hijab Series</span>
-              <h3 class="serif text-lg mt-1">Khimar Syar'i 2 Layer</h3>
-              <p class="serif text-xl mt-2" style="color:var(--green)">Rp 150.000</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 2: Three equal -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
-
-        <div class="pcard relative">
-          <div class="badge badge-soldout">HABIS</div>
-          <button class="wish-btn"><i class="far fa-heart"></i></button>
-          <div class="ci" style="height:220px">
-            <img src="https://placehold.co/500x320/D4A0A0/FAF7F2?text=Tunik+Modern"
-                 alt="Tunik Modern Minimalis"
-                 onerror="this.src='https://placehold.co/500x320/D4A0A0/FAF7F2?text=Tunik'"
-                 class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Casual Wear</span>
-            <h3 class="serif text-xl mt-1">Tunik Modern Minimalis</h3>
-            <p class="text-xs text-gray-400 font-light mt-1">Praktis & stylish untuk tampilan kasual maupun formal.</p>
-            <div class="flex items-center justify-between mt-4 pt-4" style="border-top:1px solid var(--border)">
-              <p class="serif text-xl font-light" style="color:var(--green)">Rp 250.000</p>
-              <button class="text-[0.6rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition">Notify Saya →</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="pcard relative">
-          <button class="wish-btn"><i class="far fa-heart"></i></button>
-          <div class="ci" style="height:220px">
-            <img src="https://placehold.co/500x320/1C1C1E/B8945C?text=Koko+Premium+2026"
-                 alt="Setelan Koko Premium"
-                 onerror="this.src='https://placehold.co/500x320/1C1C1E/B8945C?text=Koko'"
-                 class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Menswear</span>
-            <h3 class="serif text-xl mt-1">Setelan Koko Premium</h3>
-            <p class="text-xs text-gray-400 font-light mt-1">Elegan dengan bahan katun toyobo jahitan rapi.</p>
-            <div class="flex items-center justify-between mt-4 pt-4" style="border-top:1px solid var(--border)">
-              <p class="serif text-xl font-light" style="color:var(--green)">Rp 300.000</p>
-              <button class="text-[0.6rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition">Detail →</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="pcard relative">
-          <div class="badge">NEW ✨</div>
-          <button class="wish-btn"><i class="far fa-heart"></i></button>
-          <div class="ci" style="height:220px">
-            <img src="https://placehold.co/500x320/C4A882/FAF7F2?text=Pashmina+2026"
-                 alt="Pashmina Ceruty Babydoll"
-                 onerror="this.src='https://placehold.co/500x320/C4A882/FAF7F2?text=Pashmina'"
-                 class="w-full h-full object-cover" />
-          </div>
-          <div class="p-5">
-            <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Hijab Series</span>
-            <h3 class="serif text-xl mt-1">Pashmina Ceruty Babydoll</h3>
-            <p class="text-xs text-gray-400 font-light mt-1">Lembut di wajah dengan motif eksklusif limited edition.</p>
-            <div class="flex items-center justify-between mt-4 pt-4" style="border-top:1px solid var(--border)">
-              <p class="serif text-xl font-light" style="color:var(--green)">Rp 120.000</p>
-              <button class="text-[0.6rem] tracking-widest uppercase underline underline-offset-4 hover:text-green-700 transition">Detail →</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Featured banner: Signature Dress -->
-      <div class="pcard relative overflow-hidden">
-        <div class="absolute top-4 left-4 z-10">
-          <span class="badge" style="background:var(--gold);color:white">EXCLUSIVE</span>
-        </div>
-        <div class="flex flex-col md:flex-row">
-          <div class="ci md:w-[55%]" style="height:340px">
-            <img src="https://placehold.co/800x450/0F1A13/B8945C?text=Signature+Dress+2026"
-                 alt="Arvana Signature Dress"
-                 onerror="this.src='https://placehold.co/800x450/0F1A13/B8945C?text=Signature'"
-                 class="w-full h-full object-cover" />
-          </div>
-          <div class="flex-1 flex flex-col justify-center p-8 md:p-14" style="background:var(--dark)">
-            <div class="flex items-center gap-3 mb-4">
-              <span class="w-6 h-px" style="background:var(--gold)"></span>
-              <span class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">Limited Edition</span>
-            </div>
-            <h3 class="serif text-3xl md:text-4xl font-light text-white">Arvana Signature Dress 2026</h3>
-            <p class="text-sm text-white/40 font-light mt-3 leading-relaxed max-w-sm">
-              Mahakarya busana muslim dengan bordir tangan eksklusif dan kain premium. 
-              Hanya 50 pieces — setiap helai adalah karya seni.
+            <h3 class="serif text-2xl mt-1">Basic Paris (BP)</h3>
+            <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">
+              Square hijab with classic Paris fabric. Super soft, non-sheer (90%), sweat-absorbent, neat rolled hem.
+              <br><span class="text-[0.55rem] uppercase tracking-wider" style="color:var(--gold)">Warna: Burgundy · Maroon · Salmon · Dusty · Peach · Stone · Abu Ash · Silver · Putih · Milo · Coksu · Fossil · Skin · Soft Latte · Dark Grey · Lavender · Purple · DW · Dusty Purple</span>
             </p>
-            <div class="flex items-center gap-6 mt-8">
-              <div>
-                <p class="serif text-3xl font-light" style="color:var(--gold)">Rp 850.000</p>
-                <p class="text-[0.55rem] line-through text-white/20">Rp 1.200.000</p>
+            <div class="flex items-center justify-between mt-5 pt-4" style="border-top:1px solid var(--border)">
+              <p class="serif text-2xl font-light" style="color:var(--green)">Rp 31.000</p>
+              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="btn-shopee"><i class="fas fa-shopping-bag"></i> Beli di Shopee</a>
+            </div>
+          </div>
+        </div>
+        <!-- Pashmina Pop -->
+        <div class="pcard relative">
+          <div class="badge" style="background:var(--gold);color:white">POPULER</div>
+          <div class="ci" style="height:280px">
+            <img src="images/product-2.jpg" alt="Pashmina Pop Rayon Spandex" class="w-full h-full object-cover" />
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Pashmina Instan</span>
+              <div class="flex items-center gap-1">
+                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
+                <span class="text-[0.6rem] text-gray-400 ml-1">(63)</span>
               </div>
-              <button class="text-[0.65rem] tracking-widest uppercase text-white/60 hover:text-white px-5 py-2.5 rounded-full transition"
-                style="border:1px solid rgba(255,255,255,0.12)">
-                Pre-Order →
-              </button>
+            </div>
+            <h3 class="serif text-2xl mt-1">Pashmina Pop (PP)</h3>
+            <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">
+              Pashmina instan ukuran 165×55 cm. Bahan rayon spandex super soft, breathable, non-slip, non-sheer.
+              <br><span class="text-[0.55rem] uppercase tracking-wider" style="color:var(--gold)">Warna: Sage Green · Navajo · Khaky Putty · Black · BW · Lavender · Powder Blue</span>
+            </p>
+            <div class="flex items-center justify-between mt-5 pt-4" style="border-top:1px solid var(--border)">
+              <p class="serif text-2xl font-light" style="color:var(--green)">Rp 53.000</p>
+              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="btn-shopee"><i class="fas fa-shopping-bag"></i> Beli di Shopee</a>
             </div>
           </div>
         </div>
       </div>
     </main>
 
+    <!-- ══ SHOPEE SECTION ══ -->
+    <section id="shopee" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-6">
+      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
+        <div>
+          <div class="label-tag mb-2"><i class="fas fa-store" style="font-size:8px"></i> Official Store</div>
+          <h2 class="serif text-3xl md:text-4xl font-light">Belanja di Shopee</h2>
+        </div>
+        <a href="https://shopee.co.id/arvana.wear" target="_blank" class="hidden md:inline-flex items-center gap-2 text-[0.65rem] font-medium tracking-wider text-white px-5 py-2.5 rounded-full transition hover:opacity-90" style="background:#EE4D2D;">
+          <i class="fas fa-store"></i> Kunjungi Toko
+        </a>
+      </div>
+    </section>
+    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-16">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="chnl-card">
+          <div class="icon-box" style="background:#fef0ec;">
+            <i class="fas fa-truck" style="color:#EE4D2D;font-size:1.3rem;"></i>
+          </div>
+          <h3 class="font-medium text-sm">Gratis Ongkir</h3>
+          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Nikmati free shipping untuk pembelian minimal Rp 100.000 via Shopee Mall.</p>
+        </div>
+        <div class="chnl-card">
+          <div class="icon-box" style="background:#fef0ec;">
+            <i class="fas fa-undo-alt" style="color:#EE4D2D;font-size:1.3rem;"></i>
+          </div>
+          <h3 class="font-medium text-sm">Garansi 14 Hari</h3>
+          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Barang tidak sesuai? Retur mudah dalam 14 hari via pusat resolusi Shopee.</p>
+        </div>
+        <div class="chnl-card">
+          <div class="icon-box" style="background:#fef0ec;">
+            <i class="fas fa-shield-alt" style="color:#EE4D2D;font-size:1.3rem;"></i>
+          </div>
+          <h3 class="font-medium text-sm">Pembayaran Aman</h3>
+          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Shopee Pay, transfer bank, COD — semua dilindungi jaminan Shopee.</p>
+        </div>
+      </div>
+      <div class="text-center mt-8">
+        <a href="https://shopee.co.id/arvana.wear" target="_blank"
+          class="inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.08em] text-white px-8 py-4 rounded-full transition hover:opacity-90"
+          style="background:#EE4D2D;">
+          <i class="fas fa-shopping-cart"></i> Belanja Sekarang di Shopee &nbsp;→
+        </a>
+      </div>
+    </div>
+
+    <!-- ══ CHANNEL INTEGRATION ══ -->
+    <section class="hero-bg geo-pattern py-16">
+      <div class="max-w-[1340px] mx-auto px-6 md:px-10">
+        <div class="text-center mb-12">
+          <span class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">✦ Terhubung Dengan Kami ✦</span>
+          <h2 class="serif text-3xl md:text-4xl font-light text-white mt-3">Belanja Lewat Mana Saja</h2>
+          <p class="text-white/40 text-sm font-light mt-3 max-w-md mx-auto">Pilih platform favorit kamu untuk belanja atau sekadar lihat-lihat koleksi terbaru Arvana Wear.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <!-- Shopee -->
+          <div class="chnl-card text-center" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
+            <div class="icon-box" style="background:rgba(238,77,45,0.15);margin:0 auto 1rem;">
+              <i class="fas fa-store" style="color:#EE4D2D;font-size:1.3rem;"></i>
+            </div>
+            <h3 class="text-white font-medium text-sm">Shopee</h3>
+            <p class="text-white/30 text-xs font-light mt-2 mb-4">@arvana.wear</p>
+            <a href="https://shopee.co.id/arvana.wear" target="_blank"
+              class="inline-block text-[0.6rem] tracking-widest uppercase px-4 py-2.5 rounded-full border transition hover:bg-white hover:text-black"
+              style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);">
+              Kunjungi
+            </a>
+          </div>
+          <!-- Instagram -->
+          <div class="chnl-card text-center" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
+            <div class="icon-box" style="background:rgba(228,64,95,0.15);margin:0 auto 1rem;">
+              <i class="fab fa-instagram" style="color:#E4405F;font-size:1.3rem;"></i>
+            </div>
+            <h3 class="text-white font-medium text-sm">Instagram</h3>
+            <p class="text-white/30 text-xs font-light mt-2 mb-4">@arvana.wear</p>
+            <a href="https://instagram.com/arvana.wear" target="_blank"
+              class="inline-block text-[0.6rem] tracking-widest uppercase px-4 py-2.5 rounded-full border transition hover:bg-white hover:text-black"
+              style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);">
+              Ikuti
+            </a>
+          </div>
+          <!-- WhatsApp -->
+          <div class="chnl-card text-center" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
+            <div class="icon-box" style="background:rgba(37,211,102,0.15);margin:0 auto 1rem;">
+              <i class="fab fa-whatsapp" style="color:#25D366;font-size:1.3rem;"></i>
+            </div>
+            <h3 class="text-white font-medium text-sm">WhatsApp</h3>
+            <p class="text-white/30 text-xs font-light mt-2 mb-4">0851-8531-3732</p>
+            <a href="https://wa.me/6285185313732" target="_blank"
+              class="inline-block text-[0.6rem] tracking-widest uppercase px-4 py-2.5 rounded-full border transition hover:bg-white hover:text-black"
+              style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);">
+              Chat
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ INSTAGRAM GALLERY ══ -->
+    <section id="instagram" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-6">
+      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
+        <div>
+          <div class="label-tag mb-2"><i class="fab fa-instagram" style="font-size:8px"></i> @arvana.wear</div>
+          <h2 class="serif text-3xl md:text-4xl font-light">Dari Instagram</h2>
+        </div>
+        <a href="https://instagram.com/arvana.wear" target="_blank"
+          class="hidden md:inline-flex items-center gap-2 text-[0.65rem] font-medium tracking-wider text-white px-5 py-2.5 rounded-full transition"
+          style="background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCAF45);">
+          <i class="fab fa-instagram"></i> Ikuti Kami
+        </a>
+      </div>
+    </section>
+    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-16">
+      <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
+          <img src="https://placehold.co/400x400/2D6A4F/FAF7F2?text=Abaya" alt="Arvana Wear Instagram 1" onerror="this.src='https://placehold.co/400x400/2D6A4F/FAF7F2?text=AW'"/>
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
+          <img src="https://placehold.co/400x400/B8945C/FAF7F2?text=Gamis" alt="Arvana Wear Instagram 2" onerror="this.src='https://placehold.co/400x400/B8945C/FAF7F2?text=AW'"/>
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
+          <img src="https://placehold.co/400x400/40916C/FAF7F2?text=Hijab" alt="Arvana Wear Instagram 3" onerror="this.src='https://placehold.co/400x400/40916C/FAF7F2?text=AW'"/>
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
+          <img src="https://placehold.co/400x400/1C1C1E/B8945C?text=Koko" alt="Arvana Wear Instagram 4" onerror="this.src='https://placehold.co/400x400/1C1C1E/B8945C?text=AW'"/>
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
+          <img src="https://placehold.co/400x400/C4A882/FAF7F2?text=Pashmina" alt="Arvana Wear Instagram 5" onerror="this.src='https://placehold.co/400x400/C4A882/FAF7F2?text=AW'"/>
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
+          <img src="https://placehold.co/400x400/D4A0A0/FAF7F2?text=Dress" alt="Arvana Wear Instagram 6" onerror="this.src='https://placehold.co/400x400/D4A0A0/FAF7F2?text=AW'"/>
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+      </div>
+      <div class="text-center mt-8">
+        <a href="https://instagram.com/arvana.wear" target="_blank"
+          class="md:hidden inline-flex items-center gap-2 text-[0.65rem] font-medium tracking-wider text-white px-6 py-3 rounded-full transition"
+          style="background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCAF45);">
+          <i class="fab fa-instagram"></i> Ikuti @arvana.wear
+        </a>
+      </div>
+    </div>
+
     <!-- ══ TESTIMONIALS ══ -->
-    <section id="testimoni" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-4">
+    <section id="testimoni" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-8 pb-4">
       <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
         <div>
           <div class="label-tag mb-2"><i class="fas fa-quote-left" style="font-size:8px"></i> Testimoni</div>
@@ -578,88 +706,76 @@
         </div>
       </div>
     </section>
-
     <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-16">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="testi-card">
           <div class="flex items-center gap-1 mb-3">
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
+            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
           </div>
-          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">
-            "Abaya-nya jatuh banget, bahannya adem walau dipake seharian. Terima kasih Arvana Wear, jadi andalan buat kondangan!"
-          </p>
+          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">"Abaya-nya jatuh banget, bahannya adem walau dipake seharian. Langsung beli dari Shopee, sampe 2 hari aja. Recomended!"</p>
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-medium" style="background:var(--green)">FA</div>
             <div>
               <p class="text-xs font-medium">Fatimah A.</p>
-              <p class="text-[0.55rem] text-gray-400">Jakarta · 2 minggu lalu</p>
+              <p class="text-[0.55rem] text-gray-400">Jakarta · Shopee</p>
             </div>
           </div>
         </div>
         <div class="testi-card">
           <div class="flex items-center gap-1 mb-3">
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
+            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
           </div>
-          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">
-            "Koko premiumnya beda sama yang lain. Jahitan rapi, bahannya adem. Udah repeat order 3 kali buat seluruh keluarga."
-          </p>
+          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">"Koko premiumnya beda sama yang lain. Jahitan rapi, bahannya adem. Order dari IG, respon cepet banget di WA!"</p>
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-medium" style="background:var(--charcoal)">RM</div>
             <div>
               <p class="text-xs font-medium">Ridwan M.</p>
-              <p class="text-[0.55rem] text-gray-400">Bandung · 1 bulan lalu</p>
+              <p class="text-[0.55rem] text-gray-400">Bandung · Instagram</p>
             </div>
           </div>
         </div>
         <div class="testi-card">
           <div class="flex items-center gap-1 mb-3">
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
+            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
           </div>
-          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">
-            "Pashmina cerutynya lembut banget, gak bikin gatal. Motifnya cantik dan limited — langsung bestie pada nanya dimana belinya!"
-          </p>
+          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">"Pashmina cerutynya lembut banget, gak bikin gatal. Beli di Shopee pake voucher gratis ongkir — hemat banget!"</p>
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-medium" style="background:var(--gold)">NS</div>
             <div>
               <p class="text-xs font-medium">Nurul S.</p>
-              <p class="text-[0.55rem] text-gray-400">Surabaya · 3 minggu lalu</p>
+              <p class="text-[0.55rem] text-gray-400">Surabaya · Shopee</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══ NEWSLETTER + CTA ══ -->
+    <!-- ══ NEWSLETTER ══ -->
     <section class="hero-bg geo-pattern" style="background:linear-gradient(135deg, var(--dark) 0%, #1a2e20 100%);">
       <div class="max-w-[1340px] mx-auto px-6 md:px-10 py-20 md:py-24 text-center">
-        <span class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">✦ Komunitas Arvana ✦</span>
+        <span class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">✦ #YourJourneyYourStyle ✦</span>
         <h2 class="serif text-3xl md:text-5xl font-light text-white mt-4 mb-4">
-          Dapatkan Update Koleksi Terbaru
+          Perjalanan Gayamu<br>Dimulai di Sini
         </h2>
         <p class="text-white/40 text-sm font-light max-w-md mx-auto leading-relaxed mb-8">
-          Jadi yang pertama tahu soal koleksi terbatas, diskon spesial, dan inspirasi gaya busana muslim.
+          Ikuti Instagram @arvana.wear untuk koleksi terbatas, atau belanja langsung di Shopee.
         </p>
-        <div class="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
-          <input type="email" placeholder="email@kamu.com"
-            class="flex-1 px-5 py-3.5 rounded-xl border-0 text-sm font-light outline-none"
-            style="background:rgba(255,255,255,0.08);color:white;">
-          <button
-            class="text-[0.68rem] font-medium tracking-[0.1em] uppercase px-6 py-3.5 rounded-xl transition hover:opacity-90"
-            style="background:var(--gold);color:white;">
-            Daftar
-          </button>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="https://shopee.co.id/arvana.wear" target="_blank"
+            class="inline-flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.08em] uppercase px-6 py-3.5 rounded-xl text-white transition hover:opacity-90"
+            style="background:#EE4D2D;">
+            <i class="fas fa-store"></i> Shopee
+          </a>
+          <a href="https://instagram.com/arvana.wear" target="_blank"
+            class="inline-flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.08em] uppercase px-6 py-3.5 rounded-xl text-white transition hover:opacity-90"
+            style="background:linear-gradient(135deg,#833AB4,#FD1D1D);">
+            <i class="fab fa-instagram"></i> Instagram
+          </a>
+          <a href="https://wa.me/6285185313732" target="_blank"
+            class="inline-flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.08em] uppercase px-6 py-3.5 rounded-xl text-white transition hover:opacity-90"
+            style="background:#25D366;">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
         </div>
       </div>
     </section>
@@ -673,36 +789,37 @@
               Arvana<span style="color:var(--gold)">Wear</span>
             </p>
             <p class="text-sm text-white/30 font-light mt-3 max-w-xs leading-relaxed">
-              Busana muslim premium yang memadukan keanggunan desain modern dengan nilai-nilai syar'i. Setiap helai adalah cerminan iman dan gaya.
+              Busana muslim premium yang memadukan keanggunan desain modern dengan nilai-nilai syar'i.
+              Tersedia di Shopee, Instagram, dan WhatsApp.
             </p>
             <div class="flex gap-4 mt-5">
-              <a href="#" class="text-white/30 hover:text-white transition"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="text-white/30 hover:text-white transition"><i class="fab fa-tiktok"></i></a>
-              <a href="#" class="text-white/30 hover:text-white transition"><i class="fab fa-whatsapp"></i></a>
-              <a href="#" class="text-white/30 hover:text-white transition"><i class="fab fa-shopee"></i></a>
+              <a href="https://instagram.com/arvana.wear" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.tiktok.com/@arvana.wear" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fab fa-tiktok"></i></a>
+              <a href="https://wa.me/6285185313732" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fab fa-whatsapp"></i></a>
+              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fas fa-store"></i></a>
             </div>
           </div>
           <div>
             <p class="text-[0.6rem] tracking-widest uppercase mb-4" style="color:var(--gold)">Belanja</p>
             <div class="space-y-2.5 text-sm text-white/30 font-light">
-              <p><a href="#" class="hover:text-white transition">Koleksi Wanita</a></p>
-              <p><a href="#" class="hover:text-white transition">Koleksi Pria</a></p>
-              <p><a href="#" class="hover:text-white transition">Hijab</a></p>
-              <p><a href="#" class="hover:text-white transition">Anak-Anak</a></p>
+              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="block hover:text-white transition">Shopee Official Store</a>
+              <a href="https://instagram.com/arvana.wear" target="_blank" class="block hover:text-white transition">Instagram @arvana.wear</a>
+              <a href="https://wa.me/6285185313732" target="_blank" class="block hover:text-white transition">WhatsApp Bisnis</a>
+              <a href="#" class="block hover:text-white transition">Koleksi Wanita</a>
             </div>
           </div>
           <div>
             <p class="text-[0.6rem] tracking-widest uppercase mb-4" style="color:var(--gold)">Perusahaan</p>
             <div class="space-y-2.5 text-sm text-white/30 font-light">
-              <p><a href="#" class="hover:text-white transition">Tentang Kami</a></p>
-              <p><a href="#" class="hover:text-white transition">Kebijakan Pengiriman</a></p>
-              <p><a href="#" class="hover:text-white transition">Pengembalian</a></p>
-              <p><a href="#" class="hover:text-white transition">Hubungi Kami</a></p>
+              <a href="#" class="block hover:text-white transition">Tentang Kami</a>
+              <a href="#" class="block hover:text-white transition">Kebijakan Pengiriman</a>
+              <a href="#" class="block hover:text-white transition">Pengembalian</a>
+              <a href="https://wa.me/6285185313732" target="_blank" class="block hover:text-white transition">Hubungi Kami</a>
             </div>
           </div>
         </div>
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8">
-          <p class="text-xs text-white/20 tracking-wide">© 2026 Arvana Wear — Made with ❤️ for DevSecOps learning.</p>
+          <p class="text-xs text-white/20 tracking-wide">© 2026 Arvana Wear — #YourJourneyYourStyle. Tersedia di Shopee, Instagram & WhatsApp.</p>
           <p class="text-[0.55rem] tracking-widest" style="color:var(--gold)">✦ Est. 2024 ✦</p>
         </div>
       </div>
@@ -716,7 +833,6 @@
   ══════════════════════════════════════════ -->
   <div id="page-login" class="page">
     <div class="min-h-screen flex">
-      <!-- Left panel -->
       <div class="hidden lg:flex lg:w-[42%] flex-col justify-between p-12 relative overflow-hidden hero-bg geo-pattern">
         <div class="absolute top-0 left-0 w-48 h-48 opacity-20" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
         <div class="relative z-10">
@@ -727,12 +843,11 @@
         <div class="relative z-10">
           <p class="text-[0.55rem] tracking-[0.22em] uppercase mb-5" style="color:var(--gold)">✦ selamat datang kembali ✦</p>
           <blockquote class="serif text-4xl font-light italic leading-tight text-white/80">
-            "Bukan sekadar<br>pakaian.<br>Ini cerminan iman<br>dan <span style="color:var(--gold)">keanggunan.</span>"
+            "Bukan sekadar<br>pakaian.<br>Ini cerminan iman<br>dan <span style="color:var(--gold)">#YourJourneyYourStyle</span>"
           </blockquote>
           <div class="mt-8 h-px w-12" style="background:var(--gold)"></div>
         </div>
       </div>
-      <!-- Right panel -->
       <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-20 py-12" style="background:var(--cream)">
         <button onclick="showPage('catalog')"
           class="self-start flex items-center gap-2 text-[0.68rem] tracking-widest uppercase text-gray-400 hover:text-gray-700 transition mb-12">
@@ -771,15 +886,13 @@
         </div>
       </div>
     </div>
-  </div><!-- /page-login -->
-
+  </div>
 
   <!-- ══════════════════════════════════════════
        PAGE: REGISTER
   ══════════════════════════════════════════ -->
   <div id="page-register" class="page">
     <div class="min-h-screen flex">
-      <!-- Left panel -->
       <div class="hidden lg:flex lg:w-[42%] flex-col justify-between p-12 relative overflow-hidden hero-bg geo-pattern">
         <div class="absolute top-0 left-0 w-48 h-48 opacity-20" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
         <div class="relative z-10">
@@ -790,12 +903,11 @@
         <div class="relative z-10">
           <p class="text-[0.55rem] tracking-[0.22em] uppercase mb-5" style="color:var(--gold)">✦ bergabunglah ✦</p>
           <blockquote class="serif text-4xl font-light italic leading-tight text-white/80">
-            "Mulai perjalanan<br>hijrah Anda bersama<br><span style="color:var(--gold)">ArvanaWear.</span>"
+            "Mulai perjalanan<br>hijrah Anda bersama<br><span style="color:var(--gold)">#YourJourneyYourStyle</span>"
           </blockquote>
           <div class="mt-8 h-px w-12" style="background:var(--gold)"></div>
         </div>
       </div>
-      <!-- Right panel -->
       <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-20 py-12" style="background:var(--cream)">
         <button onclick="showPage('catalog')"
           class="self-start flex items-center gap-2 text-[0.68rem] tracking-widest uppercase text-gray-400 hover:text-gray-700 transition mb-12">
@@ -803,7 +915,7 @@
         </button>
         <p class="text-[0.55rem] tracking-[0.22em] uppercase mb-4" style="color:var(--gold)">✦ akun baru ✦</p>
         <h1 class="serif font-light mb-2" style="font-size:clamp(2.5rem,5vw,3.5rem)">Daftar</h1>
-        <p class="text-sm text-gray-400 font-light mb-10">Buat akun dan nikmati diskon member 15%.</p>
+        <p class="text-sm text-gray-400 font-light mb-10">Buat akun. Atau langsung belanja via Shopee dan follow Instagram!</p>
         <div class="max-w-[360px] w-full space-y-5">
           <div>
             <label class="text-[0.6rem] tracking-widest uppercase text-gray-400 block mb-2">Nama Lengkap</label>
@@ -826,7 +938,23 @@
           <p class="text-xs text-gray-400 font-light text-center">
             Dengan mendaftar, kamu setuju dengan <a href="#" class="underline hover:text-green-700 transition" style="color:var(--green)">Syarat & Ketentuan</a>.
           </p>
-          <p class="text-center text-sm text-gray-400 font-light">
+          <div class="relative my-4">
+            <div class="absolute inset-0 flex items-center"><span class="w-full" style="border-top:1px solid var(--border)"></span></div>
+            <div class="relative flex justify-center"><span class="text-xs text-gray-400 font-light px-3" style="background:var(--cream)">atau belanja langsung</span></div>
+          </div>
+          <div class="flex gap-3">
+            <a href="https://shopee.co.id/arvana.wear" target="_blank"
+              class="flex-1 text-center text-[0.65rem] font-medium text-white py-3 rounded-xl transition hover:opacity-90"
+              style="background:#EE4D2D;">
+              <i class="fas fa-store mr-1"></i> Shopee
+            </a>
+            <a href="https://wa.me/6285185313732" target="_blank"
+              class="flex-1 text-center text-[0.65rem] font-medium text-white py-3 rounded-xl transition hover:opacity-90"
+              style="background:#25D366;">
+              <i class="fab fa-whatsapp mr-1"></i> WA
+            </a>
+          </div>
+          <p class="text-center text-sm text-gray-400 font-light pt-1">
             Sudah punya akun?
             <button onclick="showPage('login')"
               class="font-medium underline underline-offset-4 transition ml-1"
@@ -835,10 +963,9 @@
         </div>
       </div>
     </div>
-  </div><!-- /page-register -->
+  </div>
 
 
-  <!-- ══ JAVASCRIPT ═══════════════════════════ -->
   <script>
     const API_URL = '';
 
@@ -850,7 +977,6 @@
       window.scrollTo(0, 0);
     }
 
-    // ══ Navbar hide on scroll ══
     const nav = document.getElementById('main-nav');
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
@@ -864,7 +990,6 @@
       lastScroll = currentScroll;
     }, { passive: true });
 
-    // ══ Animate stat numbers on scroll ══
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -873,7 +998,6 @@
         }
       });
     }, { threshold: 0.2 });
-
     document.querySelectorAll('.stat-num').forEach(el => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px)';
@@ -881,7 +1005,24 @@
       observer.observe(el);
     });
 
-    // ══ Helper ══
+    // Scroll reveal for sections
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // Back to top
+    const backBtn = document.getElementById('back-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) backBtn.classList.add('show');
+      else backBtn.classList.remove('show');
+    }, { passive: true });
+
     function showMsg(id, text, isError = false) {
       const el = document.getElementById(id);
       el.textContent = text;
@@ -889,7 +1030,6 @@
       el.classList.remove('hidden');
     }
 
-    // ══ Login ══
     async function handleLogin() {
       const email    = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
@@ -912,7 +1052,6 @@
       }
     }
 
-    // ══ Register ══
     async function handleRegister() {
       const name     = document.getElementById('reg-name').value.trim();
       const email    = document.getElementById('reg-email').value.trim();

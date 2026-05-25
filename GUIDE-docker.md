@@ -25,9 +25,9 @@
 
 ```
 [Browser]
-    │
+    │ (port 8888)
     ▼
-[Nginx container :8080]  ← Serve index.html + proxy API request
+[Nginx container :8888]  ← Serve index.html + proxy API request
     │
     ▼
 [App container :3000]    ← Node.js / Express (server.js)
@@ -41,7 +41,7 @@
 ```
 
 **Alur request login:**
-1. Browser `fetch POST /login` → Nginx (port 8080)
+1. Browser `fetch POST /login` → Nginx (port 8888)
 2. Nginx proxy → App container (port 3000)
 3. App query ke PostgreSQL container
 4. Response kembali ke browser
@@ -87,8 +87,8 @@ cp .env.docker .env
 File `.env` berisi password yang akan dibaca `docker-compose.yml`:
 
 ```env
-DB_PASSWORD=vespa_secret          # Password PostgreSQL
-GF_SECURITY_ADMIN_PASSWORD=admin123  # Password Grafana
+DB_PASSWORD=arvana_secret            # Password PostgreSQL
+GRAFANA_PASSWORD=admin123            # Password Grafana
 ```
 
 > **Security Note:** File `.env` sudah ada di `.gitignore` — tidak akan pernah
