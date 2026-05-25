@@ -101,6 +101,10 @@ jobs:
             # Hapus paksa container lama jika nyangkut
             sudo docker rm -f arvana-app || true
 
+            # Bersihkan cache build dan container/image yang tidak terpakai agar disk tidak penuh
+            sudo docker system prune -f
+            sudo docker builder prune -af
+
             sudo docker compose up -d --build
             sudo docker compose ps
 
