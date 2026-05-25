@@ -225,7 +225,7 @@ membaca secrets ini untuk deploy ke EC2 tanpa menyimpan password di kode.
 | `EC2_USER` | `ubuntu` | Default untuk AMI Ubuntu |
 | `EC2_SSH_KEY` | Isi file `.pem` | Paste seluruh isi file key pair |
 | `DB_PASSWORD` | Password PostgreSQL | Bebas, minimal 12 karakter |
-| `GRAFANA_ADMIN_PASSWORD` | Password Grafana | Bebas, minimal 12 karakter |
+| `GRAFANA_PASSWORD` | Password Grafana | Bebas, minimal 12 karakter |
 
 Hanya 5 secret — jauh lebih sedikit dari versi non-Docker yang butuh 9 secret.
 
