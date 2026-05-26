@@ -3,1078 +3,866 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arvana Wear — Muslim Fashion Elegan</title>
+  <title>Arvana Wear — Antara Kain dan Makna</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=JetBrains+Mono:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --cream:    #FAF7F2;
-      --cream2:   #F5F0E8;
-      --charcoal: #1C1C1E;
+      --bg:       #0A0A0B;
+      --bg2:      #121214;
+      --text:     #E8E6E3;
+      --text2:    #807E7A;
+      --text3:    #4A4845;
+      --gold:     #C9A96E;
+      --gold-dim: #8B7A5A;
       --green:    #2D6A4F;
-      --green-l:  #40916C;
-      --gold:     #B8945C;
-      --gold-l:   #D4A853;
-      --rose:     #D4A0A0;
-      --border:   #E6DDD0;
-      --sand:     #C4A882;
-      --dark:     #0F1A13;
+      --line:     rgba(255,255,255,0.06);
+      --glow:     rgba(201,169,110,0.08);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    .serif { font-family: 'Cormorant Garamond', serif; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    ::selection { background: var(--gold); color: var(--bg); }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+    /* ── Slow fade in ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.4; }
+      50%      { opacity: 1; }
+    }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      33%  { transform: translate(20px, -30px) rotate(1deg); }
+      66%  { transform: translate(-10px, 20px) rotate(-1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
     }
 
-    /* ── Scroll reveal ── */
     .reveal {
       opacity: 0;
       transform: translateY(30px);
-      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .reveal.visible {
       opacity: 1;
       transform: translateY(0);
     }
 
-    /* ── Back to top ── */
-    #back-top {
-      position: fixed; bottom: 5rem; right: 1.5rem; z-index: 99;
-      width: 40px; height: 40px;
-      background: var(--charcoal);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; visibility: hidden;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    /* ── Hero particle effect ── */
+    .particle-field {
+      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
     }
-    #back-top.show { opacity: 1; visibility: visible; }
-    #back-top:hover { transform: translateY(-3px); }
-    #back-top i { color: white; font-size: 0.9rem; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
 
-    /* ── Benefit card ── */
-    .bcard {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 1.25rem;
-      padding: 2rem;
-      text-align: center;
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    /* ── Typewriter cursor ── */
+    .cursor-blink::after {
+      content: '|';
+      animation: blink 1s step-end infinite;
+      color: var(--gold);
+      font-weight: 200;
     }
-    .bcard:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 16px 40px -8px rgba(0,0,0,0.06);
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
-    .bcard .icon-wrap {
-      width: 60px; height: 60px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.25rem;
-      font-size: 1.3rem;
-      transition: transform 0.3s ease;
-    }
-    .bcard:hover .icon-wrap { transform: scale(1.1); }
 
-    /* ── Color swatch ── */
-    .swatch {
-      display: inline-block;
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      margin: 0 2px;
-      transition: transform 0.2s, border-color 0.2s;
-      cursor: pointer;
-    }
-    .swatch:hover { transform: scale(1.3); border-color: var(--green); }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--cream);
-      color: var(--charcoal);
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
-    }
-    .serif { font-family: 'Playfair Display', serif; }
-    #main-nav.scrolled {
-      background: rgba(250, 247, 242, 0.92);
+    /* ── Glass card ── */
+    .glass {
+      background: rgba(255,255,255,0.03);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     }
+    .glass:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(201,169,110,0.2);
+      transform: translateY(-4px);
+    }
+
+    /* ── Horizontal divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+      opacity: 0.3;
+    }
+
+    /* ── Scroll progress ── */
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      z-index: 999; width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Quote mark ── */
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem; line-height: 0.6;
+      color: var(--gold-dim); opacity: 0.3;
+    }
+
+    /* ── Product card ── */
     .pcard {
-      background: white;
+      background: var(--bg2);
+      border: 1px solid var(--line);
       border-radius: 1.25rem;
       overflow: hidden;
-      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
-      border: 1px solid var(--border);
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .pcard:hover {
+      border-color: rgba(201,169,110,0.25);
       transform: translateY(-6px);
-      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.1);
+      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.6), 0 0 40px -20px var(--glow);
     }
-    .pcard .ci { overflow: hidden; }
-    .pcard .ci img {
-      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    .pcard .img-wrap { overflow: hidden; height: 240px; }
+    .pcard .img-wrap img {
       width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .pcard:hover .ci img { transform: scale(1.07); }
-    .badge {
-      position: absolute; top: 1rem; left: 1rem;
-      font-size: 0.6rem; letter-spacing: 0.08em; font-weight: 500;
-      padding: 0.3rem 0.8rem; border-radius: 999px;
-      background: white; color: var(--green);
-    }
-    .badge-soldout { background: var(--charcoal); color: white; }
-    .marquee-wrap { overflow: hidden; }
+    .pcard:hover .img-wrap img { transform: scale(1.06); }
+
+    /* ── Marquee ── */
+    .marquee-wrap { overflow: hidden; width: 100%; }
     .marquee-inner {
       display: flex; width: max-content;
-      animation: ticker 30s linear infinite;
+      animation: scrollText 40s linear infinite;
     }
-    .marquee-wrap:hover .marquee-inner { animation-play-state: paused; }
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
+    @keyframes scrollText {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
-    .ainput {
-      width: 100%; background: white;
-      border: 1px solid var(--border);
-      border-radius: 0.875rem;
-      padding: 0.85rem 1.1rem;
-      font-size: 0.9rem; font-weight: 300;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.2s;
-      outline: none;
-    }
-    .ainput:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.08); }
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--cream); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    ::selection { background: var(--green); color: white; }
-    .page { display: none; }
-    .page.active {
-      display: block;
-      animation: pageIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    @keyframes pageIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .cat-card {
-      position: relative; border-radius: 1.25rem; overflow: hidden;
-      cursor: pointer;
-    }
-    .cat-card img { transition: transform 0.6s ease; }
-    .cat-card:hover img { transform: scale(1.06); }
-    .cat-card .overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%);
-    }
-    .cat-card .text {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 1.5rem;
-    }
-    .testi-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 1.25rem;
-      padding: 1.75rem;
-      transition: transform 0.3s ease;
-    }
-    .testi-card:hover { transform: translateY(-3px); }
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      line-height: 1;
-    }
-    .label-tag {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--gold);
-    }
-    #wa-btn {
-      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
-      width: 52px; height: 52px;
-      background: #25D366;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-    #wa-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5); }
-    #wa-btn i { color: white; font-size: 1.5rem; }
-    .hero-bg {
-      background: linear-gradient(135deg, var(--dark) 0%, #1a2e20 50%, var(--dark) 100%);
-      background-size: 200% 200%;
-      animation: heroShift 8s ease infinite;
-    }
-    .geo-pattern {
-      background-image:
-        radial-gradient(circle at 30% 70%, rgba(255,255,255,0.03) 1px, transparent 1px),
-        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px, 30px 30px;
-    }
-    @keyframes heroShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .wish-btn {
-      position: absolute; top: 1rem; right: 1rem;
-      width: 34px; height: 34px;
-      background: white; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      border: none; cursor: pointer;
-      opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .pcard:hover .wish-btn { opacity: 1; }
-    .wish-btn i { color: #ccc; font-size: 0.85rem; transition: color 0.2s; }
-    .wish-btn:hover i { color: #e74c3c; }
-    @media (max-width: 768px) { .wish-btn { opacity: 1; } }
 
-    /* ── Shopee button ── */
-    .btn-shopee {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      background: #EE4D2D;
-      color: white;
-      font-size: 0.65rem; font-weight: 500; letter-spacing: 0.06em;
-      padding: 0.6rem 1.2rem;
-      border-radius: 999px;
-      transition: opacity 0.2s;
-    }
-    .btn-shopee:hover { opacity: 0.9; }
-
-    /* ── Instagram grid item ── */
-    .ig-item {
-      position: relative; border-radius: 0.75rem; overflow: hidden;
-      aspect-ratio: 1/1; cursor: pointer;
-    }
-    .ig-item img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    .ig-item:hover img { transform: scale(1.08); }
-    .ig-item .ig-overlay {
-      position: absolute; inset: 0;
-      background: rgba(0,0,0,0.3);
-      opacity: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: opacity 0.3s ease;
-    }
-    .ig-item:hover .ig-overlay { opacity: 1; }
-    .ig-overlay i { color: white; font-size: 1.5rem; }
-
-    /* ── Channel cards ── */
-    .chnl-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 1.25rem;
-      padding: 2rem;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .chnl-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px -8px rgba(0,0,0,0.06);
-    }
-    .chnl-card .icon-box {
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1rem;
+    @media (max-width: 768px) {
+      .serif.text-hero { font-size: 2.8rem !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ══ WHATSAPP ══ -->
-  <a id="wa-btn" href="https://wa.me/6285185313732?text=Halo%20Arvana%20Wear!%20Saya%20mau%20tanya%20produk" target="_blank" aria-label="Hubungi via WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-  </a>
+<!-- ══ SCROLL PROGRESS ══ -->
+<div id="scroll-progress"></div>
 
-  <!-- ══ BACK TO TOP ══ -->
-  <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Kembali ke atas">
-    <i class="fas fa-chevron-up"></i>
-  </button>
+<!-- ══ NAVBAR ══ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" style="mix-blend-mode: difference;">
+  <div class="max-w-[1100px] mx-auto px-6 h-[64px] flex items-center justify-between">
+    <a href="#hero" class="serif text-lg tracking-wide text-white/80 hover:text-white transition">Arvana<span class="text-[var(--gold)]">Wear</span></a>
+    <div class="flex items-center gap-6 text-[0.6rem] tracking-[0.2em] uppercase text-white/40">
+      <a href="#manifesto" class="hover:text-white/80 transition">Manifesto</a>
+      <a href="#koleksi" class="hover:text-white/80 transition">Koleksi</a>
+      <a href="#belanja" class="hover:text-white/80 transition">Belanja</a>
+      <a href="#tentang" class="hover:text-white/80 transition">Tentang</a>
+    </div>
+  </div>
+</nav>
 
-  <!-- ══════════════════════════════════════════
-       PAGE: CATALOG (HOME)
-  ══════════════════════════════════════════ -->
-  <div id="page-catalog" class="page active">
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section id="hero" class="min-h-screen flex items-center relative overflow-hidden" style="background: var(--bg);">
+  <!-- Particles -->
+  <div class="particle-field" id="particles"></div>
 
-    <!-- ══ NAVBAR ══ -->
-    <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-      <div class="max-w-[1340px] mx-auto px-6 md:px-10 h-[68px] flex items-center justify-between">
-        <button onclick="showPage('catalog')" class="serif text-2xl font-medium tracking-tight">
-          Arvana<span style="color:var(--green)">Wear</span>
-        </button>
-        <div class="hidden md:flex items-center gap-8 text-[0.7rem] font-medium tracking-[0.12em] uppercase">
-          <a href="#trending" class="hover:text-green-700 transition">Koleksi</a>
-          <a href="#shopee" class="hover:text-green-700 transition">Shopee</a>
-          <a href="#instagram" class="hover:text-green-700 transition">Instagram</a>
-          <a href="#testimoni" class="hover:text-green-700 transition">Testimoni</a>
+  <!-- Ambient glow -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-[0.04]" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%); pointer-events: none;"></div>
+
+  <div class="max-w-[1100px] mx-auto px-6 w-full relative z-10 pt-20 pb-16">
+    <div class="max-w-3xl">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
+        <span class="mono text-[0.55rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">
+          #YourJourneyYourStyle
+        </span>
+      </div>
+
+      <h1 class="serif font-light leading-[1.1] text-white mb-6" style="font-size: clamp(3.2rem, 8vw, 6.5rem);">
+        Antara Kain<br>
+        <span class="text-[var(--gold)]">dan Makna</span>
+      </h1>
+
+      <p class="text-[var(--text2)] text-sm md:text-base font-light max-w-xl leading-[1.9] mb-10">
+        Kita hidup di zaman yang memuja kecepatan. Scroll tanpa henti, belanja tanpa pikir,
+        tren berganti sebelum jahitan sempat kering. Tapi pernahkah kau bertanya —
+        <span class="text-white/60 italic">apakah yang kau pakai benar-benar mencerminkan siapa dirimu?</span>
+        Atau sekadar cerminan dari apa yang orang lain bilang keren?
+      </p>
+
+      <div class="flex flex-wrap gap-4 items-center">
+        <a href="#manifesto"
+          class="mono text-[0.6rem] tracking-[0.2em] uppercase px-6 py-3.5 rounded-full transition-all duration-300"
+          style="background: var(--gold); color: var(--bg);">
+          Baca Manifesto →
+        </a>
+        <a href="#koleksi"
+          class="mono text-[0.6rem] tracking-[0.2em] uppercase px-6 py-3.5 rounded-full transition-all duration-300"
+          style="border: 1px solid var(--line); color: var(--text2);">
+          Lihat Koleksi
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+      <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)]">Scroll</span>
+      <div class="w-px h-8 bg-gradient-to-b from-[var(--gold-dim)] to-transparent"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     MANIFESTO
+══════════════════════════════════════════ -->
+<section id="manifesto" class="py-28 md:py-40 relative">
+  <div class="max-w-[750px] mx-auto px-6">
+    <!-- Label -->
+    <div class="flex items-center gap-3 mb-16 reveal">
+      <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
+      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">01 · Manifesto</span>
+    </div>
+
+    <!-- Opening -->
+    <div class="reveal" style="transition-delay: 0.1s;">
+      <div class="quote-mark">"</div>
+      <p class="serif text-2xl md:text-3xl font-light text-white/80 leading-[1.7] mb-8 italic" style="padding-left: 2rem;">
+        "Kita bukan apa yang kita pakai. Tapi apa yang kita pakai bisa menjadi <span class="text-[var(--gold)]">pengingat</span> akan siapa kita ingin menjadi."
+      </p>
+      <p class="text-right text-xs text-[var(--text3)] mono tracking-wider">— Arsir, Arvana Wear, 2026</p>
+    </div>
+
+    <div class="divider my-16"></div>
+
+    <!-- Body 1 -->
+    <div class="reveal space-y-6 text-sm md:text-base text-[var(--text2)] leading-[2]">
+      <p>
+        Di era di mana <span class="text-white/60">fast fashion</span> memproduksi pakaian lebih cepat dari kemampuan kita memaknai,
+        di mana algoritma menentukan apa yang "in" sebelum kita sempat bertanya apa yang kita suka —
+        Arvana Wear lahir bukan sekadar untuk menjual hijab.
+      </p>
+      <p>
+        Kami ada untuk mengingatkan bahwa <span class="text-white/70">setiap helai kain yang menutupi tubuhmu
+        adalah pernyataan.</span> Pernyataan bahwa di tengah dunia yang berteriak minta perhatian, kau memilih untuk
+        diam dan tetap pada prinsip. Bahwa kau memilih <span class="italic">kesadaran</span> di atas konsumsi buta.
+      </p>
+    </div>
+
+    <div class="divider my-16"></div>
+
+    <!-- Philosophy block -->
+    <div class="reveal" style="transition-delay: 0.2s;">
+      <h2 class="serif text-3xl md:text-4xl font-light text-white mb-10" style="letter-spacing: -0.02em;">
+        Filsafat di Balik<br>
+        <span class="text-[var(--gold)]">Selembar Hijab</span>
+      </h2>
+
+      <div class="space-y-12">
+        <!-- 1 -->
+        <div class="flex gap-6">
+          <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] pt-1 shrink-0">01</span>
+          <div>
+            <h3 class="text-white text-base font-medium mb-2">Pilihan adalah Diri</h3>
+            <p class="text-sm text-[var(--text2)] leading-[2]">
+              Jean-Paul Sartre bilang, <span class="italic text-white/60">"Kita adalah pilihan-pilihan kita."</span>
+              Setiap pagi, ketika kau memilih kain mana yang menutupi kepalamu, kau sedang menulis ulang identitasmu.
+              Bukan karena tekanan sosial. Bukan karena tren. Tapi karena <span class="text-white/60">kesadaran penuh</span>.
+              Itulah <span class="mono text-[0.55rem] tracking-wider text-[var(--gold)]">otentisitas</span>.
+              Dan itu tidak bisa dibeli — hanya <span class="italic">dipilih</span>.
+            </p>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="showPage('login')"
-            class="text-[0.68rem] font-medium tracking-[0.1em] uppercase px-4 py-2 rounded-full border transition hover:border-green-700 hover:text-green-700"
-            style="border-color:var(--border)">
-            Masuk
-          </button>
-          <button onclick="showPage('register')"
-            class="text-[0.68rem] font-medium tracking-[0.1em] uppercase px-4 py-2.5 rounded-full text-white transition hover:opacity-90"
-            style="background:var(--charcoal)">
-            Daftar
-          </button>
+
+        <!-- 2 -->
+        <div class="flex gap-6">
+          <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] pt-1 shrink-0">02</span>
+          <div>
+            <h3 class="text-white text-base font-medium mb-2">Hadir dalam Setiap Helai</h3>
+            <p class="text-sm text-[var(--text2)] leading-[2]">
+              Stoikisme mengajarkan bahwa kedamaian tidak datang dari memiliki lebih banyak,
+              tapi dari menghargai apa yang ada. Seperti kata Marcus Aurelius:
+              <span class="italic text-white/60">"Hanya orang bodoh yang mengukur kebahagiaan dari apa yang dimiliki orang lain."</span>
+              Sehelai hijab yang dipakai dengan kesadaran penuh nilainya lebih tinggi
+              dari seratus helai yang dipakai tanpa hadir.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="flex gap-6">
+          <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] pt-1 shrink-0">03</span>
+          <div>
+            <h3 class="text-white text-base font-medium mb-2">Hijrah sebagai Perjalanan Tanpa Akhir</h3>
+            <p class="text-sm text-[var(--text2)] leading-[2]">
+              Hijrah secara harfiah berarti migrasi — meninggalkan sesuatu menuju sesuatu yang lebih baik.
+              Tapi dalam konteks yang lebih dalam, hijrah adalah <span class="italic text-white/60">proses tanpa henti</span>.
+              Bukan tujuan, melainkan <span class="text-white/60">cara hidup</span>.
+              Setiap hari kita hijrah dari kebiasaan lama menuju versi diri yang sedikit lebih sadar,
+              sedikit lebih tenang, sedikit lebih dekat dengan fitrah.
+              Arvana Wear hadir untuk menemani perjalanan itu — bukan sebagai tujuan, tapi sebagai
+              <span class="text-white/60">pengingat</span>.
+            </p>
+          </div>
         </div>
       </div>
-    </nav>
+    </div>
 
-    <!-- ══ HERO ══ -->
-    <section class="hero-bg geo-pattern min-h-screen flex flex-col lg:flex-row relative overflow-hidden">
-      <div class="absolute top-0 left-0 w-64 h-64 opacity-10" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
-      <div class="absolute bottom-0 right-0 w-96 h-96 opacity-5" style="background: radial-gradient(circle, var(--gold-l) 0%, transparent 70%);"></div>
-      <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 pt-28 pb-16 lg:py-0 relative z-10">
-        <div class="flex items-center gap-3 mb-6">
-          <span class="w-8 h-px" style="background:var(--gold)"></span>
-          <span class="text-[0.6rem] tracking-[0.22em] uppercase" style="color:var(--gold)">Your Journey Your Style</span>
-        </div>
-        <h1 class="serif font-light leading-tight mb-6 text-white" style="font-size:clamp(3rem, 7.5vw, 6.5rem)">
-          Busana Muslim<br>
-          <span style="color:var(--gold)">Elegan & Syar'i</span>
-        </h1>
-        <p class="text-sm text-white/40 font-light max-w-sm leading-relaxed mb-10" style="line-height:1.9">
-          Temukan koleksi busana muslim premium di Instagram, belanja mudah lewat Shopee, dan konsultasi gratis via WhatsApp.
-          <br><span class="text-[0.65rem] tracking-widest" style="color:var(--gold);font-family:'Playfair Display',serif;font-style:italic">#YourJourneyYourStyle</span>
+    <div class="divider my-16"></div>
+
+    <!-- Closing -->
+    <div class="reveal text-center" style="transition-delay: 0.3s;">
+      <p class="text-xs text-[var(--text3)] mono tracking-wider uppercase mb-4">Maka</p>
+      <p class="serif text-2xl md:text-3xl font-light text-white/70 leading-[1.8] max-w-lg mx-auto">
+        Sebelum kau membeli sehelai hijab,<br>
+        tanyakan pada dirimu:<br>
+        <span class="text-[var(--gold)] italic">"Apakah ini untuk citra?<br>Atau untuk kesadaran?"</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PRODUCT PHILOSOPHY
+══════════════════════════════════════════ -->
+<section class="py-20 relative" style="background: var(--bg2);">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px reveal" style="background: var(--line);">
+      <div class="p-10 md:p-12" style="background: var(--bg2);">
+        <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)]">BUKAN SEKADAR</span>
+        <h3 class="serif text-2xl font-light text-white mt-3 mb-4">Tren Sesaat</h3>
+        <p class="text-sm text-[var(--text2)] font-light leading-[1.9]">
+          Fashion datang dan pergi. Gaya berganti setiap musim. Tapi prinsip — prinsip tidak lekang waktu.
+          Kami tidak menjual tren. Kami menjual <span class="text-white/60">konsistensi</span>.
         </p>
-        <div class="flex flex-wrap gap-4">
-          <a href="#trending"
-            class="inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.12em] uppercase px-7 py-3.5 rounded-full transition hover:opacity-90"
-            style="background:var(--gold); color:white;">
-            Koleksi Terbaru &nbsp;→
-          </a>
-          <a href="#shopee"
-            class="inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.12em] uppercase px-7 py-3.5 rounded-full transition"
-            style="border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.7);">
-            Belanja di Shopee
-          </a>
-        </div>
-        <!-- Stats -->
-        <div class="mt-14 pt-8 flex gap-10 flex-wrap" style="border-top:1px solid rgba(255,255,255,0.07)">
-          <div>
-            <div class="stat-num text-white">50<span class="text-2xl" style="color:var(--gold)">+</span></div>
-            <div class="text-[0.6rem] uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.35)">Produk Premium</div>
-          </div>
-          <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
-          <div>
-            <div class="stat-num text-white">10K<span class="text-2xl" style="color:var(--gold)">+</span></div>
-            <div class="text-[0.6rem] uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.35)">Pelanggan</div>
-          </div>
-          <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
-          <div>
-            <div class="stat-num text-white">4.9<span class="text-2xl" style="color:var(--gold)">★</span></div>
-            <div class="text-[0.6rem] uppercase tracking-widest mt-1" style="color:rgba(255,255,255,0.35)">Rating</div>
-          </div>
-        </div>
       </div>
-      <div class="flex-1 relative min-h-[50vh] lg:min-h-0 overflow-hidden">
-        <div class="absolute inset-0" style="background:linear-gradient(135deg, rgba(15,26,19,0.3), transparent 50%)"></div>
-        <img src="https://placehold.co/800x1000/2D6A4F/FAF7F2?text=Arvana+Wear"
-             alt="Arvana Wear Collection"
-             class="w-full h-full object-cover" />
-        <div class="absolute bottom-8 left-8 flex items-center gap-3">
-          <div class="w-0.5 h-10" style="background:var(--gold)"></div>
-          <div>
-            <p class="serif italic text-white/60 text-lg">New Arrival</p>
-            <p class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">#YourJourneyYourStyle</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ MARQUEE ══ -->
-    <div class="marquee-wrap py-3" style="background:var(--charcoal);">
-      <div class="marquee-inner text-[0.6rem] font-medium tracking-[0.2em] uppercase" style="color:rgba(255,255,255,0.45)">
-        <span class="px-8">Basic Paris 115x115</span><span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Pashmina Pop Rayon</span><span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Basic Paris 115x115</span><span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Pashmina Pop Rayon</span><span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Basic Paris 115x115</span><span style="color:var(--gold)" class="px-2">·</span>
-        <span class="px-8">Pashmina Pop Rayon</span><span style="color:var(--gold)" class="px-2">·</span>
-      </div>
-    </div>
-
-    <!-- ══ CATEGORIES ══ -->
-    <section class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-6">
-      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
-        <div>
-          <div class="label-tag mb-2"><i class="fas fa-layer-group" style="font-size:8px"></i> Kategori</div>
-          <h2 class="serif text-3xl md:text-4xl font-light">Belanja Berdasarkan</h2>
-        </div>
-        <span class="hidden md:block text-[0.6rem] tracking-widest uppercase" style="color:var(--sand)">Temukan Gaya Anda</span>
-      </div>
-    </section>
-    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-12">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/2D6A4F/FAF7F2?text=Hijab+Collection" alt="Hijab Collection" class="w-full h-full object-cover">
-          <div class="overlay"></div>
-          <div class="text">
-            <h3 class="serif text-xl text-white">Wanita</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Basic Paris · Pashmina · Bergo</p>
-          </div>
-        </div>
-        <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/40916C/FAF7F2?text=Pashmina+Pop" alt="Pashmina Pop" class="w-full h-full object-cover">
-          <div class="overlay"></div>
-          <div class="text">
-            <h3 class="serif text-xl text-white">Pria</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Pashmina · Gamis · Koko</p>
-          </div>
-        </div>
-        <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/B8945C/FAF7F2?text=Basic+Paris" alt="Basic Paris" class="w-full h-full object-cover">
-          <div class="overlay"></div>
-          <div class="text">
-            <h3 class="serif text-xl text-white">Hijab</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Paris Segi · Pashmina · Bergo</p>
-          </div>
-        </div>
-        <div class="cat-card" style="aspect-ratio:3/4;">
-          <img src="https://placehold.co/400x500/1C1C1E/FAF7F2?text=Your+Style" alt="Your Style" class="w-full h-full object-cover">
-          <div class="overlay"></div>
-          <div class="text">
-            <h3 class="serif text-xl text-white">Anak-Anak</h3>
-            <p class="text-[0.6rem] tracking-wider text-white/60 uppercase mt-1">Paris Segi · Bergo · Aksesoris</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ MENGAPA ARVANA WEAR ══ -->
-    <section class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-6 reveal">
-      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
-        <div>
-          <div class="label-tag mb-2"><i class="fas fa-star" style="font-size:8px"></i> Kenapa Arvana?</div>
-          <h2 class="serif text-3xl md:text-4xl font-light">Kenapa Belanja di Arvana Wear?</h2>
-        </div>
-        <span class="hidden md:block text-[0.6rem] tracking-widest uppercase" style="color:var(--sand)">#YourJourneyYourStyle</span>
-      </div>
-    </section>
-    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-12 reveal">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="bcard">
-          <div class="icon-wrap" style="background:#f0f5f1;"><i class="fas fa-leaf" style="color:var(--green);"></i></div>
-          <h3 class="font-medium text-sm">Bahan Premium</h3>
-          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Kain Paris & Rayon Spandex berkualitas, adem, nyaman dipakai seharian.</p>
-        </div>
-        <div class="bcard">
-          <div class="icon-wrap" style="background:#f5f0e8;"><i class="fas fa-tag" style="color:var(--gold);"></i></div>
-          <h3 class="font-medium text-sm">Harga Terjangkau</h3>
-          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Mulai dari Rp 31.000 — kualitas premium dengan harga ramah di kantong.</p>
-        </div>
-        <div class="bcard">
-          <div class="icon-wrap" style="background:#fef0ec;"><i class="fas fa-truck" style="color:var(--sand);"></i></div>
-          <h3 class="font-medium text-sm">Pengiriman Cepat</h3>
-          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Dikirim dari Tangerang Selatan, sampai dalam 2-3 hari ke seluruh Indonesia.</p>
-        </div>
-        <div class="bcard">
-          <div class="icon-wrap" style="background:#f5e8e8;"><i class="fas fa-heart" style="color:var(--rose);"></i></div>
-          <h3 class="font-medium text-sm">Banyak Pilihan</h3>
-          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">19 warna Basic Paris & 7 warna Pashmina Pop — cocok untuk semua gaya.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ TRENDING ══ -->
-    <section id="trending" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-8 pb-6 reveal">
-      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
-        <div>
-          <div class="label-tag mb-2"><i class="fas fa-fire" style="font-size:8px"></i> Sedang Tren</div>
-          <h2 class="serif text-3xl md:text-4xl font-light">Koleksi Populer</h2>
-        </div>
-        <span class="hidden md:block text-[0.6rem] tracking-widest uppercase" style="color:var(--sand)">Paling Diminati</span>
-      </div>
-    </section>
-    <main id="koleksi" class="max-w-[1340px] mx-auto px-6 md:px-10 pb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Basic Paris -->
-        <div class="pcard relative">
-          <div class="badge">BEST SELLER 🔥</div>
-          <div class="ci" style="height:280px">
-            <img src="images/product-1.jpg" alt="Basic Paris Square Hijab" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Hijab Segi Empat</span>
-              <div class="flex items-center gap-1">
-                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
-                <span class="text-[0.6rem] text-gray-400 ml-1">(47)</span>
-              </div>
-            </div>
-            <h3 class="serif text-2xl mt-1">Basic Paris (BP)</h3>
-            <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">
-              Square hijab with classic Paris fabric. Super soft, non-sheer (90%), sweat-absorbent, neat rolled hem.
-              <br><span class="text-[0.55rem] uppercase tracking-wider" style="color:var(--gold)">Warna: Burgundy · Maroon · Salmon · Dusty · Peach · Stone · Abu Ash · Silver · Putih · Milo · Coksu · Fossil · Skin · Soft Latte · Dark Grey · Lavender · Purple · DW · Dusty Purple</span>
-            </p>
-            <div class="flex items-center justify-between mt-5 pt-4" style="border-top:1px solid var(--border)">
-              <p class="serif text-2xl font-light" style="color:var(--green)">Rp 31.000</p>
-              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="btn-shopee"><i class="fas fa-shopping-bag"></i> Beli di Shopee</a>
-            </div>
-          </div>
-        </div>
-        <!-- Pashmina Pop -->
-        <div class="pcard relative">
-          <div class="badge" style="background:var(--gold);color:white">POPULER</div>
-          <div class="ci" style="height:280px">
-            <img src="images/product-2.jpg" alt="Pashmina Pop Rayon Spandex" class="w-full h-full object-cover" />
-          </div>
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-[0.55rem] tracking-[0.18em] uppercase" style="color:var(--sand)">Pashmina Instan</span>
-              <div class="flex items-center gap-1">
-                <i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i><i class="fas fa-star" style="color:var(--gold);font-size:10px"></i>
-                <span class="text-[0.6rem] text-gray-400 ml-1">(63)</span>
-              </div>
-            </div>
-            <h3 class="serif text-2xl mt-1">Pashmina Pop (PP)</h3>
-            <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">
-              Pashmina instan ukuran 165×55 cm. Bahan rayon spandex super soft, breathable, non-slip, non-sheer.
-              <br><span class="text-[0.55rem] uppercase tracking-wider" style="color:var(--gold)">Warna: Sage Green · Navajo · Khaky Putty · Black · BW · Lavender · Powder Blue</span>
-            </p>
-            <div class="flex items-center justify-between mt-5 pt-4" style="border-top:1px solid var(--border)">
-              <p class="serif text-2xl font-light" style="color:var(--green)">Rp 53.000</p>
-              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="btn-shopee"><i class="fas fa-shopping-bag"></i> Beli di Shopee</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- ══ SHOPEE SECTION ══ -->
-    <section id="shopee" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-6">
-      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
-        <div>
-          <div class="label-tag mb-2"><i class="fas fa-store" style="font-size:8px"></i> Official Store</div>
-          <h2 class="serif text-3xl md:text-4xl font-light">Belanja di Shopee</h2>
-        </div>
-        <a href="https://shopee.co.id/arvana.wear" target="_blank" class="hidden md:inline-flex items-center gap-2 text-[0.65rem] font-medium tracking-wider text-white px-5 py-2.5 rounded-full transition hover:opacity-90" style="background:#EE4D2D;">
-          <i class="fas fa-store"></i> Kunjungi Toko
-        </a>
-      </div>
-    </section>
-    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-16">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="chnl-card">
-          <div class="icon-box" style="background:#fef0ec;">
-            <i class="fas fa-truck" style="color:#EE4D2D;font-size:1.3rem;"></i>
-          </div>
-          <h3 class="font-medium text-sm">Gratis Ongkir</h3>
-          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Nikmati free shipping untuk pembelian minimal Rp 100.000 via Shopee Mall.</p>
-        </div>
-        <div class="chnl-card">
-          <div class="icon-box" style="background:#fef0ec;">
-            <i class="fas fa-undo-alt" style="color:#EE4D2D;font-size:1.3rem;"></i>
-          </div>
-          <h3 class="font-medium text-sm">Garansi 14 Hari</h3>
-          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Barang tidak sesuai? Retur mudah dalam 14 hari via pusat resolusi Shopee.</p>
-        </div>
-        <div class="chnl-card">
-          <div class="icon-box" style="background:#fef0ec;">
-            <i class="fas fa-shield-alt" style="color:#EE4D2D;font-size:1.3rem;"></i>
-          </div>
-          <h3 class="font-medium text-sm">Pembayaran Aman</h3>
-          <p class="text-xs text-gray-400 font-light mt-2 leading-relaxed">Shopee Pay, transfer bank, COD — semua dilindungi jaminan Shopee.</p>
-        </div>
-      </div>
-      <div class="text-center mt-8">
-        <a href="https://shopee.co.id/arvana.wear" target="_blank"
-          class="inline-flex items-center gap-2 text-[0.7rem] font-medium tracking-[0.08em] text-white px-8 py-4 rounded-full transition hover:opacity-90"
-          style="background:#EE4D2D;">
-          <i class="fas fa-shopping-cart"></i> Belanja Sekarang di Shopee &nbsp;→
-        </a>
-      </div>
-    </div>
-
-    <!-- ══ CHANNEL INTEGRATION ══ -->
-    <section class="hero-bg geo-pattern py-16">
-      <div class="max-w-[1340px] mx-auto px-6 md:px-10">
-        <div class="text-center mb-12">
-          <span class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">✦ Terhubung Dengan Kami ✦</span>
-          <h2 class="serif text-3xl md:text-4xl font-light text-white mt-3">Belanja Lewat Mana Saja</h2>
-          <p class="text-white/40 text-sm font-light mt-3 max-w-md mx-auto">Pilih platform favorit kamu untuk belanja atau sekadar lihat-lihat koleksi terbaru Arvana Wear.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
-          <!-- Shopee -->
-          <div class="chnl-card text-center" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
-            <div class="icon-box" style="background:rgba(238,77,45,0.15);margin:0 auto 1rem;">
-              <i class="fas fa-store" style="color:#EE4D2D;font-size:1.3rem;"></i>
-            </div>
-            <h3 class="text-white font-medium text-sm">Shopee</h3>
-            <p class="text-white/30 text-xs font-light mt-2 mb-4">@arvana.wear</p>
-            <a href="https://shopee.co.id/arvana.wear" target="_blank"
-              class="inline-block text-[0.6rem] tracking-widest uppercase px-4 py-2.5 rounded-full border transition hover:bg-white hover:text-black"
-              style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);">
-              Kunjungi
-            </a>
-          </div>
-          <!-- Instagram -->
-          <div class="chnl-card text-center" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
-            <div class="icon-box" style="background:rgba(228,64,95,0.15);margin:0 auto 1rem;">
-              <i class="fab fa-instagram" style="color:#E4405F;font-size:1.3rem;"></i>
-            </div>
-            <h3 class="text-white font-medium text-sm">Instagram</h3>
-            <p class="text-white/30 text-xs font-light mt-2 mb-4">@arvana.wear</p>
-            <a href="https://instagram.com/arvana.wear" target="_blank"
-              class="inline-block text-[0.6rem] tracking-widest uppercase px-4 py-2.5 rounded-full border transition hover:bg-white hover:text-black"
-              style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);">
-              Ikuti
-            </a>
-          </div>
-          <!-- WhatsApp -->
-          <div class="chnl-card text-center" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);">
-            <div class="icon-box" style="background:rgba(37,211,102,0.15);margin:0 auto 1rem;">
-              <i class="fab fa-whatsapp" style="color:#25D366;font-size:1.3rem;"></i>
-            </div>
-            <h3 class="text-white font-medium text-sm">WhatsApp</h3>
-            <p class="text-white/30 text-xs font-light mt-2 mb-4">0851-8531-3732</p>
-            <a href="https://wa.me/6285185313732" target="_blank"
-              class="inline-block text-[0.6rem] tracking-widest uppercase px-4 py-2.5 rounded-full border transition hover:bg-white hover:text-black"
-              style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);">
-              Chat
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ INSTAGRAM GALLERY ══ -->
-    <section id="instagram" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-16 pb-6">
-      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
-        <div>
-          <div class="label-tag mb-2"><i class="fab fa-instagram" style="font-size:8px"></i> @arvana.wear</div>
-          <h2 class="serif text-3xl md:text-4xl font-light">Dari Instagram</h2>
-        </div>
-        <a href="https://instagram.com/arvana.wear" target="_blank"
-          class="hidden md:inline-flex items-center gap-2 text-[0.65rem] font-medium tracking-wider text-white px-5 py-2.5 rounded-full transition"
-          style="background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCAF45);">
-          <i class="fab fa-instagram"></i> Ikuti Kami
-        </a>
-      </div>
-    </section>
-    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-16">
-      <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
-        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
-          <img src="https://placehold.co/400x400/2D6A4F/FAF7F2?text=Abaya" alt="Arvana Wear Instagram 1" onerror="this.src='https://placehold.co/400x400/2D6A4F/FAF7F2?text=AW'"/>
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
-          <img src="https://placehold.co/400x400/B8945C/FAF7F2?text=Gamis" alt="Arvana Wear Instagram 2" onerror="this.src='https://placehold.co/400x400/B8945C/FAF7F2?text=AW'"/>
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
-          <img src="https://placehold.co/400x400/40916C/FAF7F2?text=Hijab" alt="Arvana Wear Instagram 3" onerror="this.src='https://placehold.co/400x400/40916C/FAF7F2?text=AW'"/>
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
-          <img src="https://placehold.co/400x400/1C1C1E/B8945C?text=Koko" alt="Arvana Wear Instagram 4" onerror="this.src='https://placehold.co/400x400/1C1C1E/B8945C?text=AW'"/>
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
-          <img src="https://placehold.co/400x400/C4A882/FAF7F2?text=Pashmina" alt="Arvana Wear Instagram 5" onerror="this.src='https://placehold.co/400x400/C4A882/FAF7F2?text=AW'"/>
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://instagram.com/arvana.wear" target="_blank" class="ig-item">
-          <img src="https://placehold.co/400x400/D4A0A0/FAF7F2?text=Dress" alt="Arvana Wear Instagram 6" onerror="this.src='https://placehold.co/400x400/D4A0A0/FAF7F2?text=AW'"/>
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-      </div>
-      <div class="text-center mt-8">
-        <a href="https://instagram.com/arvana.wear" target="_blank"
-          class="md:hidden inline-flex items-center gap-2 text-[0.65rem] font-medium tracking-wider text-white px-6 py-3 rounded-full transition"
-          style="background:linear-gradient(135deg,#833AB4,#FD1D1D,#FCAF45);">
-          <i class="fab fa-instagram"></i> Ikuti @arvana.wear
-        </a>
-      </div>
-    </div>
-
-    <!-- ══ TESTIMONIALS ══ -->
-    <section id="testimoni" class="max-w-[1340px] mx-auto px-6 md:px-10 pt-8 pb-4">
-      <div class="flex items-end justify-between pb-5" style="border-bottom:1px solid var(--border)">
-        <div>
-          <div class="label-tag mb-2"><i class="fas fa-quote-left" style="font-size:8px"></i> Testimoni</div>
-          <h2 class="serif text-3xl md:text-4xl font-light">Apa Kata Mereka</h2>
-        </div>
-      </div>
-    </section>
-    <div class="max-w-[1340px] mx-auto px-6 md:px-10 pb-16">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="testi-card">
-          <div class="flex items-center gap-1 mb-3">
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-          </div>
-          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">"Abaya-nya jatuh banget, bahannya adem walau dipake seharian. Langsung beli dari Shopee, sampe 2 hari aja. Recomended!"</p>
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-medium" style="background:var(--green)">FA</div>
-            <div>
-              <p class="text-xs font-medium">Fatimah A.</p>
-              <p class="text-[0.55rem] text-gray-400">Jakarta · Shopee</p>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="flex items-center gap-1 mb-3">
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-          </div>
-          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">"Koko premiumnya beda sama yang lain. Jahitan rapi, bahannya adem. Order dari IG, respon cepet banget di WA!"</p>
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-medium" style="background:var(--charcoal)">RM</div>
-            <div>
-              <p class="text-xs font-medium">Ridwan M.</p>
-              <p class="text-[0.55rem] text-gray-400">Bandung · Instagram</p>
-            </div>
-          </div>
-        </div>
-        <div class="testi-card">
-          <div class="flex items-center gap-1 mb-3">
-            <i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i><i class="fas fa-star" style="color:var(--gold);font-size:11px"></i>
-          </div>
-          <p class="text-sm text-gray-500 font-light leading-relaxed mb-4">"Pashmina cerutynya lembut banget, gak bikin gatal. Beli di Shopee pake voucher gratis ongkir — hemat banget!"</p>
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-medium" style="background:var(--gold)">NS</div>
-            <div>
-              <p class="text-xs font-medium">Nurul S.</p>
-              <p class="text-[0.55rem] text-gray-400">Surabaya · Shopee</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ NEWSLETTER ══ -->
-    <section class="hero-bg geo-pattern" style="background:linear-gradient(135deg, var(--dark) 0%, #1a2e20 100%);">
-      <div class="max-w-[1340px] mx-auto px-6 md:px-10 py-20 md:py-24 text-center">
-        <span class="text-[0.55rem] tracking-[0.22em] uppercase" style="color:var(--gold)">✦ #YourJourneyYourStyle ✦</span>
-        <h2 class="serif text-3xl md:text-5xl font-light text-white mt-4 mb-4">
-          Perjalanan Gayamu<br>Dimulai di Sini
-        </h2>
-        <p class="text-white/40 text-sm font-light max-w-md mx-auto leading-relaxed mb-8">
-          Ikuti Instagram @arvana.wear untuk koleksi terbatas, atau belanja langsung di Shopee.
+      <div class="p-10 md:p-12" style="background: var(--bg2);">
+        <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)]">BUKAN SEKADAR</span>
+        <h3 class="serif text-2xl font-light text-white mt-3 mb-4">Produk Massal</h3>
+        <p class="text-sm text-[var(--text2)] font-light leading-[1.9]">
+          Setiap helai yang kami kirimkan telah melalui proses seleksi — bukan hanya kualitas kain,
+          tapi juga <span class="text-white/60">makna</span> di baliknya. Adem, nyaman, tidak menerawang.
+          Seperti prinsip: nyaman di kulit, tenang di hati.
         </p>
-        <div class="flex flex-wrap justify-center gap-3">
-          <a href="https://shopee.co.id/arvana.wear" target="_blank"
-            class="inline-flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.08em] uppercase px-6 py-3.5 rounded-xl text-white transition hover:opacity-90"
-            style="background:#EE4D2D;">
-            <i class="fas fa-store"></i> Shopee
-          </a>
-          <a href="https://instagram.com/arvana.wear" target="_blank"
-            class="inline-flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.08em] uppercase px-6 py-3.5 rounded-xl text-white transition hover:opacity-90"
-            style="background:linear-gradient(135deg,#833AB4,#FD1D1D);">
-            <i class="fab fa-instagram"></i> Instagram
-          </a>
-          <a href="https://wa.me/6285185313732" target="_blank"
-            class="inline-flex items-center gap-2 text-[0.68rem] font-medium tracking-[0.08em] uppercase px-6 py-3.5 rounded-xl text-white transition hover:opacity-90"
-            style="background:#25D366;">
-            <i class="fab fa-whatsapp"></i> WhatsApp
-          </a>
-        </div>
       </div>
-    </section>
-
-    <!-- ══ FOOTER ══ -->
-    <footer id="footer" class="py-12" style="background:var(--charcoal);border-top:1px solid rgba(255,255,255,0.05)">
-      <div class="max-w-[1340px] mx-auto px-6 md:px-10">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10" style="border-bottom:1px solid rgba(255,255,255,0.06)">
-          <div class="md:col-span-2">
-            <p class="serif text-2xl text-white font-medium">
-              Arvana<span style="color:var(--gold)">Wear</span>
-            </p>
-            <p class="text-sm text-white/30 font-light mt-3 max-w-xs leading-relaxed">
-              Busana muslim premium yang memadukan keanggunan desain modern dengan nilai-nilai syar'i.
-              Tersedia di Shopee, Instagram, dan WhatsApp.
-            </p>
-            <div class="flex gap-4 mt-5">
-              <a href="https://instagram.com/arvana.wear" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fab fa-instagram"></i></a>
-              <a href="https://www.tiktok.com/@arvana.wear" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fab fa-tiktok"></i></a>
-              <a href="https://wa.me/6285185313732" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fab fa-whatsapp"></i></a>
-              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="text-white/30 hover:text-white transition text-lg"><i class="fas fa-store"></i></a>
-            </div>
-          </div>
-          <div>
-            <p class="text-[0.6rem] tracking-widest uppercase mb-4" style="color:var(--gold)">Belanja</p>
-            <div class="space-y-2.5 text-sm text-white/30 font-light">
-              <a href="https://shopee.co.id/arvana.wear" target="_blank" class="block hover:text-white transition">Shopee Official Store</a>
-              <a href="https://instagram.com/arvana.wear" target="_blank" class="block hover:text-white transition">Instagram @arvana.wear</a>
-              <a href="https://wa.me/6285185313732" target="_blank" class="block hover:text-white transition">WhatsApp Bisnis</a>
-              <a href="#" class="block hover:text-white transition">Koleksi Wanita</a>
-            </div>
-          </div>
-          <div>
-            <p class="text-[0.6rem] tracking-widest uppercase mb-4" style="color:var(--gold)">Perusahaan</p>
-            <div class="space-y-2.5 text-sm text-white/30 font-light">
-              <a href="#" class="block hover:text-white transition">Tentang Kami</a>
-              <a href="#" class="block hover:text-white transition">Kebijakan Pengiriman</a>
-              <a href="#" class="block hover:text-white transition">Pengembalian</a>
-              <a href="https://wa.me/6285185313732" target="_blank" class="block hover:text-white transition">Hubungi Kami</a>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8">
-          <p class="text-xs text-white/20 tracking-wide">© 2026 Arvana Wear — #YourJourneyYourStyle. Tersedia di Shopee, Instagram & WhatsApp.</p>
-          <p class="text-[0.55rem] tracking-widest" style="color:var(--gold)">✦ Est. 2024 ✦</p>
-        </div>
+      <div class="p-10 md:p-12" style="background: var(--bg2);">
+        <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)]">BUKAN SEKADAR</span>
+        <h3 class="serif text-2xl font-light text-white mt-3 mb-4">Transaksi</h3>
+        <p class="text-sm text-[var(--text2)] font-light leading-[1.9]">
+          Setiap pembelian adalah awal percakapan, bukan akhir. Kami ada di Shopee, Instagram, dan WhatsApp,
+          bukan hanya untuk menjual, tapi untuk <span class="text-white/60">menemani perjalananmu</span>.
+        </p>
       </div>
-    </footer>
+    </div>
+  </div>
+</section>
 
-  </div><!-- /page-catalog -->
+<!-- ══════════════════════════════════════════
+     COLLECTION
+══════════════════════════════════════════ -->
+<section id="koleksi" class="py-28 md:py-32">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4 reveal">
+      <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
+      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">02 · Koleksi</span>
+    </div>
 
+    <div class="reveal" style="transition-delay: 0.1s;">
+      <h2 class="serif text-3xl md:text-5xl font-light text-white max-w-2xl leading-[1.15]">
+        Kain yang<br>
+        <span class="text-[var(--gold)]">Berbicara</span>
+      </h2>
+      <p class="text-sm text-[var(--text2)] font-light max-w-md mt-6 leading-[1.9]">
+        Dua produk andalan. Bukan karena banyak pilihan, tapi karena setiap pilihan <span class="text-white/60">bermakna</span>.
+      </p>
+    </div>
 
-  <!-- ══════════════════════════════════════════
-       PAGE: LOGIN
-  ══════════════════════════════════════════ -->
-  <div id="page-login" class="page">
-    <div class="min-h-screen flex">
-      <div class="hidden lg:flex lg:w-[42%] flex-col justify-between p-12 relative overflow-hidden hero-bg geo-pattern">
-        <div class="absolute top-0 left-0 w-48 h-48 opacity-20" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
-        <div class="relative z-10">
-          <button onclick="showPage('catalog')" class="serif text-2xl font-light text-white">
-            Arvana<span style="color:var(--gold)">Wear</span>
-          </button>
+    <!-- Products -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
+      <!-- Basic Paris -->
+      <div class="pcard reveal">
+        <div class="img-wrap relative">
+          <img src="images/product-1.jpg" alt="Basic Paris Hijab"
+               onerror="this.src='https://placehold.co/600x400/1a1a1e/C9A96E?text=Basic+Paris'"/>
+          <div class="absolute top-4 left-4">
+            <span class="mono text-[0.45rem] tracking-[0.2em] uppercase px-3 py-1.5 rounded-full"
+                  style="background: rgba(201,169,110,0.15); color: var(--gold); border: 1px solid rgba(201,169,110,0.2);">
+              Best Seller
+            </span>
+          </div>
         </div>
-        <div class="relative z-10">
-          <p class="text-[0.55rem] tracking-[0.22em] uppercase mb-5" style="color:var(--gold)">✦ selamat datang kembali ✦</p>
-          <blockquote class="serif text-4xl font-light italic leading-tight text-white/80">
-            "Bukan sekadar<br>pakaian.<br>Ini cerminan iman<br>dan <span style="color:var(--gold)">#YourJourneyYourStyle</span>"
-          </blockquote>
-          <div class="mt-8 h-px w-12" style="background:var(--gold)"></div>
-        </div>
-      </div>
-      <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-20 py-12" style="background:var(--cream)">
-        <button onclick="showPage('catalog')"
-          class="self-start flex items-center gap-2 text-[0.68rem] tracking-widest uppercase text-gray-400 hover:text-gray-700 transition mb-12">
-          ← Kembali
-        </button>
-        <p class="text-[0.55rem] tracking-[0.22em] uppercase mb-4" style="color:var(--gold)">✦ akun anda ✦</p>
-        <h1 class="serif font-light mb-2" style="font-size:clamp(2.5rem,5vw,3.5rem)">Masuk</h1>
-        <p class="text-sm text-gray-400 font-light mb-10">Akses koleksi eksklusif dan pesanan Anda.</p>
-        <div class="max-w-[360px] w-full space-y-5">
-          <div>
-            <label class="text-[0.6rem] tracking-widest uppercase text-gray-400 block mb-2">Email</label>
-            <input id="login-email" type="email" placeholder="nama@email.com" class="ainput" />
+        <div class="p-6 md:p-7">
+          <div class="flex items-center justify-between mb-3">
+            <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)]">Hijab Segi Empat</span>
+            <span class="mono text-[0.5rem] text-[var(--text3)]">47 reviews</span>
           </div>
-          <div>
-            <label class="text-[0.6rem] tracking-widest uppercase text-gray-400 block mb-2">Password</label>
-            <input id="login-password" type="password" placeholder="••••••••" class="ainput" />
-          </div>
-          <div class="flex items-center justify-between">
-            <label class="flex items-center gap-2 text-xs text-gray-400">
-              <input type="checkbox" class="rounded" style="accent-color:var(--green)"> Ingat saya
-            </label>
-            <a href="#" class="text-xs underline underline-offset-4 hover:text-green-700 transition" style="color:var(--green)">Lupa password?</a>
-          </div>
-          <p id="login-msg" class="text-sm hidden"></p>
-          <button onclick="handleLogin()"
-            class="w-full text-white text-[0.7rem] font-medium tracking-[0.12em] uppercase py-4 rounded-xl hover:opacity-90 transition"
-            style="background:var(--charcoal)">
-            Masuk
-          </button>
-          <p class="text-center text-sm text-gray-400 font-light pt-1">
-            Belum punya akun?
-            <button onclick="showPage('register')"
-              class="font-medium underline underline-offset-4 transition ml-1"
-              style="color:var(--green)">Daftar sekarang</button>
+          <h3 class="serif text-2xl font-light text-white">Basic Paris (BP)</h3>
+          <p class="text-xs text-[var(--text2)] font-light mt-2 leading-[1.9]">
+            Paris fabric klasik. Super soft, non-sheer (90%), nyerap keringat, hem rapi.
+            Bukan sekadar hijab — ini kanvas untuk <span class="text-white/60 italic">pernyataan diam</span>mu.
           </p>
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#800020" title="Burgundy"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#800000" title="Maroon"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#FA8072" title="Salmon"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#BFAFB2" title="Dusty"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#FBCEB1" title="Peach"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#928E85" title="Stone"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#808080" title="Abu Ash"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#C0C0C0" title="Silver"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#FFFFFF" title="Putih"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#C4A882" title="Milo"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#A0522D" title="Coksu"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#8B7D6B" title="Fossil"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#E8C9A0" title="Skin"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#D2B48C" title="Soft Latte"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#4A4A4A" title="Dark Grey"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#B284BE" title="Lavender"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#6A0DAD" title="Purple"></span>
+          </div>
+          <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)] mt-3">+ DW · Dusty Purple</p>
+          <div class="flex items-center justify-between mt-5 pt-5" style="border-top: 1px solid var(--line);">
+            <span class="serif text-3xl font-light text-[var(--gold)]">Rp 31.000</span>
+            <a href="https://shopee.co.id/arvana.wear" target="_blank"
+              class="mono text-[0.55rem] tracking-[0.2em] uppercase px-5 py-2.5 rounded-full transition-all duration-300"
+              style="background: rgba(238,77,45,0.12); color: #EE4D2D; border: 1px solid rgba(238,77,45,0.2);">
+              Beli di Shopee →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pashmina Pop -->
+      <div class="pcard reveal" style="transition-delay: 0.15s;">
+        <div class="img-wrap relative">
+          <img src="images/product-2.jpg" alt="Pashmina Pop"
+               onerror="this.src='https://placehold.co/600x400/1a1a1e/C9A96E?text=Pashmina+Pop'"/>
+          <div class="absolute top-4 left-4">
+            <span class="mono text-[0.45rem] tracking-[0.2em] uppercase px-3 py-1.5 rounded-full"
+                  style="background: rgba(201,169,110,0.15); color: var(--gold); border: 1px solid rgba(201,169,110,0.2);">
+              Populer
+            </span>
+          </div>
+        </div>
+        <div class="p-6 md:p-7">
+          <div class="flex items-center justify-between mb-3">
+            <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)]">Pashmina Instan</span>
+            <span class="mono text-[0.5rem] text-[var(--text3)]">63 reviews</span>
+          </div>
+          <h3 class="serif text-2xl font-light text-white">Pashmina Pop (PP)</h3>
+          <p class="text-xs text-[var(--text2)] font-light mt-2 leading-[1.9]">
+            Rayon spandex super soft, breathable, non-slip, non-sheer. Ukuran 165×55 cm.
+            Lembut di kulit — sebagaimana prinsip yang lembut di hati.
+            <span class="text-white/60 italic">Tanpa harus berteriak, kau sudah terlihat.</span>
+          </p>
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#87A96B" title="Sage Green"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#D2B48C" title="Navajo"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#8B7D6B" title="Khaky Putty"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#1C1C1E" title="Black"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#3A3A3E" title="BW"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#B284BE" title="Lavender"></span>
+            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#87CEEB" title="Powder Blue"></span>
+          </div>
+          <div class="flex items-center justify-between mt-5 pt-5" style="border-top: 1px solid var(--line);">
+            <span class="serif text-3xl font-light text-[var(--gold)]">Rp 53.000</span>
+            <a href="https://shopee.co.id/arvana.wear" target="_blank"
+              class="mono text-[0.55rem] tracking-[0.2em] uppercase px-5 py-2.5 rounded-full transition-all duration-300"
+              style="background: rgba(238,77,45,0.12); color: #EE4D2D; border: 1px solid rgba(238,77,45,0.2);">
+              Beli di Shopee →
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ══════════════════════════════════════════
-       PAGE: REGISTER
-  ══════════════════════════════════════════ -->
-  <div id="page-register" class="page">
-    <div class="min-h-screen flex">
-      <div class="hidden lg:flex lg:w-[42%] flex-col justify-between p-12 relative overflow-hidden hero-bg geo-pattern">
-        <div class="absolute top-0 left-0 w-48 h-48 opacity-20" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
-        <div class="relative z-10">
-          <button onclick="showPage('catalog')" class="serif text-2xl font-light text-white">
-            Arvana<span style="color:var(--gold)">Wear</span>
-          </button>
+<!-- ══════════════════════════════════════════
+     MARQUEE + INTERLUDE
+══════════════════════════════════════════ -->
+<section class="py-12 overflow-hidden" style="background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="marquee-wrap">
+    <div class="marquee-inner serif text-3xl md:text-4xl font-light text-white/10 italic">
+      <span class="px-8">#YourJourneyYourStyle</span>
+      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
+      <span class="px-8">Bukan sekadar pakaian — ini pernyataan diam</span>
+      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
+      <span class="px-8">#YourJourneyYourStyle</span>
+      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
+      <span class="px-8">Kain yang berbicara tanpa suara</span>
+      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     ZEN SECTION — Stillness
+══════════════════════════════════════════ -->
+<section class="py-28 md:py-36 relative">
+  <div class="max-w-[750px] mx-auto px-6">
+    <div class="reveal text-center">
+      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">✦ Interlude ✦</span>
+      <p class="serif text-2xl md:text-3xl font-light text-white/70 leading-[1.8] mt-12 max-w-lg mx-auto">
+        "Di tengah dunia yang berisik,<br>
+        <span class="text-[var(--gold)]">diam adalah perlawanan.</span><br>
+        Di tengah mode yang gila,<br>
+        sederhana adalah revolusi."
+      </p>
+      <p class="text-xs text-[var(--text3)] mono tracking-wider mt-8">— Hidup modern, 2026</p>
+    </div>
+
+    <div class="divider my-20"></div>
+
+    <div class="reveal grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div>
+        <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">Refleksi</span>
+        <p class="text-sm text-[var(--text2)] leading-[2] mt-4">
+          <span class="text-white/60">Seneca</span> pernah menulis tentang betapa pendeknya hidup
+          — bukan karena waktunya sedikit, tapi karena kita menyia-nyiakannya.
+          Berapa lama waktu yang kau habiskan untuk scrolling, membandingkan, merasa kurang?
+          Berapa lama yang kau habiskan untuk <span class="italic">menjadi</span> dibanding
+          <span class="italic">terlihat</span>?
+        </p>
+      </div>
+      <div>
+        <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">Ajakan</span>
+        <p class="text-sm text-[var(--text2)] leading-[2] mt-4">
+          Hari ini, cobalah hadir sepenuhnya. Saat memakai hijab, rasakan kainnya.
+          Saat shalat, rasakan sujudnya. Saat berinteraksi, dengarkan sungguh-sungguh.
+          <span class="text-white/60">Itulah hijrah yang sebenarnya</span> —
+          bukan dari satu tempat ke tempat lain, tapi dari satu kesadaran ke kesadaran yang lebih dalam.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SHOP — Channels
+══════════════════════════════════════════ -->
+<section id="belanja" class="py-24" style="background: var(--bg2);">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="flex items-center gap-3 mb-4 reveal">
+      <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
+      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">03 · Belanja</span>
+    </div>
+    <div class="reveal" style="transition-delay: 0.1s;">
+      <h2 class="serif text-3xl md:text-5xl font-light text-white max-w-xl leading-[1.15]">
+        Mulai<br>
+        <span class="text-[var(--gold)]">Perjalananmu</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-14 reveal">
+      <!-- Shopee -->
+      <a href="https://shopee.co.id/arvana.wear" target="_blank" class="glass p-8 block group">
+        <div class="flex items-center justify-between mb-6">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+               style="background: rgba(238,77,45,0.1);">
+            <svg class="w-5 h-5" style="color: #EE4D2D;" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L20 8l-9 9z"/></svg>
+          </div>
+          <span class="mono text-[0.5rem] tracking-wider text-[var(--text3)] group-hover:text-[var(--gold)] transition">Belanja →</span>
         </div>
-        <div class="relative z-10">
-          <p class="text-[0.55rem] tracking-[0.22em] uppercase mb-5" style="color:var(--gold)">✦ bergabunglah ✦</p>
-          <blockquote class="serif text-4xl font-light italic leading-tight text-white/80">
-            "Mulai perjalanan<br>hijrah Anda bersama<br><span style="color:var(--gold)">#YourJourneyYourStyle</span>"
-          </blockquote>
-          <div class="mt-8 h-px w-12" style="background:var(--gold)"></div>
+        <h3 class="serif text-xl font-light text-white group-hover:text-[var(--gold)] transition">Shopee</h3>
+        <p class="text-xs text-[var(--text2)] font-light mt-2 leading-relaxed">
+          Official store @arvana.wear. Gratis ongkir min. Rp 100rb, garansi 14 hari, pembayaran aman.
+        </p>
+        <p class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] mt-4">@arvana.wear</p>
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://instagram.com/arvana.wear" target="_blank" class="glass p-8 block group">
+        <div class="flex items-center justify-between mb-6">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+               style="background: rgba(228,64,95,0.1);">
+            <svg class="w-5 h-5" style="color: #E4405F;" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 0 2.5 1.25 1.25 0 0 1 0-2.5M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10m0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+          </div>
+          <span class="mono text-[0.5rem] tracking-wider text-[var(--text3)] group-hover:text-[var(--gold)] transition">Ikuti →</span>
+        </div>
+        <h3 class="serif text-xl font-light text-white group-hover:text-[var(--gold)] transition">Instagram</h3>
+        <p class="text-xs text-[var(--text2)] font-light mt-2 leading-relaxed">
+          Koleksi terbatas, inspirasi gaya, dan cerita di balik setiap kain.
+        </p>
+        <p class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] mt-4">@arvana.wear</p>
+      </a>
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/6285185313732" target="_blank" class="glass p-8 block group">
+        <div class="flex items-center justify-between mb-6">
+          <div class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+               style="background: rgba(37,211,102,0.1);">
+            <svg class="w-5 h-5" style="color: #25D366;" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 2.07.56 4.09 1.62 5.86L2 22l4.33-1.6a9.94 9.94 0 0 0 5.71 1.8c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.02c-1.79 0-3.54-.5-5.05-1.44l-.36-.22-2.57.95.88-2.5-.24-.38a8.41 8.41 0 0 1-1.3-4.52c0-4.64 3.78-8.42 8.42-8.42s8.42 3.78 8.42 8.42-3.78 8.42-8.42 8.42zm4.61-6.34c-.25-.13-1.48-.73-1.71-.81-.23-.08-.4-.13-.57.12-.17.25-.66.81-.81.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.57-1.37-.78-1.88-.21-.51-.42-.48-.57-.48-.15 0-.32-.02-.49-.02s-.45.06-.68.32c-.23.25-.89.87-.89 2.12 0 1.25.91 2.46 1.04 2.63.13.17 1.79 2.73 4.34 3.83.61.26 1.08.42 1.45.53.61.19 1.17.16 1.61.1.49-.07 1.48-.6 1.69-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.15-.48-.28z"/></svg>
+          </div>
+          <span class="mono text-[0.5rem] tracking-wider text-[var(--text3)] group-hover:text-[var(--gold)] transition">Chat →</span>
+        </div>
+        <h3 class="serif text-xl font-light text-white group-hover:text-[var(--gold)] transition">WhatsApp</h3>
+        <p class="text-xs text-[var(--text2)] font-light mt-2 leading-relaxed">
+          Konsultasi gratis. Tanya ukuran, warna, atau sekadar ngobrol tentang hijab.
+        </p>
+        <p class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] mt-4">0851-8531-3732</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     TESTIMONIALS
+══════════════════════════════════════════ -->
+<section class="py-24">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="reveal text-center max-w-xl mx-auto mb-16">
+      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">04 · Testimoni</span>
+      <h2 class="serif text-3xl md:text-4xl font-light text-white mt-4">Suara dari Perjalanan</h2>
+      <p class="text-sm text-[var(--text2)] font-light mt-4">
+        Bukan sekadar ulasan. Ini cerita dari mereka yang memilih untuk <span class="text-white/60">sadar</span>.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal">
+      <div class="glass p-7">
+        <div class="flex gap-1 mb-4">
+          <span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span>
+        </div>
+        <p class="text-sm text-[var(--text2)] font-light leading-[1.9] mb-5">
+          "Abaya-nya jatuh banget, bahannya adem walau dipake seharian. Langsung beli dari Shopee,
+          sampe 2 hari aja. Recomended!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center mono text-[0.6rem]"
+               style="background: rgba(201,169,110,0.15); color: var(--gold);">FA</div>
+          <div>
+            <p class="text-xs text-white/70">Fatimah A.</p>
+            <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)]">Jakarta · Shopee</p>
+          </div>
         </div>
       </div>
-      <div class="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-20 py-12" style="background:var(--cream)">
-        <button onclick="showPage('catalog')"
-          class="self-start flex items-center gap-2 text-[0.68rem] tracking-widest uppercase text-gray-400 hover:text-gray-700 transition mb-12">
-          ← Kembali
-        </button>
-        <p class="text-[0.55rem] tracking-[0.22em] uppercase mb-4" style="color:var(--gold)">✦ akun baru ✦</p>
-        <h1 class="serif font-light mb-2" style="font-size:clamp(2.5rem,5vw,3.5rem)">Daftar</h1>
-        <p class="text-sm text-gray-400 font-light mb-10">Buat akun. Atau langsung belanja via Shopee dan follow Instagram!</p>
-        <div class="max-w-[360px] w-full space-y-5">
+
+      <div class="glass p-7">
+        <div class="flex gap-1 mb-4">
+          <span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span>
+        </div>
+        <p class="text-sm text-[var(--text2)] font-light leading-[1.9] mb-5">
+          "Koko premiumnya beda sama yang lain. Jahitan rapi, bahannya adem. Order dari IG,
+          respon cepet banget di WA!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center mono text-[0.6rem]"
+               style="background: rgba(255,255,255,0.06); color: var(--text2);">RM</div>
           <div>
-            <label class="text-[0.6rem] tracking-widest uppercase text-gray-400 block mb-2">Nama Lengkap</label>
-            <input id="reg-name" type="text" placeholder="Nama kamu" class="ainput" />
+            <p class="text-xs text-white/70">Ridwan M.</p>
+            <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)]">Bandung · Instagram</p>
           </div>
+        </div>
+      </div>
+
+      <div class="glass p-7">
+        <div class="flex gap-1 mb-4">
+          <span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span>
+        </div>
+        <p class="text-sm text-[var(--text2)] font-light leading-[1.9] mb-5">
+          "Pashmina cerutynya lembut banget, gak bikin gatal. Beli di Shopee pake voucher gratis
+          ongkir — hemat banget!"
+        </p>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center mono text-[0.6rem]"
+               style="background: rgba(45,106,79,0.2); color: var(--green);">NS</div>
           <div>
-            <label class="text-[0.6rem] tracking-widest uppercase text-gray-400 block mb-2">Email</label>
-            <input id="reg-email" type="email" placeholder="nama@email.com" class="ainput" />
+            <p class="text-xs text-white/70">Nurul S.</p>
+            <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)]">Surabaya · Shopee</p>
           </div>
-          <div>
-            <label class="text-[0.6rem] tracking-widest uppercase text-gray-400 block mb-2">Password</label>
-            <input id="reg-password" type="password" placeholder="Min. 8 karakter" class="ainput" />
-          </div>
-          <p id="reg-msg" class="text-sm hidden"></p>
-          <button onclick="handleRegister()"
-            class="w-full text-white text-[0.7rem] font-medium tracking-[0.12em] uppercase py-4 rounded-xl hover:opacity-90 transition"
-            style="background:var(--green)">
-            Buat Akun
-          </button>
-          <p class="text-xs text-gray-400 font-light text-center">
-            Dengan mendaftar, kamu setuju dengan <a href="#" class="underline hover:text-green-700 transition" style="color:var(--green)">Syarat & Ketentuan</a>.
-          </p>
-          <div class="relative my-4">
-            <div class="absolute inset-0 flex items-center"><span class="w-full" style="border-top:1px solid var(--border)"></span></div>
-            <div class="relative flex justify-center"><span class="text-xs text-gray-400 font-light px-3" style="background:var(--cream)">atau belanja langsung</span></div>
-          </div>
-          <div class="flex gap-3">
-            <a href="https://shopee.co.id/arvana.wear" target="_blank"
-              class="flex-1 text-center text-[0.65rem] font-medium text-white py-3 rounded-xl transition hover:opacity-90"
-              style="background:#EE4D2D;">
-              <i class="fas fa-store mr-1"></i> Shopee
-            </a>
-            <a href="https://wa.me/6285185313732" target="_blank"
-              class="flex-1 text-center text-[0.65rem] font-medium text-white py-3 rounded-xl transition hover:opacity-90"
-              style="background:#25D366;">
-              <i class="fab fa-whatsapp mr-1"></i> WA
-            </a>
-          </div>
-          <p class="text-center text-sm text-gray-400 font-light pt-1">
-            Sudah punya akun?
-            <button onclick="showPage('login')"
-              class="font-medium underline underline-offset-4 transition ml-1"
-              style="color:var(--charcoal)">Masuk</button>
-          </p>
         </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CLOSING — Final Reflection
+══════════════════════════════════════════ -->
+<section id="tentang" class="py-28 relative overflow-hidden" style="background: var(--bg2);">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full opacity-[0.02]" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
+  <div class="max-w-[750px] mx-auto px-6 relative z-10">
+    <div class="reveal text-center">
+      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">✦ #YourJourneyYourStyle ✦</span>
+
+      <h2 class="serif text-3xl md:text-5xl font-light text-white mt-12 leading-[1.2]">
+        Perjalanan Setiap<br>
+        Manusia Adalah<br>
+        <span class="text-[var(--gold)]">Unik</span>
+      </h2>
+
+      <p class="text-sm text-[var(--text2)] font-light max-w-lg mx-auto mt-8 leading-[2]">
+        Arvana Wear tidak menjawab semua pertanyaan hidup. Kami hanya sehelai kain
+        yang menyertai perjalananmu — mengingatkan bahwa di tengah hiruk-pikuk dunia
+        yang terus berlari, kau punya izin untuk <span class="text-white/60">berhenti,
+        bernapas, dan memilih dengan sadar.</span>
+      </p>
+
+      <p class="text-sm text-[var(--text2)] font-light max-w-lg mx-auto mt-5 leading-[2]">
+        Bukan karena kami sempurna. Tapi karena, seperti kata Albert Camus,
+        <span class="italic text-white/60">"Di tengah musim dingin, akhirnya aku belajar
+        bahwa di dalam diriku ada musim panas yang tak terkalahkan."</span>
+        Hijab ini bukan musim panasmu — tapi ia bisa jadi pengingat bahwa
+        <span class="text-white/70">musim panas itu ada di dalam dirimu.</span>
+      </p>
+
+      <div class="divider max-w-xs mx-auto my-12"></div>
+
+      <p class="serif text-xl md:text-2xl font-light text-white/50 italic leading-[1.8]">
+        "Dan barang siapa berhijrah di jalan Allah,<br>
+        niscaya mereka akan mendapati di muka bumi<br>
+        tempat hijrah yang luas dan rezeki yang banyak."<br>
+        <span class="text-[0.6rem] text-[var(--gold-dim)] not-italic">— QS. An-Nisa: 100</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     STATS BAR
+══════════════════════════════════════════ -->
+<div class="py-10" style="background: var(--bg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="grid grid-cols-3 gap-8 text-center">
+      <div class="reveal">
+        <p class="serif text-3xl md:text-4xl font-light text-white">50<span class="text-[var(--gold)] text-2xl">+</span></p>
+        <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)] mt-2">Produk Premium</p>
+      </div>
+      <div class="reveal" style="transition-delay: 0.1s;">
+        <p class="serif text-3xl md:text-4xl font-light text-white">10K<span class="text-[var(--gold)] text-2xl">+</span></p>
+        <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)] mt-2">Pelanggan</p>
+      </div>
+      <div class="reveal" style="transition-delay: 0.2s;">
+        <p class="serif text-3xl md:text-4xl font-light text-white">4.9<span class="text-[var(--gold)] text-2xl">★</span></p>
+        <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)] mt-2">Rating</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+<footer class="py-16" style="background: var(--bg2);">
+  <div class="max-w-[1100px] mx-auto px-6">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-10" style="border-bottom: 1px solid var(--line);">
+      <div>
+        <p class="serif text-2xl text-white font-light">
+          Arvana<span class="text-[var(--gold)]">Wear</span>
+        </p>
+        <p class="text-xs text-[var(--text3)] font-light mt-2 max-w-xs leading-relaxed">
+          Busana muslim yang memadukan keanggunan desain dengan kesadaran diri.
+          Tersedia di Shopee, Instagram, dan WhatsApp.
+        </p>
+      </div>
+      <div class="flex gap-5">
+        <a href="https://instagram.com/arvana.wear" target="_blank" class="text-[var(--text3)] hover:text-[var(--gold)] transition text-lg">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 0 2.5 1.25 1.25 0 0 1 0-2.5M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10m0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+        </a>
+        <a href="https://shopee.co.id/arvana.wear" target="_blank" class="text-[var(--text3)] hover:text-[var(--gold)] transition text-lg">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </a>
+        <a href="https://wa.me/6285185313732" target="_blank" class="text-[var(--text3)] hover:text-[var(--gold)] transition text-lg">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 2.07.56 4.09 1.62 5.86L2 22l4.33-1.6a9.94 9.94 0 0 0 5.71 1.8c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.02c-1.79 0-3.54-.5-5.05-1.44l-.36-.22-2.57.95.88-2.5-.24-.38a8.41 8.41 0 0 1-1.3-4.52c0-4.64 3.78-8.42 8.42-8.42s8.42 3.78 8.42 8.42-3.78 8.42-8.42 8.42zm4.61-6.34c-.25-.13-1.48-.73-1.71-.81-.23-.08-.4-.13-.57.12-.17.25-.66.81-.81.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.57-1.37-.78-1.88-.21-.51-.42-.48-.57-.48-.15 0-.32-.02-.49-.02s-.45.06-.68.32c-.23.25-.89.87-.89 2.12 0 1.25.91 2.46 1.04 2.63.13.17 1.79 2.73 4.34 3.83.61.26 1.08.42 1.45.53.61.19 1.17.16 1.61.1.49-.07 1.48-.6 1.69-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.15-.48-.28z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8">
+      <p class="mono text-[0.45rem] tracking-[0.2em] uppercase text-[var(--text3)]">
+        © 2026 Arvana Wear — #YourJourneyYourStyle
+      </p>
+      <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">✦ Est. 2024 ✦</p>
+    </div>
+  </div>
+</footer>
 
 
-  <script>
-    const API_URL = '';
+<script>
+  // ── Scroll Progress ──
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('scroll-progress').style.width = progress + '%';
+  }, { passive: true });
 
-    function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      const page = document.getElementById('page-' + id);
-      page.classList.add('active');
-      document.body.style.overflow = (id === 'catalog') ? '' : 'hidden';
-      window.scrollTo(0, 0);
-    }
-
-    const nav = document.getElementById('main-nav');
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-      const currentScroll = window.scrollY;
-      nav.classList.toggle('scrolled', currentScroll > 50);
-      if (currentScroll > 150) {
-        nav.style.transform = currentScroll > lastScroll ? 'translateY(-100%)' : 'translateY(0)';
-      } else {
-        nav.style.transform = 'translateY(0)';
+  // ── Scroll Reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
       }
-      lastScroll = currentScroll;
-    }, { passive: true });
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, { threshold: 0.2 });
-    document.querySelectorAll('.stat-num').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      observer.observe(el);
     });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-    // Scroll reveal for sections
-    const revealObs = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Back to top
-    const backBtn = document.getElementById('back-top');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 400) backBtn.classList.add('show');
-      else backBtn.classList.remove('show');
-    }, { passive: true });
-
-    function showMsg(id, text, isError = false) {
-      const el = document.getElementById(id);
-      el.textContent = text;
-      el.className = `text-sm ${isError ? 'text-red-500' : 'text-green-600'}`;
-      el.classList.remove('hidden');
+  // ── Navbar hide/show ──
+  let lastScroll = 0;
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    const current = window.scrollY;
+    if (current > 100) {
+      nav.style.transform = current > lastScroll ? 'translateY(-100%)' : 'translateY(0)';
+      nav.style.background = current > lastScroll ? 'none' : 'rgba(10,10,11,0.85)';
+      nav.style.backdropFilter = current > lastScroll ? 'none' : 'blur(20px)';
+    } else {
+      nav.style.transform = 'translateY(0)';
+      nav.style.background = 'none';
+      nav.style.backdropFilter = 'none';
     }
+    lastScroll = current;
+  }, { passive: true });
 
-    async function handleLogin() {
-      const email    = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      if (!email || !password) return showMsg('login-msg', 'Email dan password wajib diisi.', true);
-      try {
-        const res  = await fetch(`${API_URL}/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          showMsg('login-msg', `Selamat datang, ${data.name}! 🎉`);
-          setTimeout(() => showPage('catalog'), 1200);
-        } else {
-          showMsg('login-msg', data.message || 'Login gagal.', true);
-        }
-      } catch (_) {
-        showMsg('login-msg', 'Tidak bisa terhubung ke server.', true);
-      }
+  // ── Particles ──
+  (function createParticles() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+      p.style.animationDuration = (15 + Math.random() * 25) + 's';
+      p.style.animationDelay = (Math.random() * 20) + 's';
+      p.style.opacity = 0.1 + Math.random() * 0.3;
+      container.appendChild(p);
     }
+  })();
+</script>
 
-    async function handleRegister() {
-      const name     = document.getElementById('reg-name').value.trim();
-      const email    = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-password').value;
-      if (!name || !email || !password) return showMsg('reg-msg', 'Semua field wajib diisi.', true);
-      if (password.length < 8) return showMsg('reg-msg', 'Password minimal 8 karakter.', true);
-      try {
-        const res  = await fetch(`${API_URL}/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          showMsg('reg-msg', 'Akun berhasil dibuat! Silakan login.');
-          setTimeout(() => showPage('login'), 1500);
-        } else {
-          showMsg('reg-msg', data.message || 'Registrasi gagal.', true);
-        }
-      } catch (_) {
-        showMsg('reg-msg', 'Tidak bisa terhubung ke server.', true);
-      }
-    }
-  </script>
 </body>
 </html>
