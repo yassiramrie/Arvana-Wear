@@ -118,7 +118,7 @@ jobs:
             echo "Menunggu services menyala (termasuk healthcheck Postgres)..."
             for i in {1..6}; do
               sleep 10
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health || echo "000")
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health || true)
               if [ "$STATUS" = "200" ]; then
                 echo "PASS — App is live at port 8888!"
                 exit 0
@@ -127,5 +127,5 @@ jobs:
             done
             
             echo "FAIL — App tidak merespons setelah 60 detik."
-            cd ~/arvana-wear && sudo docker compose logs --tail=30 app
+            cd ~/arvana-wear && sudo docker compose logs --tail=30 app nginx
             exit 1

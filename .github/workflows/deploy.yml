@@ -39,7 +39,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       # Cek syntax JS — kalau ada typo/bracket kurang, langsung gagal di sini
       - name: Syntax check (server.js)
@@ -75,8 +75,8 @@ jobs:
           host:     ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key:      ${{ secrets.EC2_SSH_KEY }}
-          source:   "server.js,package.json,package-lock.json,init.sql,index.html,Dockerfile,.dockerignore,docker-compose.yml,nginx,monitoring"
           target:   "~/arvana-wear"
+          source:   "server.js,package.json,package-lock.json,init.sql,index.html,Dockerfile,.dockerignore,docker-compose.yml,nginx,monitoring,images"
 
       # ── STEP 2: SSH ke EC2 → Install Docker → Deploy ─────────────────────────
       # 'env' + 'envs' = cara aman untuk kirim secret ke dalam shell script SSH.
@@ -92,6 +92,8 @@ jobs:
           key:      ${{ secrets.EC2_SSH_KEY }}
           envs:     DB_PASSWORD,GRAFANA_PASSWORD   # ← kirim env vars di atas ke dalam shell
           script: |
+            set -e
+
             # Install Docker jika belum ada di EC2
             if ! command -v docker &>/dev/null; then
               curl -fsSL https://get.docker.com | sudo sh
@@ -136,7 +138,7 @@ jobs:
             echo "Menunggu services menyala (termasuk healthcheck Postgres)..."
             for i in {1..6}; do
               sleep 10
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health || echo "000")
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8888/health || true)
               if [ "$STATUS" = "200" ]; then
                 echo "PASS — App is live at port 8888!"
                 exit 0
@@ -145,5 +147,5 @@ jobs:
             done
             
             echo "FAIL — App tidak merespons setelah 60 detik."
-            cd ~/arvana-wear && sudo docker compose logs --tail=30 app
+            cd ~/arvana-wear && sudo docker compose logs --tail=30 app nginx
             exit 1
