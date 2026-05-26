@@ -3,8 +3,6 @@
 > **Untuk siapa?** Developer yang sudah paham dasar-dasar DevSecOps dan ingin
 > belajar containerization: menggantikan RDS, PM2, dan systemd dengan Docker.
 
-**WOI aceng DHOCLO**
-
 ---
 
 ## Apa yang Berubah dari Versi Sebelumnya?

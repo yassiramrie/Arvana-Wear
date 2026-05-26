@@ -15,6 +15,7 @@
 const express = require('express');
 const { Pool } = require('pg');          // Official PostgreSQL driver for Node.js
 const bcrypt  = require('bcryptjs');     // Password hashing (never store plain text!)
+const jwt     = require('jsonwebtoken'); // JSON Web Token for authentication state
 const cors    = require('cors');
 
 /**
@@ -40,7 +41,9 @@ require('dotenv').config();
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());                         // Allow requests from the frontend origin
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*' // Batasi origin di production (misal: https://arvanawear.com)
+}));
 app.use(express.json());                 // Parse incoming JSON request body
 
 // ── DATABASE CONNECTION ───────────────────────────────────────────────────────
@@ -154,8 +157,15 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Email atau password salah.' });
     }
 
-    // Return user info — JANGAN sertakan password_hash!
-    return res.json({ message: 'Login berhasil.', name: user.name, email: user.email });
+    // Generate JWT Token agar frontend bisa menyimpan state login (misal di localStorage)
+    const token = jwt.sign(
+      { id: user.id, email: user.email, name: user.name },
+      process.env.JWT_SECRET || 'arvana_default_secret_key', // Sebaiknya simpan di .env
+      { expiresIn: '24h' }
+    );
+
+    // Return user info beserta token — JANGAN sertakan password_hash!
+    return res.json({ message: 'Login berhasil.', name: user.name, email: user.email, token });
 
   } catch (err) {
     console.error('[LOGIN ERROR]', err.message);
