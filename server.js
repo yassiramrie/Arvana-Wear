@@ -174,7 +174,7 @@ app.post('/login', async (req, res) => {
 });
 
 // ── START SERVER ──────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`   Environment : ${process.env.NODE_ENV || 'development'}`);
   console.log(`   DB Host     : ${process.env.DB_HOST || '(not set)'}`);

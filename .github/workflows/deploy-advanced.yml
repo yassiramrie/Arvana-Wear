@@ -110,7 +110,12 @@ jobs:
             sudo docker system prune -f
             sudo docker builder prune -af
 
-            sudo docker compose up -d --build
+            # Jalankan docker compose. Jika gagal (misal karena app unhealthy), cetak log app agar kita tahu alasannya!
+            sudo docker compose up -d --build || {
+              echo "=== GAGAL DEPLOY: Menampilkan log Node.js App ==="
+              sudo docker compose logs app
+              exit 1
+            }
             sudo docker compose ps
 
       - name: Health check
