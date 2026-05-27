@@ -96,6 +96,12 @@ jobs:
 
             # Install Docker jika belum ada di EC2
             if ! command -v docker &>/dev/null; then
+              echo "=== Docker not found, installing... ==="
+              # Wait for any background apt-get processes (like unattended-upgrades) to finish
+              while sudo pgrep -x apt-get >/dev/null || sudo pgrep -x apt >/dev/null || sudo pgrep -x dpkg >/dev/null || sudo pgrep -f unattended-upgrades >/dev/null; do
+                echo "Waiting for background apt/dpkg processes to finish..."
+                sleep 10
+              done
               curl -fsSL https://get.docker.com | sudo sh
             fi
 

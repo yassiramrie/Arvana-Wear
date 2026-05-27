@@ -76,6 +76,11 @@ jobs:
             # --- Install Docker Engine (jika belum ada) ---
             if ! command -v docker &>/dev/null; then
               echo "=== Docker not found, installing... ==="
+              # Wait for any background apt-get processes (like unattended-upgrades) to finish
+              while sudo pgrep -x apt-get >/dev/null || sudo pgrep -x apt >/dev/null || sudo pgrep -x dpkg >/dev/null || sudo pgrep -f unattended-upgrades >/dev/null; do
+                echo "Waiting for background apt/dpkg processes to finish..."
+                sleep 10
+              done
               curl -fsSL https://get.docker.com | sudo sh
               echo "Docker installed: $(sudo docker --version)"
             else
@@ -98,8 +103,8 @@ jobs:
               "${DB_PASSWORD}" "${GRAFANA_PASSWORD}" > .env
             chmod 600 .env
 
-            # Hapus paksa container lama jika nyangkut
-            sudo docker rm -f arvana-app || true
+            # Matikan seluruh service lama dan hapus network agar tidak terjadi konflik (clean state)
+            sudo docker compose down --remove-orphans || true
 
             # Bersihkan cache build dan container/image yang tidak terpakai agar disk tidak penuh
             sudo docker system prune -f
