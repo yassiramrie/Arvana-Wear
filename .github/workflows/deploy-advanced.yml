@@ -109,6 +109,7 @@ jobs:
             # Bersihkan cache build dan container/image yang tidak terpakai agar disk tidak penuh
             sudo docker system prune -f
             sudo docker builder prune -af
+            sudo docker network prune -f
 
             # Jalankan docker compose. Jika gagal (misal karena app unhealthy), cetak log app agar kita tahu alasannya!
             sudo docker compose up -d --build || {
