@@ -192,10 +192,10 @@
 <div id="scroll-progress"></div>
 
 <!-- ══ NAVBAR ══ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" style="mix-blend-mode: difference;">
-  <div class="max-w-[1100px] mx-auto px-6 h-[64px] flex items-center justify-between">
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-3 md:py-0" style="mix-blend-mode: difference;">
+  <div class="max-w-[1100px] mx-auto px-4 md:px-6 md:h-[64px] flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
     <a href="#hero" class="serif text-lg tracking-wide text-white/80 hover:text-white transition">Arvana<span class="text-[var(--gold)]">Wear</span></a>
-    <div class="flex items-center gap-6 text-[0.6rem] tracking-[0.2em] uppercase text-white/40">
+    <div class="flex items-center gap-4 md:gap-6 text-[0.5rem] md:text-[0.6rem] tracking-wider md:tracking-[0.2em] uppercase text-white/40">
       <a href="#manifesto" class="hover:text-white/80 transition">Manifesto</a>
       <a href="#koleksi" class="hover:text-white/80 transition">Koleksi</a>
       <a href="#belanja" class="hover:text-white/80 transition">Belanja</a>
@@ -843,6 +843,25 @@
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+  // ── Mobile Menu Toggle ──
+  const mobileBtn = document.getElementById('mobile-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  // Buka/tutup menu saat tombol hamburger diklik
+  mobileBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle('flex');
+  });
+
+  // Tutup menu otomatis saat salah satu link diklik
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    });
+  });
+
   // ── Navbar hide/show ──
   let lastScroll = 0;
   const nav = document.getElementById('navbar');
@@ -871,14 +890,6 @@
       p.style.animationDuration = (15 + Math.random() * 25) + 's';
       p.style.animationDelay = (Math.random() * 20) + 's';
       p.style.opacity = 0.1 + Math.random() * 0.3;
-      container.appendChild(p);
-    }
-  })();
-</script>
-
-</body>
-</html>
-                      ) * 0.3;
       container.appendChild(p);
     }
   })();
