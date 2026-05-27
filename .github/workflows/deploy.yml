@@ -114,8 +114,8 @@ jobs:
               "${DB_PASSWORD}" "${GRAFANA_PASSWORD}" > .env
             chmod 600 .env
             
-            # Hapus paksa container lama jika nyangkut untuk menghindari "Conflict name"
-            sudo docker rm -f arvana-app || true
+            # Matikan dan bersihkan container lama dengan aman menggunakan Compose
+            sudo docker compose down || true
 
             # Bersihkan cache build dan container/image yang tidak terpakai agar disk tidak penuh
             sudo docker system prune -f

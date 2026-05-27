@@ -10,6 +10,9 @@ FROM node:20-alpine
 # Set working directory di dalam container
 WORKDIR /app
 
+# ── INSTALL SYSTEM DEPENDENCIES ───────────────────────────────────────────────
+RUN apk add --no-cache curl
+
 # ── INSTALL DEPENDENCIES ──────────────────────────────────────────────────────
 # Copy package.json & package-lock.json dulu (bukan seluruh kode).
 # Trik ini memanfaatkan Docker layer caching:
