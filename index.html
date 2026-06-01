@@ -11,7 +11,7 @@
   <meta property="og:description" content="Busana muslim yang memadukan keanggunan desain dengan kesadaran diri. Mulai perjalanan #YourJourneyYourStyle bersama kami." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://arvanawear.com" />
-  <meta property="og:image" content="https://arvana-wear.s3.ap-southeast-3.amazonaws.com/products/product-1.jpg" />
+  <meta property="og:image" content="/images/product-1.jpg" />
 
   <title>Arvana Wear — Antara Kain dan Makna</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -250,7 +250,7 @@
     </div>
 
     <!-- Scroll hint -->
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+    <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2">
       <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)]">Scroll</span>
       <div class="w-px h-8 bg-gradient-to-b from-[var(--gold-dim)] to-transparent"></div>
     </div>
@@ -426,7 +426,7 @@
       <!-- Basic Paris -->
       <div class="pcard reveal">
         <div class="img-wrap relative">
-          <img src="https://arvana-wear.s3.ap-southeast-3.amazonaws.com/products/product-1.jpg" alt="Basic Paris Hijab"
+          <img src="/images/product-1.jpg" alt="Basic Paris Hijab"
                onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22><rect fill=%221a1a1e%22 width=%22600%22 height=%22400%22/><text x=%22300%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%23C9A96E%22 font-size=%2224%22 font-family=%22serif%22>Basic Paris</text></svg>'"/>
           <div class="absolute top-4 left-4">
             <span class="mono text-[0.45rem] tracking-[0.2em] uppercase px-3 py-1.5 rounded-full"
@@ -479,7 +479,7 @@
       <!-- Pashmina Pop -->
       <div class="pcard reveal" style="transition-delay: 0.15s;">
         <div class="img-wrap relative">
-          <img src="https://arvana-wear.s3.ap-southeast-3.amazonaws.com/products/product-2.jpg" alt="Pashmina Pop"
+          <img src="/images/product-2.jpg" alt="Pashmina Pop"
                onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22><rect fill=%221a1a1e%22 width=%22600%22 height=%22400%22/><text x=%22300%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%23C9A96E%22 font-size=%2224%22 font-family=%22serif%22>Pashmina Pop</text></svg>'"/>
           <div class="absolute top-4 left-4">
             <span class="mono text-[0.45rem] tracking-[0.2em] uppercase px-3 py-1.5 rounded-full"
@@ -862,6 +862,30 @@
     });
   });
 
+  // ── Theme Toggle (Dark/Light) ──
+  const themeToggles = document.querySelectorAll('.theme-toggle');
+  
+  // Cek preferensi user yang tersimpan sebelumnya
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-mode');
+  }
+
+  function updateIcons() {
+    const isLight = document.body.classList.contains('light-mode');
+    document.querySelectorAll('.dark-icon').forEach(el => el.classList.toggle('hidden', !isLight));
+    document.querySelectorAll('.light-icon').forEach(el => el.classList.toggle('hidden', isLight));
+  }
+
+  themeToggles.forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+      updateIcons();
+    });
+  });
+  updateIcons();
+
   // ── Navbar hide/show ──
   let lastScroll = 0;
   const nav = document.getElementById('navbar');
@@ -869,7 +893,7 @@
     const current = window.scrollY;
     if (current > 100) {
       nav.style.transform = current > lastScroll ? 'translateY(-100%)' : 'translateY(0)';
-      nav.style.background = current > lastScroll ? 'none' : 'rgba(10,10,11,0.85)';
+      nav.style.background = current > lastScroll ? 'none' : 'var(--bg-nav)';
       nav.style.backdropFilter = current > lastScroll ? 'none' : 'blur(20px)';
     } else {
       nav.style.transform = 'translateY(0)';
@@ -897,4 +921,3 @@
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
