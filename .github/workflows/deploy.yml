@@ -99,20 +99,21 @@ jobs:
             # Install Docker jika belum ada di EC2
             if ! command -v docker &>/dev/null; then
               echo "=== Docker not found, installing... ==="
-              # Beri timeout maksimal 120 detik untuk nunggu apt/dpkg
-              TIMEOUT=120
+              # Tunggu apt/dpkg tanpa mematikan proses atau menghapus lock milik sistem.
+              TIMEOUT=600
               ELAPSED=0
-              while sudo pgrep -x apt-get >/dev/null || sudo pgrep -x apt >/dev/null || sudo pgrep -x dpkg >/dev/null || sudo pgrep -f unattended-upgrades >/dev/null; do
+              while sudo pgrep -x apt-get >/dev/null || sudo pgrep -x apt >/dev/null || sudo pgrep -x dpkg >/dev/null || sudo pgrep -x unattended-upgr >/dev/null; do
+                if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+                  echo "ERROR — apt/dpkg is still busy after ${TIMEOUT}s; refusing to interrupt package management."
+                  sudo pgrep -a -x apt-get || true
+                  sudo pgrep -a -x apt || true
+                  sudo pgrep -a -x dpkg || true
+                  sudo pgrep -a -x unattended-upgr || true
+                  exit 1
+                fi
                 echo "Waiting for background apt/dpkg processes to finish... (${ELAPSED}s)"
                 sleep 10
                 ELAPSED=$((ELAPSED + 10))
-                if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
-                  echo "TIMEOUT — apt/dpkg stuck, force kill..."
-                  sudo pkill -f unattended-upgrades || true
-                  sudo rm -f /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock /var/cache/apt/archives/lock
-                  sudo dpkg --configure -a || true
-                  break
-                fi
               done
               curl -fsSL https://get.docker.com | sudo sh
             fi
