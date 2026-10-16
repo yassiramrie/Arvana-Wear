@@ -40,6 +40,11 @@ require('dotenv').config();
 // ── APP SETUP ─────────────────────────────────────────────────────────────────
 const app  = express();
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET wajib diatur sebelum server dijalankan.');
+}
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || '*' // Batasi origin di production (misal: https://arvanawear.com)
@@ -160,7 +165,7 @@ app.post('/login', async (req, res) => {
     // Generate JWT Token agar frontend bisa menyimpan state login (misal di localStorage)
     const token = jwt.sign(
       { id: user.id, email: user.email, name: user.name },
-      process.env.JWT_SECRET || 'arvana_default_secret_key', // Sebaiknya simpan di .env
+      JWT_SECRET,
       { expiresIn: '24h' }
     );
 

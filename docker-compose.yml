@@ -57,6 +57,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: ${DB_PASSWORD:?WAJIB isi DB_PASSWORD di .env}
       DB_SSL: "false"
+      JWT_SECRET: ${JWT_SECRET:?WAJIB isi JWT_SECRET di .env}
     expose:
       - "3000"                                         # ✅ Cuma visible di internal network
     # ports: HAPUS — gak perlu, akses via nginx aja
@@ -86,7 +87,7 @@ services:
     image: nginx:1.27-alpine                           # ✅ Pin versi spesifik
     container_name: arvana-nginx
     ports:
-      - "8888:80"                                      # ✅ Port disesuaikan dengan config Security Group & deploy.yml
+      - "80:80"                                        # Port HTTP publik EC2
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./index.html:/usr/share/nginx/html/index.html:ro
@@ -219,7 +220,6 @@ volumes:
 networks:
   arvana-frontend:       # Public-facing: cuma nginx
     driver: bridge
-    name: arvana_frontend
 
   arvana-internal:       # Internal: app + postgres + nginx (buat reverse proxy)
     driver: bridge

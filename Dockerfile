@@ -19,7 +19,7 @@ RUN apk add --no-cache curl
 #   - Kalau kode berubah tapi package.json tidak → layer npm install di-cache,
 #     build jadi jauh lebih cepat.
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 # ── COPY SOURCE CODE ──────────────────────────────────────────────────────────
 # Copy setelah npm install supaya cache layer di atas tidak invalid tiap kode berubah.

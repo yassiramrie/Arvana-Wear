@@ -23,9 +23,9 @@
 
 ```
 [Browser]
-    │ (port 8888)
+    │ (port 80)
     ▼
-[Nginx container :8888]  ← Serve index.html + proxy API request
+[Nginx container :80]  ← Serve index.html + proxy API request
     │
     ▼
 [App container :3000]    ← Node.js / Express (server.js)
@@ -39,7 +39,7 @@
 ```
 
 **Alur request login:**
-1. Browser `fetch POST /login` → Nginx (port 8888)
+1. Browser `fetch POST /login` → Nginx (port 80)
 2. Nginx proxy → App container (port 3000)
 3. App query ke PostgreSQL container
 4. Response kembali ke browser
@@ -115,7 +115,7 @@ Output yang benar:
 ```
 NAME                  STATUS          PORTS
 vespa-app             Up              0.0.0.0:3000->3000/tcp
-vespa-nginx           Up              0.0.0.0:8080->80/tcp
+arvana-nginx          Up              0.0.0.0:80->80/tcp
 vespa-postgres        Up (healthy)    0.0.0.0:5432->5432/tcp
 vespa-node-exporter   Up              0.0.0.0:9100->9100/tcp
 vespa-prometheus      Up              0.0.0.0:9090->9090/tcp
@@ -126,24 +126,24 @@ vespa-grafana         Up              0.0.0.0:3001->3000/tcp
 
 ```bash
 # Health check app (via Nginx)
-curl http://localhost:8080/health
+curl http://localhost/health
 # Response: {"status":"ok"}
 
 # Test register
-curl -X POST http://localhost:8080/register \
+curl -X POST http://localhost/register \
   -H "Content-Type: application/json" \
   -d '{"name":"Test User","email":"test@email.com","password":"password123"}'
 # Response: {"message":"Akun berhasil dibuat."}
 
 # Test login
-curl -X POST http://localhost:8080/login \
+curl -X POST http://localhost/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@email.com","password":"password123"}'
 # Response: {"message":"Login berhasil.","name":"Test User","email":"test@email.com"}
 ```
 
 Buka browser:
-- `http://localhost:8080` → Frontend Vespa Catalog
+- `http://localhost` → Frontend Arvana Wear
 - `http://localhost:9090` → Prometheus
 - `http://localhost:3001` → Grafana (admin / admin123)
 
@@ -224,8 +224,9 @@ membaca secrets ini untuk deploy ke EC2 tanpa menyimpan password di kode.
 | `EC2_SSH_KEY` | Isi file `.pem` | Paste seluruh isi file key pair |
 | `DB_PASSWORD` | Password PostgreSQL | Bebas, minimal 12 karakter |
 | `GRAFANA_PASSWORD` | Password Grafana | Bebas, minimal 12 karakter |
+| `JWT_SECRET` | Secret penandatangan token | String acak panjang, minimal 32 karakter |
 
-Hanya 5 secret — jauh lebih sedikit dari versi non-Docker yang butuh 9 secret.
+Hanya 6 secret — jauh lebih sedikit dari versi non-Docker yang butuh 9 secret.
 
 ### 3.2 Cara Menambah Secret
 
@@ -248,12 +249,11 @@ Buka port berikut di Security Group EC2:
 | Port | Keterangan |
 |------|------------|
 | 22 | SSH (dari IP laptop kamu saja) |
-| 8888 | Frontend + API via Nginx |
-| 3001 | Grafana Dashboard |
-| 9090 | Prometheus (opsional, bisa tutup) |
+| 80 | Frontend + API via Nginx |
 
-> **Security Note:** Port `9100` (Node Exporter) **jangan dibuka** ke internet.
-> Node Exporter hanya diakses oleh Prometheus dari dalam Docker network.
+> **Security Note:** Port `3001`, `9090`, dan `9100` tidak perlu dibuka ke internet.
+> Grafana hanya bind ke localhost EC2. Akses dengan SSH tunnel:
+> `ssh -i my-ec2-key.pem -L 3001:localhost:3001 ubuntu@IP_EC2_KAMU`
 
 ---
 
@@ -277,7 +277,7 @@ Push ke main
   ├── SSH: install Docker jika belum ada
   ├── SSH: tulis .env dari GitHub Secrets
   ├── SSH: docker compose up -d --build
-  └── SSH: curl health check ke localhost:8888/health
+  └── SSH: curl health check ke localhost/health
 ```
 
 **Kenapa `env` + `envs` di pipeline?**
@@ -305,7 +305,7 @@ Kamu hanya perlu import dashboard di Grafana.
 
 ### 5.1 Import Dashboard Node Exporter
 
-1. Buka `http://localhost:3001` (atau `http://IP_EC2:3001`)
+1. Buat SSH tunnel, lalu buka `http://localhost:3001` di laptop
 2. Login: **admin** / password yang kamu set
 3. Klik **Dashboards** → **New** → **Import**
 4. Isi **Dashboard ID:** `1860` → klik **Load**
@@ -370,7 +370,7 @@ docker compose restart app
 
 | Masalah | Kemungkinan Penyebab | Solusi |
 |---------|---------------------|--------|
-| `curl: Connection refused` port 8888 | Nginx container tidak jalan | `docker compose logs nginx` |
+| `curl: Connection refused` port 80 | Nginx container tidak jalan | `docker compose logs nginx` |
 | App error `ECONNREFUSED 5432` | PostgreSQL belum ready | `docker compose logs postgres`, tunggu healthcheck |
 | `relation "users" does not exist` | init.sql tidak jalan | `docker compose down -v` lalu `up -d` lagi |
 | Container restart terus (restart loop) | Error di app/config | `docker compose logs app` |

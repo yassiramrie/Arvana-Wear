@@ -3,921 +3,468 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Arvana Wear — Busana muslim dan hijab yang memadukan keanggunan desain dengan kesadaran diri. Temukan koleksi eksklusif kami." />
-  <meta name="keywords" content="arvana wear, hijab, busana muslim, pashmina, hijab paris, fashion muslim" />
-  
-  <!-- Open Graph / Social Media Meta Tags -->
-  <meta property="og:title" content="Arvana Wear — Antara Kain dan Makna" />
-  <meta property="og:description" content="Busana muslim yang memadukan keanggunan desain dengan kesadaran diri. Mulai perjalanan #YourJourneyYourStyle bersama kami." />
+  <meta name="description" content="Temukan hijab pilihan Arvana Wear, nyaman dipakai dan mudah dipadukan untuk menemani setiap harimu." />
+  <meta name="keywords" content="Arvana Wear, hijab, pashmina, hijab segi empat, busana muslim" />
+  <meta property="og:title" content="Arvana Wear — Temukan Gaya Nyamanmu" />
+  <meta property="og:description" content="Hijab pilihan untuk menemani setiap langkahmu." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://arvanawear.com" />
-  <meta property="og:image" content="/images/product-1.jpg" />
-
-  <title>Arvana Wear — Antara Kain dan Makna</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=JetBrains+Mono:wght@200;300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <meta property="og:image" content="images/product-1.jpg" />
+  <title>Arvana Wear — Temukan Gaya Nyamanmu</title>
   <style>
     :root {
-      --bg:       #0A0A0B;
-      --bg2:      #121214;
-      --text:     #E8E6E3;
-      --text2:    #807E7A;
-      --text3:    #4A4845;
-      --gold:     #C9A96E;
-      --gold-dim: #8B7A5A;
-      --green:    #2D6A4F;
-      --line:     rgba(255,255,255,0.06);
-      --glow:     rgba(201,169,110,0.08);
+      --ink: #24352d;
+      --muted: #777d73;
+      --cream: #fbf8f1;
+      --paper: #fffefa;
+      --green: #314f3f;
+      --green-dark: #213a2d;
+      --sage: #e6eadd;
+      --sand: #efe4d3;
+      --line: #e9e6de;
+      --accent: #b87657;
+      --serif: "Palatino Linotype", "Book Antiqua", Georgia, serif;
+      --sans: "Segoe UI", Arial, sans-serif;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
-      line-height: 1.8;
-      -webkit-font-smoothing: antialiased;
+    body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+    body, button, a { font-family: var(--sans); }
+    button { color: inherit; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    .announcement { padding: 9px 20px; background: var(--green-dark); color: #f8f4e9; text-align: center; font-size: 11px; letter-spacing: .09em; }
+    .site-header { position: sticky; top: 0; z-index: 20; background: rgba(251,248,241,.95); border-bottom: 1px solid rgba(36,53,45,.08); backdrop-filter: blur(14px); }
+    .nav-wrap { width: min(1200px, calc(100% - 48px)); height: 78px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { color: var(--green-dark); font-family: var(--serif); font-size: 26px; letter-spacing: -.04em; white-space: nowrap; }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 34px; color: #5f685f; font-size: 13px; }
+    .nav-links a:hover, .footer-links a:hover { color: var(--accent); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .icon-button { position: relative; display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: transparent; cursor: pointer; }
+    .icon-button:hover { background: var(--sage); }
+    .cart-count { position: absolute; top: -3px; right: -4px; display: grid; min-width: 18px; height: 18px; padding: 0 4px; place-items: center; border-radius: 12px; background: var(--accent); color: white; font-size: 10px; }
+    .menu-button { display: none; }
+    .container { width: min(1200px, calc(100% - 48px)); margin: 0 auto; }
+    .hero { padding: 52px 0 68px; }
+    .hero-grid { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 56px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: currentColor; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, .product-name, .brand-story h2 { font-family: var(--serif); font-weight: 400; }
+    h1 { max-width: 520px; margin: 22px 0 18px; color: var(--green-dark); font-size: clamp(44px, 5.4vw, 72px); letter-spacing: -.055em; line-height: 1.08; }
+    h1 em { color: var(--accent); font-weight: 400; }
+    .hero-copy { max-width: 445px; margin-bottom: 29px; color: var(--muted); font-size: 15px; line-height: 1.9; }
+    .button-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px; padding: 0 22px; border: 1px solid transparent; border-radius: 3px; font-size: 12px; font-weight: 700; letter-spacing: .03em; cursor: pointer; transition: .2s ease; }
+    .button-primary { background: var(--green); color: white; }
+    .button-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .button-secondary { border-color: #d7d6cb; color: var(--green-dark); }
+    .button-secondary:hover { border-color: var(--green); background: white; }
+    .hero-note { display: flex; align-items: center; gap: 11px; margin-top: 32px; color: var(--muted); font-size: 11px; }
+    .note-stars { color: #bd8954; letter-spacing: 2px; font-size: 13px; }
+    .hero-visual { position: relative; min-height: 490px; }
+    .hero-photo { position: absolute; top: 0; right: 5%; width: 76%; height: 455px; overflow: hidden; border-radius: 48% 48% 4px 4px; background: var(--sand); }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 54%; }
+    .hero-swatch { position: absolute; right: 0; bottom: 5px; width: 43%; height: 175px; overflow: hidden; border: 9px solid var(--cream); border-radius: 3px; box-shadow: 0 18px 45px #4a36251c; }
+    .hero-swatch img { width: 100%; height: 100%; object-fit: cover; object-position: 70% center; }
+    .hero-seal { position: absolute; left: 1%; bottom: 40px; display: grid; width: 112px; height: 112px; padding: 15px; place-items: center; border-radius: 50%; background: var(--green); color: white; text-align: center; font-family: var(--serif); font-size: 15px; line-height: 1.35; transform: rotate(-9deg); }
+    .benefits { padding: 23px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #f5f2e9; }
+    .benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .benefit { display: flex; align-items: center; justify-content: center; gap: 12px; color: #5c675e; font-size: 12px; }
+    .benefit svg { flex: none; color: var(--green); }
+    .collection { padding: 95px 0 104px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
+    .section-heading h2 { margin: 12px 0 0; color: var(--green-dark); font-size: clamp(34px, 4vw, 49px); letter-spacing: -.045em; }
+    .section-heading p { max-width: 330px; margin: 0 0 4px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .category-tabs { display: flex; gap: 8px; margin-bottom: 25px; }
+    .category-tab { padding: 9px 17px; border: 1px solid #deddd3; border-radius: 30px; background: transparent; color: #697168; font-size: 11px; cursor: pointer; }
+    .category-tab.active, .category-tab:hover { border-color: var(--green); background: var(--green); color: white; }
+    .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+    .product-card { min-width: 0; }
+    .product-image { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #eee9df; }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+    .product-card:hover .product-image img { transform: scale(1.035); }
+    .badge { position: absolute; top: 13px; left: 13px; padding: 7px 10px; background: rgba(255,254,250,.94); color: var(--green-dark); font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .favorite { position: absolute; top: 11px; right: 11px; display: grid; width: 34px; height: 34px; place-items: center; border: 0; border-radius: 50%; background: rgba(255,254,250,.92); color: var(--green); cursor: pointer; }
+    .favorite.active { color: #b55858; }
+    .product-info { padding: 15px 2px 0; }
+    .product-category { margin-bottom: 6px; color: #96978c; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .product-name { margin-bottom: 5px; color: var(--green-dark); font-size: 19px; }
+    .product-description { min-height: 35px; margin-bottom: 11px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .swatches { display: flex; align-items: center; gap: 7px; margin: 0 0 14px; }
+    .swatch { width: 16px; height: 16px; padding: 0; border: 1px solid rgba(36,53,45,.18); border-radius: 50%; cursor: pointer; }
+    .swatch.selected { outline: 1px solid var(--green); outline-offset: 2px; }
+    .product-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .price { color: var(--green-dark); font-size: 14px; font-weight: 700; }
+    .add-button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 0 7px 7px; border: 0; background: transparent; color: var(--green); font-size: 10px; font-weight: 700; cursor: pointer; }
+    .add-button:hover { color: var(--accent); }
+    .brand-story { display: grid; grid-template-columns: 1fr 1fr; min-height: 355px; margin-bottom: 100px; background: var(--sage); }
+    .story-image { min-height: 355px; overflow: hidden; }
+    .story-image img { width: 100%; height: 100%; object-fit: cover; object-position: center 58%; }
+    .story-copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 50px clamp(32px, 6vw, 82px); }
+    .story-copy h2 { margin: 17px 0 14px; color: var(--green-dark); font-size: clamp(30px, 3.4vw, 43px); letter-spacing: -.04em; line-height: 1.2; }
+    .story-copy p { max-width: 390px; margin-bottom: 23px; color: #697168; font-size: 13px; line-height: 1.9; }
+    .contact-strip { padding: 47px 0; background: var(--green-dark); color: white; }
+    .contact-inner { display: flex; align-items: center; justify-content: space-between; gap: 25px; }
+    .contact-strip h2 { margin: 0 0 6px; font-family: var(--serif); font-size: 29px; font-weight: 400; }
+    .contact-strip p { margin: 0; color: #c9d0c7; font-size: 12px; }
+    .contact-strip .button { border-color: #9aaf9e; color: white; }
+    .contact-strip .button:hover { background: #ffffff14; }
+    footer { padding: 48px 0 24px; background: #f4f1e9; }
+    .footer-main { display: flex; justify-content: space-between; gap: 30px; padding-bottom: 38px; }
+    .footer-about { max-width: 300px; }
+    .footer-about p { margin: 11px 0 0; color: var(--muted); font-size: 11px; line-height: 1.8; }
+    .footer-links { display: flex; gap: 50px; color: #697168; font-size: 11px; }
+    .footer-links strong { display: block; margin-bottom: 13px; color: var(--green-dark); font-size: 11px; }
+    .footer-links a { display: block; margin: 9px 0; }
+    .copyright { display: flex; justify-content: space-between; gap: 18px; padding-top: 18px; border-top: 1px solid #dfddd4; color: #85877f; font-size: 10px; }
+    .cart-overlay { position: fixed; inset: 0; z-index: 40; background: #17251e66; opacity: 0; visibility: hidden; transition: .2s; }
+    .cart-overlay.open { opacity: 1; visibility: visible; }
+    .cart-panel { position: fixed; top: 0; right: 0; z-index: 41; display: flex; width: min(420px, 100%); height: 100dvh; flex-direction: column; padding: 25px; background: var(--paper); box-shadow: -10px 0 40px #17251e1a; transform: translateX(102%); transition: transform .25s ease; }
+    .cart-panel.open { transform: translateX(0); }
+    .cart-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .cart-head h2 { margin: 0; font-family: var(--serif); font-size: 25px; font-weight: 400; }
+    .close-cart { border: 0; background: none; font-size: 24px; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; }
+    .cart-empty { padding: 38px 0; color: var(--muted); font-size: 13px; text-align: center; }
+    .cart-item { display: grid; grid-template-columns: 62px 1fr auto; align-items: center; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .cart-item img { width: 62px; height: 70px; object-fit: cover; }
+    .cart-item-name { margin: 0 0 5px; color: var(--green-dark); font-family: var(--serif); font-size: 15px; }
+    .cart-item-detail { margin: 0; color: var(--muted); font-size: 10px; }
+    .cart-item-price { font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .cart-footer { padding-top: 17px; border-top: 1px solid var(--line); }
+    .cart-total { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; }
+    .cart-checkout { width: 100%; }
+    .toast { position: fixed; right: 24px; bottom: 24px; z-index: 50; padding: 13px 18px; background: var(--green-dark); color: white; font-size: 12px; opacity: 0; pointer-events: none; transform: translateY(8px); transition: .2s; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) {
+      .nav-links { gap: 20px; }
+      .hero-grid { gap: 25px; }
+      .hero-visual { min-height: 415px; }
+      .hero-photo { height: 385px; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 30px; }
     }
-    .serif { font-family: 'Cormorant Garamond', serif; }
-    .mono { font-family: 'JetBrains Mono', monospace; }
-
-    ::selection { background: var(--gold); color: var(--bg); }
-    ::-webkit-scrollbar { width: 3px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
-
-    /* ── Slow fade in ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+    @media (max-width: 640px) {
+      .announcement { font-size: 9px; }
+      .nav-wrap, .container { width: min(100% - 36px, 1200px); }
+      .nav-wrap { height: 66px; }
+      .brand { font-size: 23px; }
+      .nav-links { position: absolute; top: 65px; left: 0; right: 0; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 8px 18px 14px; border-bottom: 1px solid var(--line); background: var(--cream); }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 11px 0; }
+      .menu-button { display: grid; }
+      .hero { padding: 35px 0 43px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 27px; }
+      .hero-copy { font-size: 13px; }
+      h1 { max-width: 430px; font-size: clamp(43px, 12vw, 60px); }
+      .hero-visual { min-height: 360px; }
+      .hero-photo { right: 7%; width: 76%; height: 340px; }
+      .hero-swatch { width: 41%; height: 130px; }
+      .hero-seal { left: 0; bottom: 23px; width: 88px; height: 88px; font-size: 12px; }
+      .benefit-grid { grid-template-columns: 1fr; gap: 15px; }
+      .benefit { justify-content: flex-start; }
+      .collection { padding: 68px 0 70px; }
+      .section-heading { display: block; margin-bottom: 25px; }
+      .section-heading p { margin-top: 12px; }
+      .category-tabs { overflow-x: auto; padding: 2px 0 5px; }
+      .category-tab { flex: none; }
+      .product-grid { gap: 23px 13px; }
+      .product-name { font-size: 17px; }
+      .product-description { min-height: 50px; font-size: 10px; }
+      .badge { top: 8px; left: 8px; padding: 6px 7px; font-size: 8px; }
+      .favorite { top: 7px; right: 7px; width: 31px; height: 31px; }
+      .product-bottom { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .add-button { padding-left: 0; }
+      .brand-story { grid-template-columns: 1fr; margin-bottom: 65px; }
+      .story-image { min-height: 260px; height: 260px; }
+      .story-copy { padding: 34px 25px 39px; }
+      .contact-inner, .footer-main, .copyright { align-items: flex-start; flex-direction: column; }
+      .contact-strip h2 { font-size: 25px; }
+      .footer-links { width: 100%; justify-content: space-between; gap: 20px; }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    @keyframes pulseGlow {
-      0%, 100% { opacity: 0.4; }
-      50%      { opacity: 1; }
-    }
-    @keyframes drift {
-      0%   { transform: translate(0, 0) rotate(0deg); }
-      33%  { transform: translate(20px, -30px) rotate(1deg); }
-      66%  { transform: translate(-10px, 20px) rotate(-1deg); }
-      100% { transform: translate(0, 0) rotate(0deg); }
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                  transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── Hero particle effect ── */
-    .particle-field {
-      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
-    }
-    .particle {
-      position: absolute;
-      width: 2px; height: 2px;
-      background: var(--gold);
-      border-radius: 50%;
-      opacity: 0;
-      animation: particleFloat linear infinite;
-    }
-    @keyframes particleFloat {
-      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
-      10%  { opacity: 0.6; }
-      90%  { opacity: 0.6; }
-      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-    }
-
-    /* ── Typewriter cursor ── */
-    .cursor-blink::after {
-      content: '|';
-      animation: blink 1s step-end infinite;
-      color: var(--gold);
-      font-weight: 200;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* ── Glass card ── */
-    .glass {
-      background: rgba(255,255,255,0.03);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--line);
-      border-radius: 1.25rem;
-      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .glass:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(201,169,110,0.2);
-      transform: translateY(-4px);
-    }
-
-    /* ── Horizontal divider ── */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
-      opacity: 0.3;
-    }
-
-    /* ── Scroll progress ── */
-    #scroll-progress {
-      position: fixed; top: 0; left: 0; height: 2px;
-      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
-      z-index: 999; width: 0%;
-      transition: width 0.1s linear;
-    }
-
-    /* ── Quote mark ── */
-    .quote-mark {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 4rem; line-height: 0.6;
-      color: var(--gold-dim); opacity: 0.3;
-    }
-
-    /* ── Product card ── */
-    .pcard {
-      background: var(--bg2);
-      border: 1px solid var(--line);
-      border-radius: 1.25rem;
-      overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .pcard:hover {
-      border-color: rgba(201,169,110,0.25);
-      transform: translateY(-6px);
-      box-shadow: 0 24px 60px -20px rgba(0,0,0,0.6), 0 0 40px -20px var(--glow);
-    }
-    .pcard .img-wrap { overflow: hidden; aspect-ratio: 4/5; width: 100%; max-height: 380px; }
-    .pcard .img-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .pcard:hover .img-wrap img { transform: scale(1.06); }
-
-    /* ── Marquee ── */
-    .marquee-wrap { overflow: hidden; width: 100%; }
-    .marquee-inner {
-      display: flex; width: max-content;
-      animation: scrollText 40s linear infinite;
-    }
-    @keyframes scrollText {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    @media (max-width: 768px) {
-      /* Menyesuaikan gambar dan teks agar lebih pas di layar HP */
-      .pcard .img-wrap { aspect-ratio: 1/1; max-height: 300px; }
-      h2.serif { font-size: 2.25rem !important; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
   </style>
 </head>
 <body>
-
-<!-- ══ SCROLL PROGRESS ══ -->
-<div id="scroll-progress"></div>
-
-<!-- ══ NAVBAR ══ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-3 md:py-0" style="mix-blend-mode: difference;">
-  <div class="max-w-[1100px] mx-auto px-4 md:px-6 md:h-[64px] flex flex-col md:flex-row items-center justify-between gap-2 md:gap-0">
-    <a href="#hero" class="serif text-lg tracking-wide text-white/80 hover:text-white transition">Arvana<span class="text-[var(--gold)]">Wear</span></a>
-    <div class="flex items-center gap-4 md:gap-6 text-[0.5rem] md:text-[0.6rem] tracking-wider md:tracking-[0.2em] uppercase text-white/40">
-      <a href="#manifesto" class="hover:text-white/80 transition">Manifesto</a>
-      <a href="#koleksi" class="hover:text-white/80 transition">Koleksi</a>
-      <a href="#belanja" class="hover:text-white/80 transition">Belanja</a>
-      <a href="#tentang" class="hover:text-white/80 transition">Tentang</a>
-    </div>
-  </div>
-</nav>
-
-<!-- ══════════════════════════════════════════
-     HERO
-══════════════════════════════════════════ -->
-<section id="hero" class="min-h-screen flex items-center relative overflow-hidden" style="background: var(--bg);">
-  <!-- Particles -->
-  <div class="particle-field" id="particles"></div>
-
-  <!-- Ambient glow -->
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-[0.04]" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%); pointer-events: none;"></div>
-
-  <div class="max-w-[1100px] mx-auto px-6 w-full relative z-10 pt-20 pb-16">
-    <div class="max-w-3xl">
-      <div class="flex items-center gap-3 mb-6">
-        <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
-        <span class="mono text-[0.55rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">
-          #YourJourneyYourStyle
-        </span>
-      </div>
-
-      <h1 class="serif font-light leading-[1.1] text-white mb-6" style="font-size: clamp(3.2rem, 8vw, 6.5rem);">
-        Antara Kain<br>
-        <span class="text-[var(--gold)]">dan Makna</span>
-      </h1>
-
-      <p class="text-[var(--text2)] text-sm md:text-base font-light max-w-xl leading-[1.9] mb-10">
-        Kita hidup di zaman yang memuja kecepatan. Scroll tanpa henti, belanja tanpa pikir,
-        tren berganti sebelum jahitan sempat kering. Tapi pernahkah kau bertanya —
-        <span class="text-white/60 italic">apakah yang kau pakai benar-benar mencerminkan siapa dirimu?</span>
-        Atau sekadar cerminan dari apa yang orang lain bilang keren?
-      </p>
-
-      <div class="flex flex-wrap gap-4 items-center">
-        <a href="#manifesto"
-          class="mono text-[0.6rem] tracking-[0.2em] uppercase px-6 py-3.5 rounded-full transition-all duration-300"
-          style="background: var(--gold); color: var(--bg);">
-          Baca Manifesto →
-        </a>
-        <a href="#koleksi"
-          class="mono text-[0.6rem] tracking-[0.2em] uppercase px-6 py-3.5 rounded-full transition-all duration-300"
-          style="border: 1px solid var(--line); color: var(--text2);">
-          Lihat Koleksi
-        </a>
+  <div class="announcement">Pilihan hijab nyaman untuk hari-hari istimewa maupun sehari-hari</div>
+  <header class="site-header">
+    <div class="nav-wrap">
+      <a class="brand" href="#beranda" aria-label="Arvana Wear beranda">Arvana<span>Wear</span></a>
+      <nav class="nav-links" id="nav-links" aria-label="Navigasi utama">
+        <a href="#beranda">Beranda</a>
+        <a href="#koleksi">Koleksi</a>
+        <a href="#cerita">Cerita Kami</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-button" id="cart-toggle" type="button" aria-label="Buka keranjang">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 4h2l2.2 11.1a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.4L22 8H6"/><circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+          <span class="cart-count" id="cart-count">0</span>
+        </button>
+        <button class="icon-button menu-button" id="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
       </div>
     </div>
+  </header>
 
-    <!-- Scroll hint -->
-    <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2">
-      <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)]">Scroll</span>
-      <div class="w-px h-8 bg-gradient-to-b from-[var(--gold-dim)] to-transparent"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     MANIFESTO
-══════════════════════════════════════════ -->
-<section id="manifesto" class="py-28 md:py-40 relative">
-  <div class="max-w-[750px] mx-auto px-6">
-    <!-- Label -->
-    <div class="flex items-center gap-3 mb-16 reveal">
-      <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
-      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">01 · Manifesto</span>
-    </div>
-
-    <!-- Opening -->
-    <div class="reveal" style="transition-delay: 0.1s;">
-      <div class="quote-mark">"</div>
-      <p class="serif text-2xl md:text-3xl font-light text-white/80 leading-[1.7] mb-8 italic" style="padding-left: 2rem;">
-        "Kita bukan apa yang kita pakai. Tapi apa yang kita pakai bisa menjadi <span class="text-[var(--gold)]">pengingat</span> akan siapa kita ingin menjadi."
-      </p>
-      <p class="text-right text-xs text-[var(--text3)] mono tracking-wider">— Arsir, Arvana Wear, 2026</p>
-    </div>
-
-    <div class="divider my-16"></div>
-
-    <!-- Body 1 -->
-    <div class="reveal space-y-6 text-sm md:text-base text-[var(--text2)] leading-[2]">
-      <p>
-        Di era di mana <span class="text-white/60">fast fashion</span> memproduksi pakaian lebih cepat dari kemampuan kita memaknai,
-        di mana algoritma menentukan apa yang "in" sebelum kita sempat bertanya apa yang kita suka —
-        Arvana Wear lahir bukan sekadar untuk menjual hijab.
-      </p>
-      <p>
-        Kami ada untuk mengingatkan bahwa <span class="text-white/70">setiap helai kain yang menutupi tubuhmu
-        adalah pernyataan.</span> Pernyataan bahwa di tengah dunia yang berteriak minta perhatian, kau memilih untuk
-        diam dan tetap pada prinsip. Bahwa kau memilih <span class="italic">kesadaran</span> di atas konsumsi buta.
-      </p>
-    </div>
-
-    <div class="divider my-16"></div>
-
-    <!-- Philosophy block -->
-    <div class="reveal" style="transition-delay: 0.2s;">
-      <h2 class="serif text-3xl md:text-4xl font-light text-white mb-10" style="letter-spacing: -0.02em;">
-        Filsafat di Balik<br>
-        <span class="text-[var(--gold)]">Selembar Hijab</span>
-      </h2>
-
-      <div class="space-y-12">
-        <!-- 1 -->
-        <div class="flex gap-6">
-          <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] pt-1 shrink-0">01</span>
-          <div>
-            <h3 class="text-white text-base font-medium mb-2">Pilihan adalah Diri</h3>
-            <p class="text-sm text-[var(--text2)] leading-[2]">
-              Jean-Paul Sartre bilang, <span class="italic text-white/60">"Kita adalah pilihan-pilihan kita."</span>
-              Setiap pagi, ketika kau memilih kain mana yang menutupi kepalamu, kau sedang menulis ulang identitasmu.
-              Bukan karena tekanan sosial. Bukan karena tren. Tapi karena <span class="text-white/60">kesadaran penuh</span>.
-              Itulah <span class="mono text-[0.55rem] tracking-wider text-[var(--gold)]">otentisitas</span>.
-              Dan itu tidak bisa dibeli — hanya <span class="italic">dipilih</span>.
-            </p>
+  <main>
+    <section class="hero" id="beranda">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="eyebrow">Temani hari dengan nyaman</span>
+          <h1>Anggun dalam<br>setiap <em>langkah.</em></h1>
+          <p class="hero-copy">Koleksi hijab pilihan dengan warna yang mudah dipadukan dan bahan nyaman untuk menemani rutinitasmu.</p>
+          <div class="button-row">
+            <a class="button button-primary" href="#koleksi">Jelajahi koleksi <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="https://shopee.co.id/arvana.wear" target="_blank" rel="noopener noreferrer">Kunjungi Shopee</a>
           </div>
+          <div class="hero-note"><span class="note-stars" aria-label="lima bintang">★★★★★</span><span>Dirancang untuk nyaman dipakai setiap hari</span></div>
         </div>
-
-        <!-- 2 -->
-        <div class="flex gap-6">
-          <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] pt-1 shrink-0">02</span>
-          <div>
-            <h3 class="text-white text-base font-medium mb-2">Hadir dalam Setiap Helai</h3>
-            <p class="text-sm text-[var(--text2)] leading-[2]">
-              Stoikisme mengajarkan bahwa kedamaian tidak datang dari memiliki lebih banyak,
-              tapi dari menghargai apa yang ada. Seperti kata Marcus Aurelius:
-              <span class="italic text-white/60">"Hanya orang bodoh yang mengukur kebahagiaan dari apa yang dimiliki orang lain."</span>
-              Sehelai hijab yang dipakai dengan kesadaran penuh nilainya lebih tinggi
-              dari seratus helai yang dipakai tanpa hadir.
-            </p>
-          </div>
-        </div>
-
-        <!-- 3 -->
-        <div class="flex gap-6">
-          <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] pt-1 shrink-0">03</span>
-          <div>
-            <h3 class="text-white text-base font-medium mb-2">Hijrah sebagai Perjalanan Tanpa Akhir</h3>
-            <p class="text-sm text-[var(--text2)] leading-[2]">
-              Hijrah secara harfiah berarti migrasi — meninggalkan sesuatu menuju sesuatu yang lebih baik.
-              Tapi dalam konteks yang lebih dalam, hijrah adalah <span class="italic text-white/60">proses tanpa henti</span>.
-              Bukan tujuan, melainkan <span class="text-white/60">cara hidup</span>.
-              Setiap hari kita hijrah dari kebiasaan lama menuju versi diri yang sedikit lebih sadar,
-              sedikit lebih tenang, sedikit lebih dekat dengan fitrah.
-              Arvana Wear hadir untuk menemani perjalanan itu — bukan sebagai tujuan, tapi sebagai
-              <span class="text-white/60">pengingat</span>.
-            </p>
-          </div>
+        <div class="hero-visual" aria-label="Koleksi hijab Arvana dalam pilihan warna lembut">
+          <div class="hero-photo"><img src="images/product-1.jpg" alt="Koleksi hijab Arvana dengan warna-warna lembut" fetchpriority="high"></div>
+          <div class="hero-swatch"><img src="images/product-2.jpg" alt="Detail bahan hijab Arvana"></div>
+          <div class="hero-seal">Nyaman<br>di setiap<br>momen</div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="divider my-16"></div>
-
-    <!-- Closing -->
-    <div class="reveal text-center" style="transition-delay: 0.3s;">
-      <p class="text-xs text-[var(--text3)] mono tracking-wider uppercase mb-4">Maka</p>
-      <p class="serif text-2xl md:text-3xl font-light text-white/70 leading-[1.8] max-w-lg mx-auto">
-        Sebelum kau membeli sehelai hijab,<br>
-        tanyakan pada dirimu:<br>
-        <span class="text-[var(--gold)] italic">"Apakah ini untuk citra?<br>Atau untuk kesadaran?"</span>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     PRODUCT PHILOSOPHY
-══════════════════════════════════════════ -->
-<section class="py-20 relative" style="background: var(--bg2);">
-  <div class="max-w-[1100px] mx-auto px-6">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-px reveal" style="background: var(--line);">
-      <div class="p-10 md:p-12" style="background: var(--bg2);">
-        <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)]">BUKAN SEKADAR</span>
-        <h3 class="serif text-2xl font-light text-white mt-3 mb-4">Tren Sesaat</h3>
-        <p class="text-sm text-[var(--text2)] font-light leading-[1.9]">
-          Fashion datang dan pergi. Gaya berganti setiap musim. Tapi prinsip — prinsip tidak lekang waktu.
-          Kami tidak menjual tren. Kami menjual <span class="text-white/60">konsistensi</span>.
-        </p>
+    <section class="benefits" aria-label="Keunggulan Arvana Wear">
+      <div class="container benefit-grid">
+        <div class="benefit"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg><span>Pilihan warna untuk gayamu</span></div>
+        <div class="benefit"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s-8-4.4-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.6-8 11-8 11Z"/><path d="M8 12h8"/></svg><span>Nyaman menemani aktivitasmu</span></div>
+        <div class="benefit"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 7h18v13H3zM3 7l2-4h14l2 4M8 11h8"/></svg><span>Belanja mudah lewat Shopee atau WhatsApp</span></div>
       </div>
-      <div class="p-10 md:p-12" style="background: var(--bg2);">
-        <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)]">BUKAN SEKADAR</span>
-        <h3 class="serif text-2xl font-light text-white mt-3 mb-4">Produk Massal</h3>
-        <p class="text-sm text-[var(--text2)] font-light leading-[1.9]">
-          Setiap helai yang kami kirimkan telah melalui proses seleksi — bukan hanya kualitas kain,
-          tapi juga <span class="text-white/60">makna</span> di baliknya. Adem, nyaman, tidak menerawang.
-          Seperti prinsip: nyaman di kulit, tenang di hati.
-        </p>
-      </div>
-      <div class="p-10 md:p-12" style="background: var(--bg2);">
-        <span class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)]">BUKAN SEKADAR</span>
-        <h3 class="serif text-2xl font-light text-white mt-3 mb-4">Transaksi</h3>
-        <p class="text-sm text-[var(--text2)] font-light leading-[1.9]">
-          Setiap pembelian adalah awal percakapan, bukan akhir. Kami ada di Shopee, Instagram, dan WhatsApp,
-          bukan hanya untuk menjual, tapi untuk <span class="text-white/60">menemani perjalananmu</span>.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ══════════════════════════════════════════
-     COLLECTION
-══════════════════════════════════════════ -->
-<section id="koleksi" class="py-28 md:py-32">
-  <div class="max-w-[1100px] mx-auto px-6">
-    <div class="flex items-center gap-3 mb-4 reveal">
-      <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
-      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">02 · Koleksi</span>
-    </div>
-
-    <div class="reveal" style="transition-delay: 0.1s;">
-      <h2 class="serif text-3xl md:text-5xl font-light text-white max-w-2xl leading-[1.15]">
-        Kain yang<br>
-        <span class="text-[var(--gold)]">Berbicara</span>
-      </h2>
-      <p class="text-sm text-[var(--text2)] font-light max-w-md mt-6 leading-[1.9]">
-        Dua produk andalan. Bukan karena banyak pilihan, tapi karena setiap pilihan <span class="text-white/60">bermakna</span>.
-      </p>
-    </div>
-
-    <!-- Products -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
-      <!-- Basic Paris -->
-      <div class="pcard reveal">
-        <div class="img-wrap relative">
-          <img src="/images/product-1.jpg" alt="Basic Paris Hijab"
-               onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22><rect fill=%221a1a1e%22 width=%22600%22 height=%22400%22/><text x=%22300%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%23C9A96E%22 font-size=%2224%22 font-family=%22serif%22>Basic Paris</text></svg>'"/>
-          <div class="absolute top-4 left-4">
-            <span class="mono text-[0.45rem] tracking-[0.2em] uppercase px-3 py-1.5 rounded-full"
-                  style="background: rgba(201,169,110,0.15); color: var(--gold); border: 1px solid rgba(201,169,110,0.2);">
-              Best Seller
-            </span>
-          </div>
+    <section class="collection" id="koleksi">
+      <div class="container">
+        <div class="section-heading">
+          <div><span class="eyebrow">Dikurasi untukmu</span><h2>Koleksi pilihan</h2></div>
+          <p>Temukan hijab andalan dengan sentuhan warna yang terasa pas untuk menemani setiap cerita.</p>
         </div>
-        <div class="p-6 md:p-7">
-          <div class="flex items-center justify-between mb-3">
-            <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)]">Hijab Segi Empat</span>
-            <span class="mono text-[0.5rem] text-[var(--text3)]">47 reviews</span>
-          </div>
-          <h3 class="serif text-2xl font-light text-white">Basic Paris (BP)</h3>
-          <p class="text-xs text-[var(--text2)] font-light mt-2 leading-[1.9]">
-            Paris fabric klasik. Super soft, non-sheer (90%), nyerap keringat, hem rapi.
-            Bukan sekadar hijab — ini kanvas untuk <span class="text-white/60 italic">pernyataan diam</span>mu.
-          </p>
-          <div class="flex flex-wrap gap-1.5 mt-4">
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#800020" title="Burgundy"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#800000" title="Maroon"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#FA8072" title="Salmon"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#BFAFB2" title="Dusty"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#FBCEB1" title="Peach"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#928E85" title="Stone"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#808080" title="Abu Ash"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#C0C0C0" title="Silver"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#FFFFFF" title="Putih"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#C4A882" title="Milo"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#A0522D" title="Coksu"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#8B7D6B" title="Fossil"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#E8C9A0" title="Skin"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#D2B48C" title="Soft Latte"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#4A4A4A" title="Dark Grey"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#B284BE" title="Lavender"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#6A0DAD" title="Purple"></span>
-          </div>
-          <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)] mt-3">+ DW · Dusty Purple</p>
-          <div class="flex items-center justify-between mt-5 pt-5" style="border-top: 1px solid var(--line);">
-            <span class="serif text-3xl font-light text-[var(--gold)]">Rp 31.000</span>
-            <a href="https://shopee.co.id/arvana.wear" target="_blank" rel="noopener noreferrer"
-              class="mono text-[0.55rem] tracking-[0.2em] uppercase px-5 py-2.5 rounded-full transition-all duration-300"
-              style="background: rgba(238,77,45,0.12); color: #EE4D2D; border: 1px solid rgba(238,77,45,0.2);">
-              Beli di Shopee →
-            </a>
-          </div>
+        <div class="category-tabs" role="group" aria-label="Filter kategori produk">
+          <button class="category-tab active" type="button" data-filter="all" aria-pressed="true">Semua koleksi</button>
+          <button class="category-tab" type="button" data-filter="segi-empat" aria-pressed="false">Hijab segi empat</button>
+          <button class="category-tab" type="button" data-filter="pashmina" aria-pressed="false">Pashmina</button>
+        </div>
+        <div class="product-grid" id="product-grid">
+          <article class="product-card" data-category="segi-empat">
+            <div class="product-image">
+              <img src="images/product-1.jpg" alt="Basic Paris Hijab, pilihan warna lembut" loading="lazy">
+              <span class="badge">Favorit</span>
+              <button class="favorite" type="button" aria-label="Simpan Basic Paris ke favorit" aria-pressed="false">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+              </button>
+            </div>
+            <div class="product-info">
+              <p class="product-category">Hijab segi empat</p>
+              <h3 class="product-name">Basic Paris</h3>
+              <p class="product-description">Paris klasik yang lembut, ringan, dan mudah dibentuk.</p>
+              <div class="swatches" aria-label="Pilihan warna Basic Paris">
+                <button class="swatch selected" type="button" style="background:#6f3948" title="Burgundy" aria-label="Warna Burgundy" aria-pressed="true"></button>
+                <button class="swatch" type="button" style="background:#bc777e" title="Dusty Pink" aria-label="Warna Dusty Pink" aria-pressed="false"></button>
+                <button class="swatch" type="button" style="background:#d7c4aa" title="Soft Latte" aria-label="Warna Soft Latte" aria-pressed="false"></button>
+                <button class="swatch" type="button" style="background:#77796e" title="Stone" aria-label="Warna Stone" aria-pressed="false"></button>
+              </div>
+              <div class="product-bottom"><span class="price">Rp 31.000</span><button class="add-button" type="button" data-product="basic-paris" data-name="Basic Paris" data-price="31000" data-image="images/product-1.jpg">Tambah ke tas <span aria-hidden="true">+</span></button></div>
+            </div>
+          </article>
+          <article class="product-card" data-category="pashmina">
+            <div class="product-image">
+              <img src="images/product-2.jpg" alt="Pashmina Pop, hijab lembut berwarna dusty pink" loading="lazy">
+              <span class="badge">Mudah dipakai</span>
+              <button class="favorite" type="button" aria-label="Simpan Pashmina Pop ke favorit" aria-pressed="false">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+              </button>
+            </div>
+            <div class="product-info">
+              <p class="product-category">Pashmina</p>
+              <h3 class="product-name">Pashmina Pop</h3>
+              <p class="product-description">Rayon spandex lembut dan breathable, ukuran 165 × 55 cm.</p>
+              <div class="swatches" aria-label="Pilihan warna Pashmina Pop">
+                <button class="swatch selected" type="button" style="background:#87977b" title="Sage Green" aria-label="Warna Sage Green" aria-pressed="true"></button>
+                <button class="swatch" type="button" style="background:#d1bda1" title="Navajo" aria-label="Warna Navajo" aria-pressed="false"></button>
+                <button class="swatch" type="button" style="background:#332f30" title="Black" aria-label="Warna Black" aria-pressed="false"></button>
+                <button class="swatch" type="button" style="background:#9bb8c2" title="Powder Blue" aria-label="Warna Powder Blue" aria-pressed="false"></button>
+              </div>
+              <div class="product-bottom"><span class="price">Rp 53.000</span><button class="add-button" type="button" data-product="pashmina-pop" data-name="Pashmina Pop" data-price="53000" data-image="images/product-2.jpg">Tambah ke tas <span aria-hidden="true">+</span></button></div>
+            </div>
+          </article>
         </div>
       </div>
+    </section>
 
-      <!-- Pashmina Pop -->
-      <div class="pcard reveal" style="transition-delay: 0.15s;">
-        <div class="img-wrap relative">
-          <img src="/images/product-2.jpg" alt="Pashmina Pop"
-               onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22><rect fill=%221a1a1e%22 width=%22600%22 height=%22400%22/><text x=%22300%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%23C9A96E%22 font-size=%2224%22 font-family=%22serif%22>Pashmina Pop</text></svg>'"/>
-          <div class="absolute top-4 left-4">
-            <span class="mono text-[0.45rem] tracking-[0.2em] uppercase px-3 py-1.5 rounded-full"
-                  style="background: rgba(201,169,110,0.15); color: var(--gold); border: 1px solid rgba(201,169,110,0.2);">
-              Populer
-            </span>
-          </div>
-        </div>
-        <div class="p-6 md:p-7">
-          <div class="flex items-center justify-between mb-3">
-            <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)]">Pashmina Instan</span>
-            <span class="mono text-[0.5rem] text-[var(--text3)]">63 reviews</span>
-          </div>
-          <h3 class="serif text-2xl font-light text-white">Pashmina Pop (PP)</h3>
-          <p class="text-xs text-[var(--text2)] font-light mt-2 leading-[1.9]">
-            Rayon spandex super soft, breathable, non-slip, non-sheer. Ukuran 165×55 cm.
-            Lembut di kulit — sebagaimana prinsip yang lembut di hati.
-            <span class="text-white/60 italic">Tanpa harus berteriak, kau sudah terlihat.</span>
-          </p>
-          <div class="flex flex-wrap gap-1.5 mt-4">
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#87A96B" title="Sage Green"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#D2B48C" title="Navajo"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#8B7D6B" title="Khaky Putty"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#1C1C1E" title="Black"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#3A3A3E" title="BW"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#B284BE" title="Lavender"></span>
-            <span class="w-5 h-5 rounded-full border border-white/10" style="background:#87CEEB" title="Powder Blue"></span>
-          </div>
-          <div class="flex items-center justify-between mt-5 pt-5" style="border-top: 1px solid var(--line);">
-            <span class="serif text-3xl font-light text-[var(--gold)]">Rp 53.000</span>
-            <a href="https://shopee.co.id/arvana.wear" target="_blank" rel="noopener noreferrer"
-              class="mono text-[0.55rem] tracking-[0.2em] uppercase px-5 py-2.5 rounded-full transition-all duration-300"
-              style="background: rgba(238,77,45,0.12); color: #EE4D2D; border: 1px solid rgba(238,77,45,0.2);">
-              Beli di Shopee →
-            </a>
-          </div>
+    <section class="container" id="cerita">
+      <div class="brand-story">
+        <div class="story-image"><img src="images/product-2.jpg" alt="Kain hijab Arvana ditata dengan warna natural" loading="lazy"></div>
+        <div class="story-copy">
+          <span class="eyebrow">Tentang Arvana</span>
+          <h2>Gaya sederhana,<br>rasa percaya diri.</h2>
+          <p>Arvana Wear hadir dengan pilihan hijab yang mengutamakan kenyamanan dan mudah dipadukan. Temukan warna favoritmu, lalu kenakan dengan caramu sendiri.</p>
+          <a class="button button-secondary" href="https://instagram.com/arvana.wear" target="_blank" rel="noopener noreferrer">Kenali kami lebih dekat <span aria-hidden="true">↗</span></a>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- ══════════════════════════════════════════
-     MARQUEE + INTERLUDE
-══════════════════════════════════════════ -->
-<section class="py-12 overflow-hidden" style="background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
-  <div class="marquee-wrap">
-    <div class="marquee-inner serif text-3xl md:text-4xl font-light text-white/10 italic">
-      <span class="px-8">#YourJourneyYourStyle</span>
-      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
-      <span class="px-8">Bukan sekadar pakaian — ini pernyataan diam</span>
-      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
-      <span class="px-8">#YourJourneyYourStyle</span>
-      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
-      <span class="px-8">Kain yang berbicara tanpa suara</span>
-      <span class="px-8 text-[var(--gold)]" style="opacity:0.3">✦</span>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     ZEN SECTION — Stillness
-══════════════════════════════════════════ -->
-<section class="py-28 md:py-36 relative">
-  <div class="max-w-[750px] mx-auto px-6">
-    <div class="reveal text-center">
-      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">✦ Interlude ✦</span>
-      <p class="serif text-2xl md:text-3xl font-light text-white/70 leading-[1.8] mt-12 max-w-lg mx-auto">
-        "Di tengah dunia yang berisik,<br>
-        <span class="text-[var(--gold)]">diam adalah perlawanan.</span><br>
-        Di tengah mode yang gila,<br>
-        sederhana adalah revolusi."
-      </p>
-      <p class="text-xs text-[var(--text3)] mono tracking-wider mt-8">— Hidup modern, 2026</p>
-    </div>
-
-    <div class="divider my-20"></div>
-
-    <div class="reveal grid grid-cols-1 md:grid-cols-2 gap-12">
-      <div>
-        <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">Refleksi</span>
-        <p class="text-sm text-[var(--text2)] leading-[2] mt-4">
-          <span class="text-white/60">Seneca</span> pernah menulis tentang betapa pendeknya hidup
-          — bukan karena waktunya sedikit, tapi karena kita menyia-nyiakannya.
-          Berapa lama waktu yang kau habiskan untuk scrolling, membandingkan, merasa kurang?
-          Berapa lama yang kau habiskan untuk <span class="italic">menjadi</span> dibanding
-          <span class="italic">terlihat</span>?
-        </p>
+    <section class="contact-strip" id="kontak">
+      <div class="container contact-inner">
+        <div><h2>Butuh bantuan memilih?</h2><p>Tanya warna, produk, atau cara pemesanan langsung ke tim kami.</p></div>
+        <a class="button button-secondary" href="https://wa.me/6285185313732?text=Halo%20Arvana%20Wear%2C%20saya%20ingin%20bertanya%20tentang%20produk." target="_blank" rel="noopener noreferrer">Hubungi via WhatsApp <span aria-hidden="true">↗</span></a>
       </div>
-      <div>
-        <span class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">Ajakan</span>
-        <p class="text-sm text-[var(--text2)] leading-[2] mt-4">
-          Hari ini, cobalah hadir sepenuhnya. Saat memakai hijab, rasakan kainnya.
-          Saat shalat, rasakan sujudnya. Saat berinteraksi, dengarkan sungguh-sungguh.
-          <span class="text-white/60">Itulah hijrah yang sebenarnya</span> —
-          bukan dari satu tempat ke tempat lain, tapi dari satu kesadaran ke kesadaran yang lebih dalam.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
+  </main>
 
-<!-- ══════════════════════════════════════════
-     SHOP — Channels
-══════════════════════════════════════════ -->
-<section id="belanja" class="py-24" style="background: var(--bg2);">
-  <div class="max-w-[1100px] mx-auto px-6">
-    <div class="flex items-center gap-3 mb-4 reveal">
-      <span class="w-6 h-px bg-[var(--gold-dim)]"></span>
-      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">03 · Belanja</span>
-    </div>
-    <div class="reveal" style="transition-delay: 0.1s;">
-      <h2 class="serif text-3xl md:text-5xl font-light text-white max-w-xl leading-[1.15]">
-        Mulai<br>
-        <span class="text-[var(--gold)]">Perjalananmu</span>
-      </h2>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-14 reveal">
-      <!-- Shopee -->
-      <a href="https://shopee.co.id/arvana.wear" target="_blank" rel="noopener noreferrer" class="glass p-8 block group">
-        <div class="flex items-center justify-between mb-6">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
-               style="background: rgba(238,77,45,0.1);">
-            <svg class="w-5 h-5" style="color: #EE4D2D;" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L20 8l-9 9z"/></svg>
-          </div>
-          <span class="mono text-[0.5rem] tracking-wider text-[var(--text3)] group-hover:text-[var(--gold)] transition">Belanja →</span>
+  <footer>
+    <div class="container">
+      <div class="footer-main">
+        <div class="footer-about">
+          <a class="brand" href="#beranda">Arvana<span>Wear</span></a>
+          <p>Hijab pilihan dengan warna yang mudah dipadukan untuk menemani setiap langkahmu.</p>
         </div>
-        <h3 class="serif text-xl font-light text-white group-hover:text-[var(--gold)] transition">Shopee</h3>
-        <p class="text-xs text-[var(--text2)] font-light mt-2 leading-relaxed">
-          Official store @arvana.wear. Gratis ongkir min. Rp 100rb, garansi 14 hari, pembayaran aman.
-        </p>
-        <p class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] mt-4">@arvana.wear</p>
-      </a>
-
-      <!-- Instagram -->
-      <a href="https://instagram.com/arvana.wear" target="_blank" rel="noopener noreferrer" class="glass p-8 block group">
-        <div class="flex items-center justify-between mb-6">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
-               style="background: rgba(228,64,95,0.1);">
-            <svg class="w-5 h-5" style="color: #E4405F;" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 0 2.5 1.25 1.25 0 0 1 0-2.5M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10m0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
-          </div>
-          <span class="mono text-[0.5rem] tracking-wider text-[var(--text3)] group-hover:text-[var(--gold)] transition">Ikuti →</span>
-        </div>
-        <h3 class="serif text-xl font-light text-white group-hover:text-[var(--gold)] transition">Instagram</h3>
-        <p class="text-xs text-[var(--text2)] font-light mt-2 leading-relaxed">
-          Koleksi terbatas, inspirasi gaya, dan cerita di balik setiap kain.
-        </p>
-        <p class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] mt-4">@arvana.wear</p>
-      </a>
-
-      <!-- WhatsApp -->
-      <a href="https://wa.me/6285185313732" target="_blank" rel="noopener noreferrer" class="glass p-8 block group">
-        <div class="flex items-center justify-between mb-6">
-          <div class="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
-               style="background: rgba(37,211,102,0.1);">
-            <svg class="w-5 h-5" style="color: #25D366;" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 2.07.56 4.09 1.62 5.86L2 22l4.33-1.6a9.94 9.94 0 0 0 5.71 1.8c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.02c-1.79 0-3.54-.5-5.05-1.44l-.36-.22-2.57.95.88-2.5-.24-.38a8.41 8.41 0 0 1-1.3-4.52c0-4.64 3.78-8.42 8.42-8.42s8.42 3.78 8.42 8.42-3.78 8.42-8.42 8.42zm4.61-6.34c-.25-.13-1.48-.73-1.71-.81-.23-.08-.4-.13-.57.12-.17.25-.66.81-.81.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.57-1.37-.78-1.88-.21-.51-.42-.48-.57-.48-.15 0-.32-.02-.49-.02s-.45.06-.68.32c-.23.25-.89.87-.89 2.12 0 1.25.91 2.46 1.04 2.63.13.17 1.79 2.73 4.34 3.83.61.26 1.08.42 1.45.53.61.19 1.17.16 1.61.1.49-.07 1.48-.6 1.69-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.15-.48-.28z"/></svg>
-          </div>
-          <span class="mono text-[0.5rem] tracking-wider text-[var(--text3)] group-hover:text-[var(--gold)] transition">Chat →</span>
-        </div>
-        <h3 class="serif text-xl font-light text-white group-hover:text-[var(--gold)] transition">WhatsApp</h3>
-        <p class="text-xs text-[var(--text2)] font-light mt-2 leading-relaxed">
-          Konsultasi gratis. Tanya ukuran, warna, atau sekadar ngobrol tentang hijab.
-        </p>
-        <p class="mono text-[0.5rem] tracking-wider text-[var(--gold-dim)] mt-4">0851-8531-3732</p>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     TESTIMONIALS
-══════════════════════════════════════════ -->
-<section class="py-24">
-  <div class="max-w-[1100px] mx-auto px-6">
-    <div class="reveal text-center max-w-xl mx-auto mb-16">
-      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">04 · Testimoni</span>
-      <h2 class="serif text-3xl md:text-4xl font-light text-white mt-4">Suara dari Perjalanan</h2>
-      <p class="text-sm text-[var(--text2)] font-light mt-4">
-        Bukan sekadar ulasan. Ini cerita dari mereka yang memilih untuk <span class="text-white/60">sadar</span>.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 reveal">
-      <div class="glass p-7">
-        <div class="flex gap-1 mb-4">
-          <span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span>
-        </div>
-        <p class="text-sm text-[var(--text2)] font-light leading-[1.9] mb-5">
-          "Abaya-nya jatuh banget, bahannya adem walau dipake seharian. Langsung beli dari Shopee,
-          sampe 2 hari aja. Recomended!"
-        </p>
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full flex items-center justify-center mono text-[0.6rem]"
-               style="background: rgba(201,169,110,0.15); color: var(--gold);">FA</div>
-          <div>
-            <p class="text-xs text-white/70">Fatimah A.</p>
-            <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)]">Jakarta · Shopee</p>
-          </div>
+        <div class="footer-links">
+          <div><strong>Jelajahi</strong><a href="#koleksi">Koleksi</a><a href="#cerita">Cerita kami</a></div>
+          <div><strong>Temukan kami</strong><a href="https://shopee.co.id/arvana.wear" target="_blank" rel="noopener noreferrer">Shopee</a><a href="https://instagram.com/arvana.wear" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://wa.me/6285185313732" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
         </div>
       </div>
-
-      <div class="glass p-7">
-        <div class="flex gap-1 mb-4">
-          <span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span>
-        </div>
-        <p class="text-sm text-[var(--text2)] font-light leading-[1.9] mb-5">
-          "Koko premiumnya beda sama yang lain. Jahitan rapi, bahannya adem. Order dari IG,
-          respon cepet banget di WA!"
-        </p>
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full flex items-center justify-center mono text-[0.6rem]"
-               style="background: rgba(255,255,255,0.06); color: var(--text2);">RM</div>
-          <div>
-            <p class="text-xs text-white/70">Ridwan M.</p>
-            <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)]">Bandung · Instagram</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="glass p-7">
-        <div class="flex gap-1 mb-4">
-          <span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span><span class="text-[var(--gold)] text-sm">★</span>
-        </div>
-        <p class="text-sm text-[var(--text2)] font-light leading-[1.9] mb-5">
-          "Pashmina cerutynya lembut banget, gak bikin gatal. Beli di Shopee pake voucher gratis
-          ongkir — hemat banget!"
-        </p>
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-full flex items-center justify-center mono text-[0.6rem]"
-               style="background: rgba(45,106,79,0.2); color: var(--green);">NS</div>
-          <div>
-            <p class="text-xs text-white/70">Nurul S.</p>
-            <p class="mono text-[0.45rem] tracking-wider text-[var(--text3)]">Surabaya · Shopee</p>
-          </div>
-        </div>
-      </div>
+      <div class="copyright"><span>© 2026 Arvana Wear. Hak cipta dilindungi.</span><span>Dibuat dengan sepenuh hati.</span></div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ══════════════════════════════════════════
-     CLOSING — Final Reflection
-══════════════════════════════════════════ -->
-<section id="tentang" class="py-28 relative overflow-hidden" style="background: var(--bg2);">
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full opacity-[0.02]" style="background: radial-gradient(circle, var(--gold) 0%, transparent 70%);"></div>
-  <div class="max-w-[750px] mx-auto px-6 relative z-10">
-    <div class="reveal text-center">
-      <span class="mono text-[0.5rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">✦ #YourJourneyYourStyle ✦</span>
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <aside class="cart-panel" id="cart-panel" aria-label="Keranjang belanja" aria-hidden="true">
+    <div class="cart-head"><h2>Keranjangmu</h2><button class="close-cart" id="close-cart" type="button" aria-label="Tutup keranjang">×</button></div>
+    <div class="cart-items" id="cart-items"><p class="cart-empty">Keranjangmu masih kosong. Yuk, temukan hijab favoritmu.</p></div>
+    <div class="cart-footer"><div class="cart-total"><span>Subtotal</span><strong id="cart-total">Rp 0</strong></div><button class="button button-primary cart-checkout" id="checkout" type="button">Pesan via WhatsApp <span aria-hidden="true">↗</span></button></div>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-      <h2 class="serif text-3xl md:text-5xl font-light text-white mt-12 leading-[1.2]">
-        Perjalanan Setiap<br>
-        Manusia Adalah<br>
-        <span class="text-[var(--gold)]">Unik</span>
-      </h2>
+  <script>
+    const cart = [];
+    const rupiah = (amount) => `Rp ${amount.toLocaleString('id-ID')}`;
+    const cartPanel = document.getElementById('cart-panel');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const toast = document.getElementById('toast');
+    let toastTimer;
 
-      <p class="text-sm text-[var(--text2)] font-light max-w-lg mx-auto mt-8 leading-[2]">
-        Arvana Wear tidak menjawab semua pertanyaan hidup. Kami hanya sehelai kain
-        yang menyertai perjalananmu — mengingatkan bahwa di tengah hiruk-pikuk dunia
-        yang terus berlari, kau punya izin untuk <span class="text-white/60">berhenti,
-        bernapas, dan memilih dengan sadar.</span>
-      </p>
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toast.classList.remove('show'), 2200);
+    }
 
-      <p class="text-sm text-[var(--text2)] font-light max-w-lg mx-auto mt-5 leading-[2]">
-        Bukan karena kami sempurna. Tapi karena, seperti kata Albert Camus,
-        <span class="italic text-white/60">"Di tengah musim dingin, akhirnya aku belajar
-        bahwa di dalam diriku ada musim panas yang tak terkalahkan."</span>
-        Hijab ini bukan musim panasmu — tapi ia bisa jadi pengingat bahwa
-        <span class="text-white/70">musim panas itu ada di dalam dirimu.</span>
-      </p>
-
-      <div class="divider max-w-xs mx-auto my-12"></div>
-
-      <p class="serif text-xl md:text-2xl font-light text-white/50 italic leading-[1.8]">
-        "Dan barang siapa berhijrah di jalan Allah,<br>
-        niscaya mereka akan mendapati di muka bumi<br>
-        tempat hijrah yang luas dan rezeki yang banyak."<br>
-        <span class="text-[0.6rem] text-[var(--gold-dim)] not-italic">— QS. An-Nisa: 100</span>
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════
-     STATS BAR
-══════════════════════════════════════════ -->
-<div class="py-10" style="background: var(--bg); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
-  <div class="max-w-[1100px] mx-auto px-6">
-    <div class="grid grid-cols-3 gap-8 text-center">
-      <div class="reveal">
-        <p class="serif text-3xl md:text-4xl font-light text-white">50<span class="text-[var(--gold)] text-2xl">+</span></p>
-        <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)] mt-2">Produk Premium</p>
-      </div>
-      <div class="reveal" style="transition-delay: 0.1s;">
-        <p class="serif text-3xl md:text-4xl font-light text-white">10K<span class="text-[var(--gold)] text-2xl">+</span></p>
-        <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)] mt-2">Pelanggan</p>
-      </div>
-      <div class="reveal" style="transition-delay: 0.2s;">
-        <p class="serif text-3xl md:text-4xl font-light text-white">4.9<span class="text-[var(--gold)] text-2xl">★</span></p>
-        <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--text3)] mt-2">Rating</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     FOOTER
-══════════════════════════════════════════ -->
-<footer class="py-16" style="background: var(--bg2);">
-  <div class="max-w-[1100px] mx-auto px-6">
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-10" style="border-bottom: 1px solid var(--line);">
-      <div>
-        <p class="serif text-2xl text-white font-light">
-          Arvana<span class="text-[var(--gold)]">Wear</span>
-        </p>
-        <p class="text-xs text-[var(--text3)] font-light mt-2 max-w-xs leading-relaxed">
-          Busana muslim yang memadukan keanggunan desain dengan kesadaran diri.
-          Tersedia di Shopee, Instagram, dan WhatsApp.
-        </p>
-      </div>
-      <div class="flex gap-5">
-        <a href="https://instagram.com/arvana.wear" target="_blank" rel="noopener noreferrer" class="text-[var(--text3)] hover:text-[var(--gold)] transition text-lg">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 0 2.5 1.25 1.25 0 0 1 0-2.5M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10m0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
-        </a>
-        <a href="https://shopee.co.id/arvana.wear" target="_blank" rel="noopener noreferrer" class="text-[var(--text3)] hover:text-[var(--gold)] transition text-lg">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-        </a>
-        <a href="https://wa.me/6285185313732" target="_blank" rel="noopener noreferrer" class="text-[var(--text3)] hover:text-[var(--gold)] transition text-lg">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 2.07.56 4.09 1.62 5.86L2 22l4.33-1.6a9.94 9.94 0 0 0 5.71 1.8c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.02c-1.79 0-3.54-.5-5.05-1.44l-.36-.22-2.57.95.88-2.5-.24-.38a8.41 8.41 0 0 1-1.3-4.52c0-4.64 3.78-8.42 8.42-8.42s8.42 3.78 8.42 8.42-3.78 8.42-8.42 8.42zm4.61-6.34c-.25-.13-1.48-.73-1.71-.81-.23-.08-.4-.13-.57.12-.17.25-.66.81-.81.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.25-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.57-1.37-.78-1.88-.21-.51-.42-.48-.57-.48-.15 0-.32-.02-.49-.02s-.45.06-.68.32c-.23.25-.89.87-.89 2.12 0 1.25.91 2.46 1.04 2.63.13.17 1.79 2.73 4.34 3.83.61.26 1.08.42 1.45.53.61.19 1.17.16 1.61.1.49-.07 1.48-.6 1.69-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.15-.48-.28z"/></svg>
-        </a>
-      </div>
-    </div>
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8">
-      <p class="mono text-[0.45rem] tracking-[0.2em] uppercase text-[var(--text3)]">
-        © 2026 Arvana Wear — #YourJourneyYourStyle
-      </p>
-      <p class="mono text-[0.45rem] tracking-[0.3em] uppercase text-[var(--gold-dim)]">✦ Est. 2024 ✦</p>
-    </div>
-  </div>
-</footer>
-
-
-<script>
-  // ── Scroll Progress ──
-  window.addEventListener('scroll', () => {
-    const scrollTop = document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (scrollTop / scrollHeight) * 100;
-    document.getElementById('scroll-progress').style.width = progress + '%';
-  }, { passive: true });
-
-  // ── Scroll Reveal ──
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+    function updateCart() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+      document.getElementById('cart-count').textContent = count;
+      document.getElementById('cart-total').textContent = rupiah(subtotal);
+      const items = document.getElementById('cart-items');
+      if (!cart.length) {
+        items.innerHTML = '<p class="cart-empty">Keranjangmu masih kosong. Yuk, temukan hijab favoritmu.</p>';
+        return;
       }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // ── Mobile Menu Toggle ──
-  const mobileBtn = document.getElementById('mobile-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-
-  // Buka/tutup menu saat tombol hamburger diklik
-  mobileBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    mobileMenu.classList.toggle('flex');
-  });
-
-  // Tutup menu otomatis saat salah satu link diklik
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden');
-      mobileMenu.classList.remove('flex');
-    });
-  });
-
-  // ── Theme Toggle (Dark/Light) ──
-  const themeToggles = document.querySelectorAll('.theme-toggle');
-  
-  // Cek preferensi user yang tersimpan sebelumnya
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
-  }
-
-  function updateIcons() {
-    const isLight = document.body.classList.contains('light-mode');
-    document.querySelectorAll('.dark-icon').forEach(el => el.classList.toggle('hidden', !isLight));
-    document.querySelectorAll('.light-icon').forEach(el => el.classList.toggle('hidden', isLight));
-  }
-
-  themeToggles.forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
-      updateIcons();
-    });
-  });
-  updateIcons();
-
-  // ── Navbar hide/show ──
-  let lastScroll = 0;
-  const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    const current = window.scrollY;
-    if (current > 100) {
-      nav.style.transform = current > lastScroll ? 'translateY(-100%)' : 'translateY(0)';
-      nav.style.background = current > lastScroll ? 'none' : 'var(--bg-nav)';
-      nav.style.backdropFilter = current > lastScroll ? 'none' : 'blur(20px)';
-    } else {
-      nav.style.transform = 'translateY(0)';
-      nav.style.background = 'none';
-      nav.style.backdropFilter = 'none';
+      items.innerHTML = cart.map((item) => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="">
+          <div><p class="cart-item-name">${item.name}</p><p class="cart-item-detail">${item.color} · ${item.quantity} buah</p></div>
+          <span class="cart-item-price">${rupiah(item.price * item.quantity)}</span>
+        </div>`).join('');
     }
-    lastScroll = current;
-  }, { passive: true });
 
-  // ── Particles ──
-  (function createParticles() {
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 30; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
-      p.style.animationDuration = (15 + Math.random() * 25) + 's';
-      p.style.animationDelay = (Math.random() * 20) + 's';
-      p.style.opacity = 0.1 + Math.random() * 0.3;
-      container.appendChild(p);
+    function setCartOpen(open) {
+      cartPanel.classList.toggle('open', open);
+      cartOverlay.classList.toggle('open', open);
+      cartPanel.setAttribute('aria-hidden', String(!open));
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) document.getElementById('close-cart').focus();
     }
-  })();
-</script>
 
+    document.getElementById('cart-toggle').addEventListener('click', () => setCartOpen(true));
+    document.getElementById('close-cart').addEventListener('click', () => setCartOpen(false));
+    cartOverlay.addEventListener('click', () => setCartOpen(false));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setCartOpen(false);
+    });
+
+    document.querySelectorAll('.add-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.product-card');
+        const selectedSwatch = card.querySelector('.swatch.selected');
+        const color = selectedSwatch ? selectedSwatch.title : 'Pilihan warna';
+        const product = cart.find((item) => item.id === button.dataset.product && item.color === color);
+        if (product) product.quantity += 1;
+        else cart.push({
+          id: button.dataset.product,
+          name: button.dataset.name,
+          price: Number(button.dataset.price),
+          image: button.dataset.image,
+          color,
+          quantity: 1
+        });
+        updateCart();
+        showToast(`${button.dataset.name} (${color}) ditambahkan ke keranjang`);
+      });
+    });
+
+    document.querySelectorAll('.swatch').forEach((swatch) => {
+      swatch.addEventListener('click', () => {
+        const group = swatch.closest('.swatches');
+        group.querySelectorAll('.swatch').forEach((option) => {
+          const selected = option === swatch;
+          option.classList.toggle('selected', selected);
+          option.setAttribute('aria-pressed', String(selected));
+        });
+      });
+    });
+
+    document.querySelectorAll('.favorite').forEach((button) => {
+      button.addEventListener('click', () => {
+        const active = button.getAttribute('aria-pressed') !== 'true';
+        button.setAttribute('aria-pressed', String(active));
+        button.classList.toggle('active', active);
+        showToast(active ? 'Ditambahkan ke favorit' : 'Dihapus dari favorit');
+      });
+    });
+
+    document.querySelectorAll('.category-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.category-tab').forEach((option) => {
+          const active = option === tab;
+          option.classList.toggle('active', active);
+          option.setAttribute('aria-pressed', String(active));
+        });
+        document.querySelectorAll('.product-card').forEach((card) => {
+          card.hidden = tab.dataset.filter !== 'all' && card.dataset.category !== tab.dataset.filter;
+        });
+      });
+    });
+
+    document.getElementById('checkout').addEventListener('click', () => {
+      if (!cart.length) {
+        showToast('Keranjangmu masih kosong');
+        return;
+      }
+      const lines = cart.map((item) => `- ${item.name} (${item.color}) x${item.quantity}: ${rupiah(item.price * item.quantity)}`);
+      const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+      const message = `Halo Arvana Wear, saya ingin memesan:\n${lines.join('\n')}\nSubtotal: ${rupiah(subtotal)}`;
+      window.open(`https://wa.me/6285185313732?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+    });
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    menuToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+    });
+    navLinks.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
 </body>
 </html>
