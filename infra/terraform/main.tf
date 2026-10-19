@@ -575,7 +575,7 @@ resource "aws_secretsmanager_secret_version" "application" {
     DB_USER     = "arvana_app"
     DB_PASSWORD = random_password.database_app.result
     DB_SSL      = "verify-full"
-    DB_SSL_CA   = "/etc/ssl/certs/ca-certificates.crt"
+    DB_SSL_CA   = "/etc/ssl/certs/rds-global-bundle.crt"
     DB_POOL_MAX = tostring(var.database_pool_max)
     JWT_SECRET  = random_password.jwt.result
     CORS_ORIGIN = var.application_origin

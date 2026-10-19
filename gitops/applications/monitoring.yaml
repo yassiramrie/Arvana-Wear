@@ -11,6 +11,8 @@ spec:
     targetRevision: 92.10.1
     helm:
       valuesObject:
+        alertmanager:
+          enabled: false
         grafana:
           service:
             type: ClusterIP

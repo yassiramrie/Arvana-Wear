@@ -13,6 +13,8 @@ RUN apk add --no-cache ca-certificates \
     && rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
     /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
 
+COPY rds-global-bundle.crt /etc/ssl/certs/rds-global-bundle.crt
+
 COPY --from=dependencies --chown=node:node /app/node_modules ./node_modules
 COPY --chown=node:node package.json server.js telemetry.js init.sql ./
 COPY --chown=node:node scripts/ ./scripts/
