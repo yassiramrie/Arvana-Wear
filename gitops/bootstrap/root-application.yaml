@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: arvana-root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/yassiramrie/Arvana-Wear.git
+    targetRevision: main
+    path: gitops/applications
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

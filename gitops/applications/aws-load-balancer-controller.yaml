@@ -1,0 +1,34 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  project: default
+  source:
+    repoURL: https://aws.github.io/eks-charts
+    chart: aws-load-balancer-controller
+    targetRevision: 1.13.3
+    helm:
+      valuesObject:
+        clusterName: arvana-wear-dev
+        region: ap-southeast-3
+        vpcId: vpc-0a44de8c29603e768
+        serviceAccount:
+          create: true
+          name: aws-load-balancer-controller
+        enableShield: false
+        enableWaf: false
+        enableWafv2: false
+        defaultTargetType: instance
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

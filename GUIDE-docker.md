@@ -1,5 +1,9 @@
 #  Arvana Wear — Panduan Deployment dengan Docker
 
+> **Catatan:** Panduan ini tetap mencakup Docker Compose untuk development dan
+> latihan EC2. CI/CD aktif repository menggunakan OIDC, ECR, EKS, dan Argo CD;
+> ikuti [Task-Arvana-Wear.md](./Task-Arvana-Wear.md) untuk deployment tersebut.
+
 > **Untuk siapa?** Developer yang sudah paham dasar-dasar DevSecOps dan ingin
 > belajar containerization: menggantikan RDS, PM2, dan systemd dengan Docker.
 
@@ -91,6 +95,9 @@ GRAFANA_PASSWORD=admin123            # Password Grafana
 
 > **Security Note:** File `.env` sudah ada di `.gitignore` — tidak akan pernah
 > ter-commit ke GitHub. Jangan hardcode password langsung di kode.
+>
+> Compose ini untuk development/lab. Untuk production gunakan database terkelola
+> dengan TLS terverifikasi dan konfigurasi deployment sesuai `Task-Arvana-Wear.md`.
 
 ### 1.3 Jalankan Semua Container
 
@@ -175,23 +182,28 @@ arvana-wear/
 ### Bagaimana `Dockerfile` Bekerja?
 
 ```dockerfile
-FROM node:20-alpine       # Base image: Node.js 20 ukuran kecil (~50MB)
+FROM node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402 AS dependencies
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
-WORKDIR /app              # Set direktori kerja di dalam container
-
-COPY package*.json ./     # Copy package.json DULU (bukan semua kode)
-RUN npm install           # Install dependency
-
-COPY . .                  # Baru copy seluruh kode
-
-EXPOSE 3000               # Declare port yang dipakai
-CMD ["node", "server.js"] # Perintah yang dijalankan saat container start
+FROM node:22-alpine@sha256:0a7108bf6c7bf5de370ffb1a3ed6be93d405b43ff159f681a8d18c0e2bc2e402 AS runtime
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+    /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack
+COPY --from=dependencies --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node package.json server.js ./
+USER node
+EXPOSE 3000
+CMD ["node", "server.js"]
 ```
 
-> **Kenapa `package.json` di-copy dulu?** Docker punya layer cache. Selama
-> `package.json` tidak berubah, layer `npm install` di-cache dan build
-> jadi jauh lebih cepat. Kalau semua file di-copy sekaligus, setiap perubahan
-> kode kecil akan trigger `npm install` ulang.
+Build memakai dua stage: dependency produksi dipasang dengan lockfile, lalu
+hanya dependency dan file runtime yang disalin ke image akhir. Proses berjalan
+sebagai user non-root `node`; `.dockerignore` mencegah file lokal dan secret
+ikut masuk build context.
 
 ### Bagaimana `docker-compose.yml` Bekerja?
 
@@ -210,91 +222,69 @@ app:
 
 ---
 
-## Langkah 3 — Setup GitHub Secrets untuk CI/CD
+## Langkah 3 — GitHub Actions dan GitOps
 
-GitHub Secrets adalah tempat menyimpan kredensial sensitif. Pipeline CI/CD
-membaca secrets ini untuk deploy ke EC2 tanpa menyimpan password di kode.
+Workflow aktif tidak deploy melalui SSH ke EC2 dan tidak memerlukan access key
+AWS statis atau secret deployment EC2. GitHub Actions memakai OIDC untuk
+mendapatkan kredensial sementara, mengunggah image ke ECR, lalu membuat pull
+request untuk memperbarui tag image di GitOps.
 
-### 3.1 Secret yang Diperlukan
+Setelah Terraform diterapkan, atur Actions Variables berikut di repository
+(**Settings → Secrets and variables → Actions → Variables**):
 
-| Secret Name | Nilai | Cara Mendapatkan |
-|-------------|-------|-----------------|
-| `EC2_HOST` | IP publik EC2 | EC2 Console → instance → Public IPv4 |
-| `EC2_USER` | `ubuntu` | Default untuk AMI Ubuntu |
-| `EC2_SSH_KEY` | Isi file `.pem` | Paste seluruh isi file key pair |
-| `DB_PASSWORD` | Password PostgreSQL | Bebas, minimal 12 karakter |
-| `GRAFANA_PASSWORD` | Password Grafana | Bebas, minimal 12 karakter |
-| `JWT_SECRET` | Secret penandatangan token | String acak panjang, minimal 32 karakter |
+- `AWS_ROLE_ARN`: output Terraform `github_actions_role_arn`.
+- `AWS_REGION`: region deployment, default `ap-southeast-3`.
 
-Hanya 6 secret — jauh lebih sedikit dari versi non-Docker yang butuh 9 secret.
+Aktifkan branch protection agar PR image-tag ditinjau sebelum merge. Argo CD
+menyinkronkan perubahan setelah merge; secret aplikasi disimpan di AWS Secrets
+Manager, bukan di GitHub. Lihat [panduan deployment utama](./Task-Arvana-Wear.md)
+untuk langkah bootstrap, IAM, EKS, dan konfigurasi Argo CD.
 
-### 3.2 Cara Menambah Secret
-
-1. Buka repo GitHub kamu
-2. **Settings** → **Secrets and variables** → **Actions**
-3. Klik **New repository secret**
-4. Isi **Name** dan **Value** → **Add secret**
-
-Untuk `EC2_SSH_KEY`:
-```bash
-# Tampilkan isi file .pem di terminal
-cat my-ec2-key.pem
-# Copy SEMUA outputnya termasuk baris -----BEGIN RSA PRIVATE KEY-----
-```
-
-### 3.3 Security Group EC2
+### 3.4 Security Group EC2 untuk latihan
 
 Buka port berikut di Security Group EC2:
 
 | Port | Keterangan |
 |------|------------|
 | 22 | SSH (dari IP laptop kamu saja) |
-| 80 | Frontend + API via Nginx |
+| 80 | HTTP (redirect ke HTTPS setelah TLS diaktifkan) |
+| 443 | HTTPS setelah domain dan sertifikat valid disiapkan |
 
 > **Security Note:** Port `3001`, `9090`, dan `9100` tidak perlu dibuka ke internet.
 > Grafana hanya bind ke localhost EC2. Akses dengan SSH tunnel:
 > `ssh -i my-ec2-key.pem -L 3001:localhost:3001 ubuntu@IP_EC2_KAMU`
 
+### Persiapan HTTPS untuk latihan EC2
+
+Nginx lokal tetap memakai HTTP agar bisa dijalankan tanpa domain. Jangan kirim
+kredensial atau token sungguhan melalui HTTP publik. Setelah domain diarahkan ke
+EC2 dan sertifikat TLS valid tersedia:
+
+1. Pasang `fullchain.pem` dan `privkey.pem` di direktori `certs/` pada host EC2.
+   Jangan commit direktori atau private key tersebut.
+2. Salin `nginx/nginx.tls.conf.example` menjadi konfigurasi yang dipakai
+   Nginx (`nginx/nginx.conf`).
+3. Pada service `nginx` di `docker-compose.yml`, publish port `443:443` dan
+   mount `./certs:/etc/nginx/certs:ro`.
+4. Jalankan ulang Nginx dan verifikasi HTTPS serta redirect dari HTTP sebelum
+   menerima login atau registrasi publik.
+
+Konfigurasi contoh mengalihkan seluruh HTTP ke HTTPS dan hanya menerima TLS
+1.2/1.3. Jangan aktifkan sebelum sertifikat valid tersedia karena Nginx akan
+gagal start tanpa file sertifikat.
+
 ---
 
-## Langkah 4 — CI/CD Pipeline (deploy.yml)
+## Langkah 4 — Alur workflow aktif (`deploy.yml`)
 
-Pipeline berjalan otomatis setiap kamu push ke branch `main`.
+Pipeline berjalan pada pull request dan push ke branch `main`.
 
 ```
-Push ke main
-      │
-      ▼
-[JOB 1: test]  ← Jalan di GitHub cloud runner
-  ├── node --check server.js    (syntax check)
-  ├── node -e "require('./package.json')"  (validasi JSON)
-  └── npm audit --audit-level=high  (security scan)
-      │
-      │  (hanya lanjut kalau test PASS)
-      ▼
-[JOB 2: deploy]  ← Jalan di GitHub cloud runner, tapi SSH ke EC2 kamu
-  ├── SCP semua file ke EC2 (~/arvana-wear/)
-  ├── SSH: install Docker jika belum ada
-  ├── SSH: tulis .env dari GitHub Secrets
-  ├── SSH: docker compose up -d --build
-  └── SSH: curl health check ke localhost/health
-```
-
-**Kenapa `env` + `envs` di pipeline?**
-
-```yaml
-- name: Deploy via Docker Compose
-  uses: appleboy/ssh-action@v1.0.3
-  env:
-    DB_PASSWORD: ${{ secrets.DB_PASSWORD }}   # ← declare di level action
-  with:
-    envs: DB_PASSWORD                         # ← kirim ke dalam shell SSH
-    script: |
-      echo "${DB_PASSWORD}" > .env            # ← aman, tidak muncul di log
-```
-
-Secret tidak bisa langsung ditulis di `script` karena akan muncul di log GitHub.
-Dengan `env` + `envs`, secret dikirim sebagai environment variable ke SSH session.
+Push/PR → test, audit, validasi Terraform/Kubernetes
+       → build dan Trivy scan image API/frontend
+       → (push main) OIDC, push image immutable ke ECR
+       → buat PR tag GitOps
+       → (setelah merge) Argo CD sync ke EKS
 
 ---
 
@@ -376,7 +366,7 @@ docker compose restart app
 | Container restart terus (restart loop) | Error di app/config | `docker compose logs app` |
 | Grafana tidak bisa akses Prometheus | Network issue | `docker compose restart grafana` |
 | `.env` tidak terbaca | File tidak ada | `cp .env.docker .env` |
-| Pipeline gagal di step SCP | File `.dockerignore` terlalu agresif | Pastikan semua file ter-copy |
+| Workflow gagal mengambil kredensial AWS | `AWS_ROLE_ARN`, region, atau trust policy OIDC salah | Cocokkan Actions Variables dengan output Terraform dan repository/branch pada trust policy |
 
 ---
 
@@ -385,14 +375,14 @@ docker compose restart app
 | Konsep | Implementasi |
 |--------|-------------|
 | **Containerization** | Semua service dikemas dalam Docker image — portable, reproducible |
-| **Secrets Management** | `.env` tidak di-commit, CI/CD inject dari GitHub Secrets |
+| **Secrets Management** | Local Compose memakai `.env` yang tidak di-commit; EKS mengambil secret dari AWS Secrets Manager |
 | **Service Discovery** | Docker DNS: container komunikasi via nama service, bukan IP |
 | **Infrastructure as Code** | Seluruh stack terdefinisi di `docker-compose.yml` |
 | **Health Check** | `depends_on + healthcheck` pastikan service start dalam urutan yang benar |
 | **Data Persistence** | Docker volumes: data tidak hilang saat container restart |
 | **Least Privilege** | Node Exporter hanya bisa diakses dari dalam Docker network |
 | **Idempotency** | `docker compose up -d` aman dijalankan berkali-kali |
-| **Observability** | Prometheus + Grafana jalan otomatis dalam satu stack yang sama |
+| **Observability** | Local Compose menyediakan Prometheus + Grafana; EKS memakai CloudWatch, Prometheus/Grafana, OpenTelemetry, dan X-Ray |
 
 
 *Dibuat untuk tujuan pembelajaran DevSecOps. Happy hacking! 🧕*

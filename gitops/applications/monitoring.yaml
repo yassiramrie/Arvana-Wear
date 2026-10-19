@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 92.10.1
+    helm:
+      valuesObject:
+        grafana:
+          service:
+            type: ClusterIP
+          serviceAccount:
+            create: true
+            name: kube-prometheus-stack-grafana
+            annotations:
+              eks.amazonaws.com/role-arn: arn:aws:iam::985937786438:role/arvana-wear-dev-grafana-cloudwatch
+          persistence:
+            enabled: false
+          additionalDataSources:
+            - name: CloudWatch
+              type: cloudwatch
+              access: proxy
+              jsonData:
+                authType: default
+                defaultRegion: ap-southeast-3
+            - name: AWS X-Ray
+              type: grafana-x-ray-datasource
+              access: proxy
+              jsonData:
+                authType: default
+                defaultRegion: ap-southeast-3
+        prometheus:
+          prometheusSpec:
+            retention: 7d
+            replicas: 1
+            resources:
+              requests:
+                cpu: 200m
+                memory: 512Mi
+              limits:
+                cpu: 1
+                memory: 1Gi
+            additionalScrapeConfigs:
+              - job_name: arvana-otel
+                static_configs:
+                  - targets: [otel-collector.monitoring.svc.cluster.local:8889]
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

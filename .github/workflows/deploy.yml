@@ -1,171 +1,260 @@
-# .github/workflows/deploy.yml
-# ─────────────────────────────────────────────────────────────────────────────
-# CI/CD Pipeline — Arvana Wear (Busana Muslim)
-# Trigger: setiap push ke branch 'main'
-#
-# Alur:
-#   test → deploy
-#
-# GitHub Secrets yang harus diset di repo Settings → Secrets:
-#   EC2_HOST               → IP publik atau domain EC2
-#   EC2_USER               → SSH username (biasanya: ubuntu)
-#   EC2_SSH_KEY            → Isi file .pem (private key)
-#   DB_PASSWORD            → Password PostgreSQL container
-#   GRAFANA_PASSWORD       → Password login Grafana (port 3001)
-#   JWT_SECRET             → Secret untuk menandatangani token login
-# ─────────────────────────────────────────────────────────────────────────────
-
-name: Deploy — Arvana Wear
+name: CI — Arvana Wear
 
 on:
+  pull_request:
   push:
     branches: [main]
+    paths-ignore:
+      - "gitops/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-
-  # ════════════════════════════════════════════════════════════════════════════
-  # JOB 1: TEST
-  # Jalan di GitHub runner (cloud) — tidak butuh server kita.
-  # Kalau ada step yang gagal, pipeline berhenti dan job 'deploy' tidak jalan.
-  # ════════════════════════════════════════════════════════════════════════════
-  test:
-    name: Run Tests
+  verify:
+    name: Test and scan images
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+      API_REPOSITORY: arvana-wear-dev-api
+      FRONTEND_REPOSITORY: arvana-wear-dev-frontend
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "22"
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      # Cek syntax JS — kalau ada typo/bracket kurang, langsung gagal di sini
-      - name: Syntax check (server.js)
-        run: node --check server.js
+      - name: Run tests
+        run: npm test
 
-      # Validasi package.json adalah JSON yang valid
-      - name: Validate package.json
-        run: node -e "require('./package.json')"
+      - name: Validate source
+        run: |
+          node --check server.js
+          node --check telemetry.js
+          node --check scripts/migrate.js
+          node -e "require('./package.json')"
 
-      # Scan dependency untuk vulnerability HIGH/CRITICAL
-      - name: Security audit
+      - name: Audit dependencies
         run: npm audit --audit-level=high
 
-  # ════════════════════════════════════════════════════════════════════════════
-  # JOB 2: DEPLOY
-  # Jalan setelah job 'test' berhasil (needs: test).
-  # Kirim file ke EC2, lalu jalankan semua container via Docker Compose.
-  # ════════════════════════════════════════════════════════════════════════════
-  deploy:
-    name: Deploy to EC2 (Docker Compose)
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.16.6"
+
+      - name: Validate Terraform
+        run: |
+          terraform fmt -check -recursive infra
+          terraform -chdir=infra/bootstrap-state init -backend=false -input=false
+          terraform -chdir=infra/bootstrap-state validate
+          terraform -chdir=infra/terraform init -backend=false -input=false
+          terraform -chdir=infra/terraform validate
+
+      - name: Validate Kubernetes manifests
+        uses: azure/setup-kubectl@v4
+        with:
+          version: "v1.35.0"
+
+      - name: Render Kubernetes manifests
+        run: kubectl kustomize gitops/apps/arvana/dev > /dev/null
+
+      - name: Build API image
+        run: docker build --tag arvana-api:${IMAGE_TAG} --file Dockerfile .
+
+      - name: Build frontend image
+        run: docker build --tag arvana-frontend:${IMAGE_TAG} --file nginx/Dockerfile .
+
+      - name: Scan API image with Trivy
+        run: >-
+          docker run --rm
+          -v /var/run/docker.sock:/var/run/docker.sock
+          aquasec/trivy:0.76.0
+          image --quiet --scanners vuln --severity HIGH,CRITICAL --exit-code 1
+          arvana-api:${IMAGE_TAG}
+
+      - name: Scan frontend image with Trivy
+        run: >-
+          docker run --rm
+          -v /var/run/docker.sock:/var/run/docker.sock
+          aquasec/trivy:0.76.0
+          image --quiet --scanners vuln --severity HIGH,CRITICAL --exit-code 1
+          arvana-frontend:${IMAGE_TAG}
+
+  dast:
+    name: DAST with OWASP ZAP
     runs-on: ubuntu-latest
-    needs: test   # ← Tunggu job 'test' selesai dulu
+    permissions:
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source
+        uses: actions/checkout@v4
 
-      # ── STEP 1: Kirim semua file ke EC2 via SCP ──────────────────────────────
-      # appleboy/scp-action = seperti perintah 'scp' tapi dalam bentuk action.
-      # Semua file ini dibutuhkan Docker untuk build & run container.
-      - name: Copy files to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host:     ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key:      ${{ secrets.EC2_SSH_KEY }}
-          target:   "~/arvana-wear"
-          source:   "server.js,package.json,package-lock.json,init.sql,index.html,Dockerfile,.dockerignore,docker-compose.yml,nginx,monitoring,images"
+      - name: Create temporary test credentials
+        run: |
+          {
+            printf 'DB_PASSWORD=%s\n' "$(openssl rand -hex 32)"
+            printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)"
+            printf 'GRAFANA_PASSWORD=%s\n' "$(openssl rand -hex 32)"
+          } >> "$GITHUB_ENV"
+          echo 'NODE_ENV=development' >> "$GITHUB_ENV"
+          echo 'CORS_ORIGIN=http://localhost' >> "$GITHUB_ENV"
+          echo 'DB_SSL=false' >> "$GITHUB_ENV"
 
-      # ── STEP 2: SSH ke EC2 → Install Docker → Deploy ─────────────────────────
-      # 'env' + 'envs' = cara aman untuk kirim secret ke dalam shell script SSH.
-      # Secret TIDAK boleh ditulis langsung di 'script' karena akan ter-log.
-      - name: Deploy via Docker Compose
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Start temporary API and frontend
+        run: docker compose up -d --build postgres app nginx
+
+      - name: Wait for application readiness
+        run: |
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1/ready >/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+
+      - name: Scan temporary application with OWASP ZAP
+        run: >-
+          docker run --rm --network host
+          ghcr.io/zaproxy/zaproxy:stable
+          zap-baseline.py -t http://127.0.0.1 -I
+
+      - name: Stop temporary application
+        if: always()
+        run: docker compose down --volumes
+
+  publish-and-propose:
+    name: Publish images and propose GitOps update
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [verify, dast]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+      AWS_REGION: ${{ vars.AWS_REGION || 'ap-southeast-3' }}
+      API_REPOSITORY: arvana-wear-dev-api
+      FRONTEND_REPOSITORY: arvana-wear-dev-frontend
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Build API image
+        run: docker build --tag arvana-api:${IMAGE_TAG} --file Dockerfile .
+
+      - name: Build frontend image
+        run: docker build --tag arvana-frontend:${IMAGE_TAG} --file nginx/Dockerfile .
+
+      - name: Scan API image with Trivy
+        run: >-
+          docker run --rm
+          -v /var/run/docker.sock:/var/run/docker.sock
+          aquasec/trivy:0.76.0
+          image --quiet --scanners vuln --severity HIGH,CRITICAL --exit-code 1
+          arvana-api:${IMAGE_TAG}
+
+      - name: Scan frontend image with Trivy
+        run: >-
+          docker run --rm
+          -v /var/run/docker.sock:/var/run/docker.sock
+          aquasec/trivy:0.76.0
+          image --quiet --scanners vuln --severity HIGH,CRITICAL --exit-code 1
+          arvana-frontend:${IMAGE_TAG}
+
+      - name: Verify AWS publishing configuration
         env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        with:
-          host:     ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key:      ${{ secrets.EC2_SSH_KEY }}
-          envs:     DB_PASSWORD,GRAFANA_PASSWORD,JWT_SECRET
-          script: |
-            set -e
-
-            # Install Docker jika belum ada di EC2
-            if ! command -v docker &>/dev/null; then
-              echo "=== Docker not found, installing... ==="
-              # Tunggu apt/dpkg tanpa mematikan proses atau menghapus lock milik sistem.
-              TIMEOUT=600
-              ELAPSED=0
-              while sudo pgrep -x apt-get >/dev/null || sudo pgrep -x apt >/dev/null || sudo pgrep -x dpkg >/dev/null || sudo pgrep -x unattended-upgr >/dev/null; do
-                if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
-                  echo "ERROR — apt/dpkg is still busy after ${TIMEOUT}s; refusing to interrupt package management."
-                  sudo pgrep -a -x apt-get || true
-                  sudo pgrep -a -x apt || true
-                  sudo pgrep -a -x dpkg || true
-                  sudo pgrep -a -x unattended-upgr || true
-                  exit 1
-                fi
-                echo "Waiting for background apt/dpkg processes to finish... (${ELAPSED}s)"
-                sleep 10
-                ELAPSED=$((ELAPSED + 10))
-              done
-              curl -fsSL https://get.docker.com | sudo sh
-            fi
-
-            # Pastikan Docker Compose plugin tersedia
-            if ! sudo docker compose version &>/dev/null 2>&1; then
-              sudo mkdir -p /usr/local/lib/docker/cli-plugins
-              sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose
-              sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
-            fi
-
-            cd ~/arvana-wear
-
-            # Buat file .env dari secrets CI — TIDAK pernah di-commit ke git!
-            printf "DB_PASSWORD=%s\nGRAFANA_PASSWORD=%s\nJWT_SECRET=%s\n" \
-              "${DB_PASSWORD}" "${GRAFANA_PASSWORD}" "${JWT_SECRET}" > .env
-            chmod 600 .env
-            
-            # Matikan dan bersihkan container lama dengan aman menggunakan Compose
-            sudo docker compose down || true
-
-            # Bersihkan cache build dan container/image yang tidak terpakai agar disk tidak penuh
-            sudo docker system prune -f
-            sudo docker builder prune -af
-
-            # Jalankan semua 6 container (build app image dulu, pull sisanya)
-            sudo docker compose up -d --build
-
-            # Tampilkan status semua container
-            sudo docker compose ps
-
-      # ── STEP 3: Health check ─────────────────────────────────────────────────
-      # Pastikan app merespons setelah deploy. Kalau gagal, pipeline merah
-      # dan kita bisa lihat log container untuk debug.
-      - name: Health check
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host:     ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key:      ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            echo "Menunggu services menyala (termasuk healthcheck Postgres)..."
-            for i in {1..6}; do
-              sleep 10
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/health || true)
-              if [ "$STATUS" = "200" ]; then
-                  echo "PASS — App is live on port 80!"
-                exit 0
-              fi
-              echo "Percobaan $i gagal (HTTP $STATUS). Retrying..."
-            done
-            
-            echo "FAIL — App tidak merespons setelah 60 detik."
-            cd ~/arvana-wear && sudo docker compose logs --tail=30 app nginx
+          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+        run: |
+          if [ -z "$AWS_ROLE_ARN" ]; then
+            echo "::error::Set the AWS_ROLE_ARN Actions variable to the Terraform github_actions_role_arn output."
             exit 1
+          fi
+
+      - name: Configure AWS credentials with GitHub OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Publish scanned images to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
+        run: |
+          docker tag "arvana-api:${IMAGE_TAG}" "${ECR_REGISTRY}/${API_REPOSITORY}:${IMAGE_TAG}"
+          docker tag "arvana-frontend:${IMAGE_TAG}" "${ECR_REGISTRY}/${FRONTEND_REPOSITORY}:${IMAGE_TAG}"
+          docker push "${ECR_REGISTRY}/${API_REPOSITORY}:${IMAGE_TAG}"
+          docker push "${ECR_REGISTRY}/${FRONTEND_REPOSITORY}:${IMAGE_TAG}"
+
+      - name: Propose GitOps image update
+        env:
+          ECR_REGISTRY: ${{ steps.ecr.outputs.registry }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+
+          manifest = Path("gitops/apps/arvana/dev/kustomization.yaml")
+          contents = manifest.read_text()
+          images = {
+              "arvana-wear-api": f"{os.environ['ECR_REGISTRY']}/{os.environ['API_REPOSITORY']}",
+              "arvana-wear-frontend": f"{os.environ['ECR_REGISTRY']}/{os.environ['FRONTEND_REPOSITORY']}",
+          }
+          for image, repository in images.items():
+              pattern = rf"(?m)(  - name: {re.escape(image)}\n    newName: )\S+(\n    newTag: )\S+"
+              updated, count = re.subn(
+                  pattern,
+                  lambda match: f"{match.group(1)}{repository}{match.group(2)}{os.environ['IMAGE_TAG']}",
+                  contents,
+                  count=1,
+              )
+              if count != 1:
+                  raise SystemExit(f"Expected image entry not found: {image}")
+              contents = updated
+          manifest.write_text(contents)
+          PY
+
+      - name: Validate proposed GitOps update
+        uses: azure/setup-kubectl@v4
+        with:
+          version: "v1.35.0"
+
+      - name: Render proposed GitOps manifests
+        run: |
+          kubectl kustomize gitops/applications > /dev/null
+          kubectl kustomize gitops/bootstrap > /dev/null
+          kubectl kustomize gitops/apps/arvana/dev > /dev/null
+
+      - name: Create GitOps pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore(gitops): deploy ${{ github.sha }}"
+          branch: automation/deploy-${{ github.sha }}
+          delete-branch: true
+          title: "Deploy Arvana Wear ${{ github.sha }}"
+          body: |
+            Update the development deployment to the immutable image tags built and scanned by CI.
+
+            - API: `${{ github.sha }}`
+            - Frontend: `${{ github.sha }}`
+          add-paths: gitops/apps/arvana/dev/kustomization.yaml

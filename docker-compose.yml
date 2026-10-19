@@ -49,14 +49,16 @@ services:
       dockerfile: Dockerfile
     container_name: arvana-app
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV:-development}
       PORT: 3000
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
       DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: arvana_wear
       DB_USER: postgres
       DB_PASSWORD: ${DB_PASSWORD:?WAJIB isi DB_PASSWORD di .env}
-      DB_SSL: "false"
+      DB_SSL: ${DB_SSL:-false}
+      DB_POOL_MAX: ${DB_POOL_MAX:-10}
       JWT_SECRET: ${JWT_SECRET:?WAJIB isi JWT_SECRET di .env}
     expose:
       - "3000"                                         # ✅ Cuma visible di internal network
@@ -65,7 +67,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(response => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
       interval: 15s
       timeout: 5s
       retries: 3

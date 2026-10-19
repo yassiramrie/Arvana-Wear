@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: otel-collector
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
+    chart: opentelemetry-collector
+    targetRevision: 0.176.0
+    helm:
+      valuesObject:
+        mode: deployment
+        fullnameOverride: otel-collector
+        image:
+          repository: otel/opentelemetry-collector-contrib
+          tag: 0.162.0
+        serviceAccount:
+          create: true
+          name: otel-collector
+          annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::985937786438:role/arvana-wear-dev-otel-xray
+        ports:
+          metrics:
+            enabled: true
+            containerPort: 8889
+            servicePort: 8889
+            protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        config:
+          receivers:
+            otlp:
+              protocols:
+                grpc:
+                  endpoint: 0.0.0.0:4317
+                http:
+                  endpoint: 0.0.0.0:4318
+          extensions:
+            health_check:
+              endpoint: ${env:MY_POD_IP}:13133
+          processors:
+            batch: {}
+          exporters:
+            awsxray:
+              region: ap-southeast-3
+            prometheus:
+              endpoint: 0.0.0.0:8889
+              namespace: arvana
+          service:
+            extensions: [health_check]
+            pipelines:
+              traces:
+                receivers: [otlp]
+                processors: [batch]
+                exporters: [awsxray]
+              metrics:
+                receivers: [otlp]
+                processors: [batch]
+                exporters: [prometheus]
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

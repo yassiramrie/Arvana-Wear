@@ -1,0 +1,5 @@
+bucket       = "replace-with-bootstrap-state-bucket-output"
+key          = "dev/arvana-wear/terraform.tfstate"
+region       = "ap-southeast-3"
+encrypt      = true
+use_lockfile = true

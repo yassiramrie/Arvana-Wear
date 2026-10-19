@@ -2,3 +2,12 @@ node_modules/
 .env
 *.pem
 *.log
+/certs/
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+infra/terraform/*.tfvars
+!infra/terraform/*.tfvars.example
+infra/terraform/backend.hcl
+*.tfplan

@@ -9,17 +9,25 @@
 node_modules/
 
 # Environment files (JANGAN masuk ke image!)
-.env
-.env.*
+.env*
 
 # Git
 .git/
 .gitignore
+*.pem
+*.key
+certs/
+infra/
+terraform.tfstate*
 
 # Dokumentasi & config yang tidak diperlukan app
 GUIDE.md
+GUIDE-docker.md
 README.md
+TASKS*.md
+Task-*.md
 monitoring/
+test/
 
 # Docker files itu sendiri (tidak perlu di-copy ke dalam container)
 Dockerfile

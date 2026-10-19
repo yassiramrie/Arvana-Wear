@@ -1,0 +1,35 @@
+server {
+    listen 80;
+    server_name _;
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name _;
+
+    ssl_certificate /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /images/ {
+        alias /usr/share/nginx/html/images/;
+    }
+
+    location = / {
+        try_files /index.html =404;
+    }
+
+    location ~ ^/(health|ready|api/health|register|login)(/|$) {
+        proxy_pass http://app:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+}

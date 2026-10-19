@@ -1,0 +1,32 @@
+name: Validate GitOps manifests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - "gitops/**"
+      - ".github/workflows/validate-gitops.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate GitOps YAML and Kustomize
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: "v1.35.0"
+
+      - name: Render all GitOps manifests
+        run: |
+          kubectl kustomize gitops/applications > /dev/null
+          kubectl kustomize gitops/bootstrap > /dev/null
+          kubectl kustomize gitops/apps/arvana/dev > /dev/null

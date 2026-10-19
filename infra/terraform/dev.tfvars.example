@@ -1,0 +1,21 @@
+aws_region = "ap-southeast-3"
+environment = "dev"
+github_repository = "yassiramrie/Arvana-Wear"
+github_branch = "main"
+
+# Replace with a trusted, static public IP range (for example: ["203.0.113.10/32"]).
+cluster_endpoint_public_access_cidrs = []
+
+# Start with localhost; after the public NLB is provisioned, set this to
+# http://<NLB-DNS-name> and apply Terraform again.
+application_origin = "http://localhost"
+
+# Dev defaults are intentionally small; review cost estimates before applying.
+node_instance_types = ["t3.small"]
+node_min_size = 2
+node_desired_size = 2
+node_max_size = 4
+database_instance_class = "db.t4g.micro"
+database_multi_az = false
+database_deletion_protection = false
+database_skip_final_snapshot = true

@@ -1,3 +1,7 @@
+> **Catatan:** Panduan ini adalah latihan deployment EC2 manual, bukan workflow
+> aktif repository. CI/CD sekarang menggunakan GitHub Actions OIDC, ECR, EKS, dan
+> Argo CD. Lihat [Task-Arvana-Wear.md](./Task-Arvana-Wear.md) untuk panduan aktif.
+
 ### 3.2 Security Group untuk EC2 (`arvana-wear-sg`)
 
 | Tipe | Protokol | Port | Source | Keterangan |
@@ -20,34 +24,37 @@ EC2      → RDS (port 5432)     ✅ boleh (EC2 SG sebagai source)
 
 ---
 
-## Langkah 4 — Setup GitHub Secrets (Untuk CI/CD)
+## Langkah 4 — GitHub Actions dan GitOps (Deployment aktif)
 
-GitHub Secrets adalah tempat menyimpan kredensial sensitif yang dipakai GitHub Actions.
-Tersimpan terenkripsi dan tidak pernah muncul di log.
+Workflow aktif tidak memakai SSH/EC2 atau access key AWS statis. GitHub Actions
+mendapatkan kredensial sementara melalui OIDC, membangun dan memindai image,
+mengunggahnya ke ECR, lalu membuka pull request untuk memperbarui tag image GitOps.
+Argo CD menerapkan perubahan setelah pull request tersebut di-merge.
 
-### 4.1 Secret yang Diperlukan
-
-| Secret Name | Nilai | Cara Mendapatkan |
-...
+Atur Actions Variables `AWS_ROLE_ARN` ke output Terraform
+`github_actions_role_arn` dan `AWS_REGION` ke region deployment. Kredensial AWS
+diberikan melalui OIDC; jangan menambahkan access key AWS atau private key EC2
+sebagai GitHub Secret untuk workflow ini.
 
 ```
 Developer push ke branch main
         ↓
-GitHub Actions aktif (deploy.yml)
+GitHub Actions aktif (.github/workflows/deploy.yml)
         ↓
-[Step 1] actions/checkout → ambil kode terbaru
+[Step 1] Test, audit dependency, validasi Terraform dan Kubernetes
         ↓
-[Step 2] appleboy/scp-action → copy file ke EC2 via SCP
+[Step 2] Build image API dan frontend; scan dengan Trivy
         ↓
-[Step 3] appleboy/ssh-action → SSH ke EC2, jalankan commands:
-          - Install Nginx (jika belum)
-          - Copy index.html ke /var/www/html/
-          - Restart Nginx
-          - npm install & pm2 restart backend
+[Step 3] OIDC → push image ke ECR dengan tag commit
+        ↓
+[Step 4] Buka PR perubahan tag GitOps; Argo CD sync setelah merge
 ```
 
-> **DevSecOps Note:** Prinsip ini disebut **GitOps** — Git sebagai single source of truth.
-> Setiap perubahan code otomatis terdeploy. Tidak ada deploy manual yang bisa lupa dicatat.
+Atur Actions Variables `AWS_ROLE_ARN` (output `github_actions_role_arn`) dan
+`AWS_REGION` setelah Terraform diterapkan. Lihat
+[panduan deployment utama](./Task-Arvana-Wear.md) untuk bootstrap, izin IAM,
+konfigurasi Argo CD, dan secret aplikasi. Perubahan tag deployment tetap melalui
+review dan merge PR GitOps.
 
 ...
 | Tipe | Protokol | Port | Source | Keterangan |

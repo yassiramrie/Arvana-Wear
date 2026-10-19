@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cluster-autoscaler
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes.github.io/autoscaler
+    chart: cluster-autoscaler
+    targetRevision: 9.59.0
+    helm:
+      valuesObject:
+        cloudProvider: aws
+        awsRegion: ap-southeast-3
+        autoDiscovery:
+          clusterName: arvana-wear-dev
+        image:
+          tag: v1.35.0
+        rbac:
+          create: true
+        serviceAccount:
+          create: true
+          name: cluster-autoscaler
+          annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::985937786438:role/arvana-wear-dev-cluster-autoscaler
+        extraArgs:
+          balance-similar-node-groups: true
+          skip-nodes-with-system-pods: false
+          expander: least-waste
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
+          limits:
+            cpu: 500m
+            memory: 600Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
