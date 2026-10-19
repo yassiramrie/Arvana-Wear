@@ -11,7 +11,7 @@ resources:
 images:
   - name: arvana-wear-api
     newName: 985937786438.dkr.ecr.ap-southeast-3.amazonaws.com/arvana-wear-dev-api
-    newTag: 2e3373e2330022fc87914b786deead5ca8e5cf44
+    newTag: b0130b9e3ea4be204463ffe2ab0a11c3dbbb597d
   - name: arvana-wear-frontend
     newName: 985937786438.dkr.ecr.ap-southeast-3.amazonaws.com/arvana-wear-dev-frontend
-    newTag: 2e3373e2330022fc87914b786deead5ca8e5cf44
+    newTag: b0130b9e3ea4be204463ffe2ab0a11c3dbbb597d
