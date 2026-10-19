@@ -38,13 +38,13 @@ async function migrate() {
     ? 'ALTER ROLE %I WITH LOGIN PASSWORD %L'
     : 'CREATE ROLE %I WITH LOGIN PASSWORD %L';
   const roleSql = await adminPool.query(
-    `SELECT format('${roleStatement}', $1, $2) AS statement`,
+    `SELECT format('${roleStatement}', $1::text, $2::text) AS statement`,
     [process.env.DB_USER, process.env.DB_PASSWORD]
   );
   await adminPool.query(roleSql.rows[0].statement);
 
   const databaseAccess = await adminPool.query(
-    'SELECT format(\'GRANT CONNECT ON DATABASE %I TO %I\', $1, $2) AS statement',
+    'SELECT format(\'GRANT CONNECT ON DATABASE %I TO %I\', $1::text, $2::text) AS statement',
     [process.env.DB_NAME, process.env.DB_USER]
   );
   await adminPool.query(databaseAccess.rows[0].statement);
@@ -55,7 +55,7 @@ async function migrate() {
   const privileges = await adminPool.query(
     `SELECT format(
       'GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO %I; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO %I; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO %I; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO %I',
-      $1, $1, $1, $1
+      $1::text, $1::text, $1::text, $1::text
     ) AS statement`,
     [process.env.DB_USER]
   );
