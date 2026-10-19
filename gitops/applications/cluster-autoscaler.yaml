@@ -19,11 +19,11 @@ spec:
           tag: v1.35.0
         rbac:
           create: true
-        serviceAccount:
-          create: true
-          name: cluster-autoscaler
-          annotations:
-            eks.amazonaws.com/role-arn: arn:aws:iam::985937786438:role/arvana-wear-dev-cluster-autoscaler
+          serviceAccount:
+            create: true
+            name: cluster-autoscaler
+            annotations:
+              eks.amazonaws.com/role-arn: arn:aws:iam::985937786438:role/arvana-wear-dev-cluster-autoscaler
         extraArgs:
           balance-similar-node-groups: true
           skip-nodes-with-system-pods: false
