@@ -10,8 +10,8 @@ resources:
   - autoscaling.yaml
 images:
   - name: arvana-wear-api
-    newName: arvana-wear-api
-    newTag: dev
+    newName: 985937786438.dkr.ecr.ap-southeast-3.amazonaws.com/arvana-wear-dev-api
+    newTag: a33aa1906c44442a806bcd967d2f853f6026acba
   - name: arvana-wear-frontend
-    newName: arvana-wear-frontend
-    newTag: dev
+    newName: 985937786438.dkr.ecr.ap-southeast-3.amazonaws.com/arvana-wear-dev-frontend
+    newTag: a33aa1906c44442a806bcd967d2f853f6026acba
