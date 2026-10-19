@@ -299,6 +299,11 @@ resource "aws_security_group" "eks_nodes" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  lifecycle {
+    # AWS Load Balancer Controller manages node-port ingress rules dynamically.
+    ignore_changes = [ingress]
+  }
 }
 
 resource "aws_security_group_rule" "cluster_to_nodes" {
